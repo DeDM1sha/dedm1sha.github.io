@@ -2,49 +2,67 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Цифровой двойник офиса РН-Ванкор</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* ===== ОБЩИЕ СТИЛИ ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background-color: #0a1929;
             color: #e6f1ff;
-            line-height: 1.6;
+            line-height: 1.4;
+            font-size: 14px;
+            overflow-x: hidden;
         }
         
+        /* Отключение выделения для мобильных */
+        *:not(input):not(textarea) {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* ===== КОНТЕЙНЕРЫ ===== */
         .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%;
+            padding: 12px;
+            max-width: 100%;
         }
         
-        /* Шапка */
-        header {
+        /* ===== ШАПКА ===== */
+        .mobile-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            padding: 10px 0;
+            margin-bottom: 15px;
             border-bottom: 1px solid #1e4976;
-            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            background-color: #0a1929;
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
         
         .logo-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
         
         .logo {
-            width: 80px;
-            height: 60px;
+            width: 50px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -53,36 +71,37 @@
         .logo img {
             max-width: 100%;
             max-height: 100%;
-            filter: drop-shadow(0 0 5px rgba(0, 122, 204, 0.5));
+            filter: drop-shadow(0 0 3px rgba(0, 122, 204, 0.5));
         }
         
         .company-info h1 {
-            font-size: 28px;
+            font-size: 16px;
+            font-weight: 600;
             background: linear-gradient(90deg, #007acc, #00a8ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 5px;
+            line-height: 1.2;
         }
         
         .company-info p {
             color: #a3c7e6;
-            font-size: 14px;
+            font-size: 11px;
         }
         
-        .status-indicator {
+        .mobile-status {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             background-color: rgba(0, 122, 204, 0.1);
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: 1px solid #1e4976;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
         }
         
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 8px;
+            height: 8px;
             background-color: #4caf50;
             border-radius: 50%;
             animation: pulse 2s infinite;
@@ -94,93 +113,168 @@
             100% { opacity: 1; }
         }
         
-        /* Основная информация */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-gap: 20px;
-            margin-bottom: 30px;
+        /* ===== ВРЕМЯ И ОБНОВЛЕНИЕ ===== */
+        .time-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #132f4c;
+            border-radius: 10px;
+            border: 1px solid #1e4976;
         }
         
-        .card {
+        .current-time {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .last-update {
+            font-size: 12px;
+            color: #a3c7e6;
+        }
+        
+        /* ===== БЫСТРЫЙ МОНИТОРИНГ ===== */
+        .quick-monitoring {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .monitor-item {
+            background-color: #132f4c;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #1e4976;
+            text-align: center;
+        }
+        
+        .monitor-label {
+            font-size: 11px;
+            color: #a3c7e6;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .monitor-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .monitor-trend {
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+        }
+        
+        /* ===== СВАЙП СЕКЦИИ ===== */
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin: 15px 0;
+        }
+        
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #1e4976;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .nav-dot.active {
+            background-color: #007acc;
+            transform: scale(1.2);
+        }
+        
+        /* ===== СВАЙП КАРТОЧКИ ===== */
+        .swipe-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 12px;
+            padding: 5px 0 15px 0;
+            margin-bottom: 15px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .swipe-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .swipe-card {
+            flex: 0 0 calc(100% - 24px);
+            scroll-snap-align: start;
             background-color: #132f4c;
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             border: 1px solid #1e4976;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            min-height: 250px;
         }
         
         .card-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 8px;
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #1e4976;
         }
         
-        .card-title {
-            font-size: 18px;
-            color: #a3c7e6;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .card-title i {
+        .card-header i {
             color: #00a8ff;
+            font-size: 16px;
         }
         
-        .time-display {
-            font-size: 14px;
-            color: #a3c7e6;
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e6f1ff;
         }
         
-        /* Оборудование */
-        .equipment-grid {
-            grid-column: span 12;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 15px;
+        /* ===== ОБОРУДОВАНИЕ ===== */
+        .equipment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
         .equipment-item {
             background-color: #0a1929;
-            border-radius: 10px;
-            padding: 15px;
-            border-left: 4px solid #007acc;
-            transition: all 0.3s;
-            min-height: 150px;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 3px solid #007acc;
             display: flex;
             flex-direction: column;
-        }
-        
-        .equipment-item:hover {
-            background-color: #0d2138;
+            gap: 8px;
         }
         
         .equipment-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+            align-items: flex-start;
         }
         
         .equipment-name {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             flex: 1;
         }
         
         .equipment-status {
-            font-size: 11px;
+            font-size: 10px;
             padding: 3px 8px;
-            border-radius: 20px;
+            border-radius: 12px;
             font-weight: 500;
             white-space: nowrap;
         }
@@ -200,169 +294,312 @@
             color: #f44336;
         }
         
-        .equipment-metrics {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 12px;
-            flex: 1;
-            justify-content: space-around;
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
         }
         
-        .metric-row {
+        .metric-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 6px 0;
         }
         
         .metric-label {
             color: #a3c7e6;
+            font-size: 12px;
         }
         
         .metric-value {
             font-weight: 600;
+            font-size: 13px;
             color: #e6f1ff;
-            text-align: right;
-            min-width: 60px;
         }
         
-        /* Графики */
-        .charts {
-            grid-column: span 12;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 20px;
-        }
-        
-        .chart-container {
-            background-color: #0a1929;
-            border-radius: 10px;
-            padding: 20px;
-            height: 350px;
+        /* ===== ГРАФИКИ ===== */
+        .chart-card {
             display: flex;
             flex-direction: column;
-        }
-        
-        .chart-title {
-            font-size: 16px;
-            color: #a3c7e6;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            height: 320px;
         }
         
         .chart-wrapper {
             flex: 1;
             position: relative;
+            margin-top: 10px;
         }
         
-        /* Мониторинг */
-        .monitoring {
-            grid-column: span 12;
+        /* Кастомные точки на графиках */
+        .chart-point {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid #007acc;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s;
+            z-index: 10;
         }
         
-        .monitoring-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            grid-gap: 15px;
+        .chart-point:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            box-shadow: 0 0 8px rgba(0, 122, 204, 0.8);
         }
         
-        .monitoring-item {
-            background-color: #0a1929;
-            border-radius: 10px;
+        .chart-point.active {
+            background-color: #007acc;
+            border-color: white;
+            box-shadow: 0 0 10px rgba(0, 122, 204, 1);
+        }
+        
+        /* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ГРАФИКОВ ===== */
+        .chart-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .chart-modal-content {
+            background-color: #132f4c;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #1e4976;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            animation: modalSlideUp 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chart-modal-header {
             padding: 15px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .monitoring-item:hover {
-            background-color: #0d2138;
-        }
-        
-        .monitoring-value {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-        
-        .monitoring-label {
-            font-size: 14px;
-            color: #a3c7e6;
-        }
-        
-        /* Новые системы */
-        .systems-grid {
-            grid-column: span 12;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 15px;
-        }
-        
-        .system-item {
-            background-color: #0a1929;
-            border-radius: 10px;
-            padding: 15px;
-            border-left: 4px solid;
-        }
-        
-        .system-item:nth-child(1) { border-left-color: #007acc; }
-        .system-item:nth-child(2) { border-left-color: #4caf50; }
-        .system-item:nth-child(3) { border-left-color: #ff9800; }
-        .system-item:nth-child(4) { border-left-color: #9c27b0; }
-        
-        .system-header {
+            border-bottom: 1px solid #1e4976;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            background-color: #0a1929;
         }
         
-        .system-name {
+        .chart-modal-title {
+            font-size: 16px;
             font-weight: 600;
-            font-size: 15px;
-        }
-        
-        .system-metrics {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 8px;
         }
         
-        /* Лог событий */
-        .events-log {
-            grid-column: span 12;
+        .close-chart-modal {
+            background: none;
+            border: none;
+            color: #a3c7e6;
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
         
-        .events-list {
-            max-height: 300px;
+        .chart-modal-body {
+            padding: 20px;
+        }
+        
+        .chart-modal-time {
+            font-size: 14px;
+            color: #a3c7e6;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .chart-modal-values {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .modal-value-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        
+        .modal-value-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .modal-value-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        
+        .modal-value-number {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .chart-modal-footer {
+            padding: 15px;
+            border-top: 1px solid #1e4976;
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-modal-btn {
+            padding: 10px 20px;
+            background-color: #007acc;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+        
+        .chart-modal-btn:hover {
+            background-color: #005a9e;
+        }
+        
+        /* ===== КНОПКИ УПРАВЛЕНИЯ ===== */
+        .mobile-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .mobile-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .mobile-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background-color: #007acc;
+            color: white;
+        }
+        
+        .btn-primary:active {
+            background-color: #005a9e;
+        }
+        
+        .btn-secondary {
+            background-color: #1e4976;
+            color: white;
+        }
+        
+        .btn-secondary:active {
+            background-color: #0a1929;
+        }
+        
+        /* ===== ЛОГ СОБЫТИЙ ===== */
+        .events-section {
+            margin: 20px 0;
+        }
+        
+        .events-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .events-header i {
+            color: #00a8ff;
+        }
+        
+        .events-container {
+            background-color: #132f4c;
+            border-radius: 12px;
+            border: 1px solid #1e4976;
+            overflow: hidden;
+        }
+        
+        .events-scroll {
+            max-height: 200px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding: 10px;
         }
         
         .event-item {
             display: flex;
-            padding: 12px 0;
+            align-items: flex-start;
+            padding: 10px;
             border-bottom: 1px solid #1e4976;
-            font-size: 14px;
+            font-size: 12px;
+            gap: 10px;
+        }
+        
+        .event-item:last-child {
+            border-bottom: none;
         }
         
         .event-time {
-            width: 80px;
+            min-width: 50px;
             color: #a3c7e6;
+            font-size: 11px;
         }
         
         .event-type {
-            width: 120px;
+            min-width: 70px;
             padding: 3px 8px;
             border-radius: 4px;
-            text-align: center;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 500;
+            text-align: center;
         }
         
         .event-info {
             flex: 1;
+            line-height: 1.4;
         }
         
         .type-info {
@@ -380,1039 +617,609 @@
             color: #f44336;
         }
         
-        /* Кнопки управления */
-        .controls {
-            grid-column: span 12;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
+        /* ===== ПОДВАЛ ===== */
+        .mobile-footer {
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 20px;
+            border-top: 1px solid #1e4976;
+            color: #a3c7e6;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+        
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 360px) {
+            .quick-monitoring {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                padding: 20px;
+                max-width: 768px;
+                margin: 0 auto;
+            }
+            
+            .quick-monitoring {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .mobile-controls {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .swipe-card {
+                flex: 0 0 calc(50% - 18px);
+            }
+        }
+        
+        /* ===== УТИЛИТЫ ===== */
+        .hidden {
+            display: none !important;
+        }
+        
+        .visible {
+            display: flex !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+        
+        .mb-15 {
+            margin-bottom: 15px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        .mt-15 {
+            margin-top: 15px;
+        }
+        
+        .mt-20 {
             margin-top: 20px;
         }
         
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background-color: #007acc;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: #005a9e;
-        }
-        
-        .btn-secondary {
-            background-color: #1e4976;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #0a1929;
-        }
-        
-        /* Подвал */
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 30px;
-            border-top: 1px solid #1e4976;
-            color: #a3c7e6;
-            font-size: 14px;
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 1400px) {
-            .equipment-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .charts {
-                grid-template-columns: 1fr;
-            }
-            
-            .monitoring-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .systems-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (max-width: 1200px) {
-            .equipment-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        @media (max-width: 992px) {
-            .equipment-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .monitoring-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .chart-container {
-                height: 300px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .equipment-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .charts {
-                grid-template-columns: 1fr;
-            }
-            
-            .monitoring-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .systems-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .dashboard {
-                grid-gap: 15px;
-            }
-            
-            .card {
-                padding: 15px;
-            }
-            
-            .controls {
-                flex-wrap: wrap;
-            }
-            
-            header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-            
-            .status-indicator {
-                align-self: flex-start;
-            }
-            
-            .chart-container {
-                height: 250px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .monitoring-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-container {
-                height: 220px;
-            }
-        }
-
-        /* Стили для модального окна истории */
-        .modal-overlay {
-            display: none;
+        /* ===== ИНДИКАТОР ЗАГРУЗКИ ===== */
+        .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
+            background-color: #0a1929;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
+            z-index: 9999;
         }
         
-        .modal-content {
-            background-color: #132f4c;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 1200px;
-            height: 80%;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #1e4976;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #1e4976;
+            border-top: 3px solid #007acc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
         
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid #1e4976;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #0a1929;
-        }
-        
-        .modal-title {
-            font-size: 22px;
-            color: #e6f1ff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            color: #a3c7e6;
-            font-size: 24px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .close-modal:hover {
-            color: #f44336;
-        }
-        
-        .modal-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .history-filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            background-color: #1e4976;
-            border: 1px solid #1e4976;
-            border-radius: 6px;
-            color: #e6f1ff;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn.active {
-            background-color: #007acc;
-            border-color: #007acc;
-        }
-        
-        .filter-btn:hover {
-            background-color: #0a1929;
-        }
-        
-        .history-period {
-            color: #a3c7e6;
-            margin-bottom: 20px;
-            font-size: 14px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 6px;
-        }
-        
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .history-item {
-            background-color: #0a1929;
-            border-radius: 8px;
-            padding: 15px;
-            border-left: 4px solid #007acc;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-        }
-        
-        .history-item.warning {
-            border-left-color: #ffc107;
-        }
-        
-        .history-item.alert {
-            border-left-color: #f44336;
-        }
-        
-        .history-date {
-            min-width: 120px;
-            color: #a3c7e6;
-            font-size: 14px;
-        }
-        
-        .history-type {
-            min-width: 100px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .history-type.info {
-            background-color: rgba(0, 122, 204, 0.2);
-            color: #007acc;
-        }
-        
-        .history-type.warning {
-            background-color: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-        }
-        
-        .history-type.alert {
-            background-color: rgba(244, 67, 54, 0.2);
-            color: #f44336;
-        }
-        
-        .history-message {
-            flex: 1;
-            color: #e6f1ff;
-        }
-        
-        .modal-footer {
-            padding: 15px 20px;
-            border-top: 1px solid #1e4976;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #0a1929;
-        }
-        
-        .export-history-btn {
-            padding: 10px 20px;
-            background-color: #007acc;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background-color 0.3s;
-        }
-        
-        .export-history-btn:hover {
-            background-color: #005a9e;
-        }
-        
-        .total-events {
-            color: #a3c7e6;
-            font-size: 14px;
-        }
-
-        /* Адаптивность для модального окна */
-        @media (max-width: 768px) {
-            .modal-content {
-                width: 95%;
-                height: 90%;
-            }
-            
-            .history-item {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .history-date {
-                min-width: auto;
-            }
-            
-            .history-type {
-                min-width: auto;
-                align-self: flex-start;
-            }
-            
-            .history-filters {
-                justify-content: center;
-            }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
+    <!-- Индикатор загрузки -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
     <div class="container">
-        <header>
+        <!-- Шапка -->
+        <header class="mobile-header">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="https://png.klev.club/uploads/posts/2024-04/png-klev-club-xuqd-p-logotip-rosneft-png-3.png" alt="Логотип Роснефть">
+                    <img src="https://png.klev.club/uploads/posts/2024-04/png-klev-club-xuqd-p-logotip-rosneft-png-3.png" alt="Роснефть">
                 </div>
                 <div class="company-info">
-                    <h1>Цифровой двойник офиса РН-Ванкор</h1>
-                    <p>Мониторинг работы оборудования и систем в реальном времени</p>
+                    <h1>РН-Ванкор</h1>
+                    <p>Цифровой двойник</p>
                 </div>
             </div>
-            <div class="status-indicator">
+            <div class="mobile-status">
                 <div class="status-dot"></div>
-                <span>Система активна | Обновление данных: каждые 60 сек.</span>
+                <span>Активна</span>
             </div>
         </header>
         
-        <main class="dashboard">
-            <!-- Основное оборудование -->
-            <div class="card equipment-grid">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-server"></i> Основное оборудование</h2>
-                    <div class="time-display">Обновлено: <span id="current-time">--:--:--</span></div>
-                </div>
-                
-                <!-- Серверная стойка #1 -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">Серверная стойка #1</div>
-                        <div class="equipment-status status-normal" id="server-status">НОРМА</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Загрузка ЦП:</span>
-                            <span class="metric-value" id="server-cpu">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Память:</span>
-                            <span class="metric-value" id="server-ram">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Температура:</span>
-                            <span class="metric-value" id="server-temp">0°C</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Сетевой коммутатор -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">Сетевой коммутатор</div>
-                        <div class="equipment-status status-normal" id="network-status">НОРМА</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Загрузка сети:</span>
-                            <span class="metric-value" id="network-load">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Пакеты/сек:</span>
-                            <span class="metric-value" id="network-packets">0</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Аптайм:</span>
-                            <span class="metric-value" id="network-uptime">0д</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ИБП -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">ИБП (электропитание)</div>
-                        <div class="equipment-status status-normal" id="ups-status">НОРМА</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Нагрузка:</span>
-                            <span class="metric-value" id="ups-load">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Батарея:</span>
-                            <span class="metric-value" id="ups-battery">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Напряжение:</span>
-                            <span class="metric-value" id="ups-voltage">0В</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Кондиционирование -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">Кондиционирование</div>
-                        <div class="equipment-status status-warning" id="ac-status">ВНИМАНИЕ</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Температура:</span>
-                            <span class="metric-value" id="ac-temp">0°C</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Влажность:</span>
-                            <span class="metric-value" id="ac-humidity">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Мощность:</span>
-                            <span class="metric-value" id="ac-power">0%</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Рабочие станции -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">Рабочие станции</div>
-                        <div class="equipment-status status-normal" id="workstation-status">НОРМА</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Активные:</span>
-                            <span class="metric-value" id="workstation-active">0/24</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Загрузка ЦП:</span>
-                            <span class="metric-value" id="workstation-load">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Интернет:</span>
-                            <span class="metric-value" id="workstation-internet">0 Мб/с</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Сервер БД Kodeks -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">Сервер БД Kodeks</div>
-                        <div class="equipment-status status-normal" id="server-db-status">НОРМА</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Диск C (система):</span>
-                            <span class="metric-value" id="server-db-disk-c">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Диск D (данные):</span>
-                            <span class="metric-value" id="server-db-disk-d">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Температура:</span>
-                            <span class="metric-value" id="server-db-temp">0°C</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Аптайм:</span>
-                            <span class="metric-value" id="server-db-uptime">0д</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Файловый сервер -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">Файловый сервер</div>
-                        <div class="equipment-status status-normal" id="server-files-status">НОРМА</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">RAID 1 (система):</span>
-                            <span class="metric-value" id="server-files-disk-raid1">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">RAID 5 (данные):</span>
-                            <span class="metric-value" id="server-files-disk-raid5">0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Температура:</span>
-                            <span class="metric-value" id="server-files-temp">0°C</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Аптайм:</span>
-                            <span class="metric-value" id="server-files-uptime">0д</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Видеонаблюдение -->
-                <div class="equipment-item">
-                    <div class="equipment-header">
-                        <div class="equipment-name">Видеонаблюдение</div>
-                        <div class="equipment-status status-normal" id="cctv-status">НОРМА</div>
-                    </div>
-                    <div class="equipment-metrics">
-                        <div class="metric-row">
-                            <span class="metric-label">Камеры онлайн:</span>
-                            <span class="metric-value" id="cctv-online">0/12</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Запись:</span>
-                            <span class="metric-value" id="cctv-recording">0ч</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Диск:</span>
-                            <span class="metric-value" id="cctv-disk">0%</span>
-                        </div>
-                    </div>
-                </div>
-                
+        <!-- Время и обновление -->
+        <div class="time-section">
+            <div class="current-time" id="current-time">--:--:--</div>
+            <div class="last-update">
+                Обновление: <span id="update-timer">60</span>с
             </div>
-            
-            <!-- Графики -->
-            <div class="card charts">
-         
-                
-                <div class="chart-container">
-                    <div class="chart-title">
-                        <i class="fas fa-hdd"></i>
-                        <span>Нагрузка на диски серверов (за 24 часа)</span>
-                    </div>
-                    <div class="chart-wrapper">
-                        <canvas id="diskLoadChart"></canvas>
-                    </div>
+        </div>
+        
+        <!-- Быстрый мониторинг -->
+        <div class="quick-monitoring">
+            <div class="monitor-item">
+                <div class="monitor-label">Температура</div>
+                <div class="monitor-value" id="quick-temp">22°C</div>
+                <div class="monitor-trend" id="quick-temp-trend"></div>
+            </div>
+            <div class="monitor-item">
+                <div class="monitor-label">Мощность</div>
+                <div class="monitor-value" id="quick-power">8.5 кВт</div>
+                <div class="monitor-trend" id="quick-power-trend"></div>
+            </div>
+            <div class="monitor-item">
+                <div class="monitor-label">Пользователи</div>
+                <div class="monitor-value" id="quick-users">18</div>
+                <div class="monitor-trend" id="quick-users-trend"></div>
+            </div>
+            <div class="monitor-item">
+                <div class="monitor-label">Интернет</div>
+                <div class="monitor-value" id="quick-internet">120 Мб/с</div>
+                <div class="monitor-trend" id="quick-internet-trend"></div>
+            </div>
+        </div>
+        
+        <!-- Навигация по секциям -->
+        <div class="section-nav">
+            <div class="nav-dot active" data-section="0"></div>
+            <div class="nav-dot" data-section="1"></div>
+            <div class="nav-dot" data-section="2"></div>
+            <div class="nav-dot" data-section="3"></div>
+        </div>
+        
+        <!-- Свайп-секции -->
+        <div class="swipe-container" id="swipeContainer">
+            <!-- Секция 1: Оборудование -->
+            <div class="swipe-card" id="equipment-section">
+                <div class="card-header">
+                    <i class="fas fa-server"></i>
+                    <h2 class="card-title">Оборудование</h2>
                 </div>
-                
-                <div class="chart-container">
-                    <div class="chart-title">
-                        <i class="fas fa-network-wired"></i>
-                        <span>Объем сетевого трафика (за 24 часа, Гб)</span>
-                    </div>
-                    <div class="chart-wrapper">
-                        <canvas id="trafficVolumeChart"></canvas>
-                    </div>
+                <div class="equipment-list" id="equipment-list">
+                    <!-- Оборудование будет добавляться здесь -->
                 </div>
             </div>
             
-            <div class="card monitoring">
+            <!-- Секция 2: Графики -->
+            <div class="swipe-card chart-card" id="charts-section">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-desktop"></i> Мониторинг в реальном времени</h2>
+                    <i class="fas fa-chart-line"></i>
+                    <h2 class="card-title">Аналитика</h2>
                 </div>
-                
-                <div class="monitoring-grid">
-                    <div class="monitoring-item">
-                        <div class="monitoring-label">Температура в серверной</div>
-                        <div class="monitoring-value" id="monitor-temp">0°C</div>
-                        <div class="monitoring-label" id="monitor-temp-trend"></div>
-                    </div>
-                    
-                    <div class="monitoring-item">
-                        <div class="monitoring-label">Потребляемая мощность</div>
-                        <div class="monitoring-value" id="monitor-power">0 кВт</div>
-                        <div class="monitoring-label" id="monitor-power-trend"></div>
-                    </div>
-                    
-                    <div class="monitoring-item">
-                        <div class="monitoring-label">Скорость интернета</div>
-                        <div class="monitoring-value" id="monitor-internet">0 Мб/с</div>
-                        <div class="monitoring-label" id="monitor-internet-trend"></div>
-                    </div>
-                    
-                    <div class="monitoring-item">
-                        <div class="monitoring-label">Активные пользователи</div>
-                        <div class="monitoring-value" id="monitor-users">0</div>
-                        <div class="monitoring-label" id="monitor-users-trend"></div>
-                    </div>
-                    
-                    <div class="monitoring-item">
-                        <div class="monitoring-label">Влажность в офисе</div>
-                        <div class="monitoring-value" id="monitor-humidity">0%</div>
-                        <div class="monitoring-label" id="monitor-humidity-trend"></div>
-                    </div>
-                    
-                    <div class="monitoring-item">
-                        <div class="monitoring-label">Качество воздуха (CO2)</div>
-                        <div class="monitoring-value" id="monitor-air">0 ppm</div>
-                        <div class="monitoring-label" id="monitor-air-trend"></div>
-                    </div>
+                <div class="chart-wrapper">
+                    <canvas id="mobileChart"></canvas>
+                    <!-- Точки графика будут добавляться через JS -->
                 </div>
             </div>
             
-            <div class="card">
+            <!-- Секция 3: Системы -->
+            <div class="swipe-card" id="systems-section">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-cogs"></i> Дополнительные системы</h2>
+                    <i class="fas fa-cogs"></i>
+                    <h2 class="card-title">Системы</h2>
                 </div>
-                
-                <div class="systems-grid">
-                    <div class="system-item">
-                        <div class="system-header">
-                            <div class="system-name">Система контроля доступа</div>
-                            <div class="equipment-status status-normal" id="access-status">НОРМА</div>
-                        </div>
-                        <div class="system-metrics">
-                            <div class="metric-row">
-                                <span>Двери под контролем:</span>
-                                <span class="metric-value" id="access-doors">0</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Сотрудников в офисе:</span>
-                                <span class="metric-value" id="access-people">0</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Последний вход:</span>
-                                <span class="metric-value" id="access-last">--:--</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="system-item">
-                        <div class="system-header">
-                            <div class="system-name">Пожарная сигнализация</div>
-                            <div class="equipment-status status-normal" id="fire-status">НОРМА</div>
-                        </div>
-                        <div class="system-metrics">
-                            <div class="metric-row">
-                                <span>Датчики дыма:</span>
-                                <span class="metric-value" id="fire-sensors">0/12</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Температурные датчики:</span>
-                                <span class="metric-value" id="fire-temp-sensors">0/8</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Последняя проверка:</span>
-                                <span class="metric-value" id="fire-last-check">-- дней</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="system-item">
-                        <div class="system-header">
-                            <div class="system-name">Система видеоконференций</div>
-                            <div class="equipment-status status-normal" id="conference-status">НОРМА</div>
-                        </div>
-                        <div class="system-metrics">
-                            <div class="metric-row">
-                                <span>Активные конференции:</span>
-                                <span class="metric-value" id="conference-active">0</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Участников всего:</span>
-                                <span class="metric-value" id="conference-participants">0</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Качество связи:</span>
-                                <span class="metric-value" id="conference-quality">0%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="system-item">
-                        <div class="system-header">
-                            <div class="system-name">Система управления зданием</div>
-                            <div class="equipment-status status-normal" id="building-status">НОРМА</div>
-                        </div>
-                        <div class="system-metrics">
-                            <div class="metric-row">
-                                <span>Освещение:</span>
-                                <span class="metric-value" id="building-lights">0%</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Вентиляция:</span>
-                                <span class="metric-value" id="building-ventilation">0%</span>
-                            </div>
-                            <div class="metric-row">
-                                <span>Полив растений:</span>
-                                <span class="metric-value" id="building-irrigation">Выкл</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="equipment-list" id="systems-list">
+                    <!-- Системы будут добавляться здесь -->
                 </div>
             </div>
             
-            <div class="card events-log">
+            <!-- Секция 4: Статус -->
+            <div class="swipe-card" id="status-section">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-clipboard-list"></i> Лог событий</h2>
+                    <i class="fas fa-heartbeat"></i>
+                    <h2 class="card-title">Состояние</h2>
                 </div>
-                
-                <div class="events-list" id="events-list">
+                <div class="equipment-list" id="status-list">
+                    <!-- Статусы систем будут добавляться здесь -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Кнопки управления -->
+        <div class="mobile-controls">
+            <button class="mobile-btn btn-primary" id="refresh-btn">
+                <i class="fas fa-sync-alt"></i> Обновить
+            </button>
+            <button class="mobile-btn btn-secondary" id="simulate-btn">
+                <i class="fas fa-bolt"></i> Событие
+            </button>
+            <button class="mobile-btn btn-secondary" id="history-btn">
+                <i class="fas fa-history"></i> История
+            </button>
+            <button class="mobile-btn btn-secondary" id="export-btn">
+                <i class="fas fa-download"></i> Экспорт
+            </button>
+        </div>
+        
+        <!-- Лог событий -->
+        <div class="events-section">
+            <div class="events-header">
+                <i class="fas fa-clipboard-list"></i>
+                <h2 class="card-title">Последние события</h2>
+            </div>
+            <div class="events-container">
+                <div class="events-scroll" id="events-list">
                     <!-- События будут добавляться здесь -->
                 </div>
             </div>
-            
-            <div class="controls">
-                <button class="btn btn-primary" id="refresh-btn">
-                    <i class="fas fa-sync-alt"></i> Обновить данные
-                </button>
-                <button class="btn btn-secondary" id="simulate-btn">
-                    <i class="fas fa-bolt"></i> Симуляция события
-                </button>
-                <button class="btn btn-secondary" id="export-btn">
-                    <i class="fas fa-download"></i> Экспорт данных
-                </button>
-                <button class="btn btn-secondary" id="history-btn">
-                    <i class="fas fa-history"></i> История событий
-                </button>
-            </div>
-        </main>
+        </div>
         
-        <footer>
-            <p>Цифровой двойник офиса РН-Ванкор | Система мониторинга оборудования | Данные обновляются в реальном времени</p>
-            <p>© 2026 Роснефть-Ванкор. Все права защищены. Версия прототипа 3.0</p>
+        <!-- Подвал -->
+        <footer class="mobile-footer">
+            <p>Цифровой двойник офиса РН-Ванкор</p>
+            <p>Версия 4.0 • Мобильная версия</p>
+            <p class="mt-10">© 2026 Роснефть-Ванкор</p>
         </footer>
     </div>
-
-    <!-- Модальное окно истории событий -->
-    <div class="modal-overlay" id="historyModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">
-                    <i class="fas fa-history"></i> История событий
-                </h2>
-                <button class="close-modal" id="closeHistoryModal">
+    
+    <!-- Модальное окно для графика -->
+    <div class="chart-modal-overlay" id="chartModal">
+        <div class="chart-modal-content">
+            <div class="chart-modal-header">
+                <div class="chart-modal-title">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="chartModalTitle">Данные графика</span>
+                </div>
+                <button class="close-chart-modal" id="closeChartModal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <div class="modal-body">
-                <div class="history-filters">
-                    <button class="filter-btn active" data-filter="all">Все события</button>
-                    <button class="filter-btn" data-filter="info">Информационные</button>
-                    <button class="filter-btn" data-filter="warning">Предупреждения</button>
-                    <button class="filter-btn" data-filter="alert">Тревоги</button>
-                    <button class="filter-btn" data-filter="last24">Последние 24 часа</button>
-                    <button class="filter-btn" data-filter="last7days">Последние 7 дней</button>
-                    <button class="filter-btn" data-filter="last30days">Последние 30 дней</button>
+            <div class="chart-modal-body">
+                <div class="chart-modal-time" id="chartModalTime">
+                    Время: 10:00
                 </div>
-                
-                <div class="history-period" id="historyPeriod">
-                    Показаны все события за последние 30 дней
-                </div>
-                
-                <div class="history-list" id="historyList">
-                    <!-- История событий будет добавляться здесь -->
+                <div class="chart-modal-values" id="chartModalValues">
+                    <!-- Значения будут добавляться здесь -->
                 </div>
             </div>
             
-            <div class="modal-footer">
-                <button class="export-history-btn" id="exportHistoryBtn">
-                    <i class="fas fa-download"></i> Экспорт истории
+            <div class="chart-modal-footer">
+                <button class="chart-modal-btn" id="chartModalExport">
+                    <i class="fas fa-download"></i> Сохранить данные
                 </button>
-                <div class="total-events" id="totalEvents">
-                    Всего событий: 0
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Глобальная переменная для хранения истории событий
+        // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+        let currentChart = null;
+        let chartPoints = [];
+        let currentChartType = 'disk';
+        let updateInterval;
+        let updateTimer = 60;
         let eventHistory = [];
-
-        // Инициализация времени
+        
+        // ===== ОБОРУДОВАНИЕ И СИСТЕМЫ =====
+        const equipmentData = [
+            {
+                id: 'server',
+                name: 'Серверная стойка #1',
+                metrics: [
+                    { label: 'Загрузка ЦП', value: '32%', id: 'server-cpu' },
+                    { label: 'Память', value: '64%', id: 'server-ram' },
+                    { label: 'Температура', value: '24°C', id: 'server-temp' }
+                ],
+                status: 'НОРМА',
+                color: '#007acc'
+            },
+            {
+                id: 'network',
+                name: 'Сетевой коммутатор',
+                metrics: [
+                    { label: 'Загрузка сети', value: '45%', id: 'network-load' },
+                    { label: 'Пакеты/сек', value: '2450', id: 'network-packets' },
+                    { label: 'Аптайм', value: '45д', id: 'network-uptime' }
+                ],
+                status: 'НОРМА',
+                color: '#4caf50'
+            },
+            {
+                id: 'ups',
+                name: 'ИБП',
+                metrics: [
+                    { label: 'Нагрузка', value: '35%', id: 'ups-load' },
+                    { label: 'Батарея', value: '92%', id: 'ups-battery' },
+                    { label: 'Напряжение', value: '223В', id: 'ups-voltage' }
+                ],
+                status: 'НОРМА',
+                color: '#ff9800'
+            },
+            {
+                id: 'ac',
+                name: 'Кондиционирование',
+                metrics: [
+                    { label: 'Температура', value: '22°C', id: 'ac-temp' },
+                    { label: 'Влажность', value: '48%', id: 'ac-humidity' },
+                    { label: 'Мощность', value: '75%', id: 'ac-power' }
+                ],
+                status: 'ВНИМАНИЕ',
+                color: '#f44336'
+            }
+        ];
+        
+        const systemsData = [
+            {
+                id: 'access',
+                name: 'Контроль доступа',
+                metrics: [
+                    { label: 'Двери', value: '7', id: 'access-doors' },
+                    { label: 'Людей в офисе', value: '18', id: 'access-people' },
+                    { label: 'Последний вход', value: '14:32', id: 'access-last' }
+                ],
+                status: 'НОРМА'
+            },
+            {
+                id: 'fire',
+                name: 'Пожарная система',
+                metrics: [
+                    { label: 'Датчики дыма', value: '12/12', id: 'fire-sensors' },
+                    { label: 'Температурные', value: '8/8', id: 'fire-temp-sensors' },
+                    { label: 'Последняя проверка', value: '2 дня', id: 'fire-last-check' }
+                ],
+                status: 'НОРМА'
+            },
+            {
+                id: 'cctv',
+                name: 'Видеонаблюдение',
+                metrics: [
+                    { label: 'Камеры онлайн', value: '12/12', id: 'cctv-online' },
+                    { label: 'Запись', value: '356ч', id: 'cctv-recording' },
+                    { label: 'Диск', value: '42%', id: 'cctv-disk' }
+                ],
+                status: 'НОРМА'
+            },
+            {
+                id: 'conference',
+                name: 'Видеоконференции',
+                metrics: [
+                    { label: 'Активные', value: '2', id: 'conference-active' },
+                    { label: 'Участники', value: '8', id: 'conference-participants' },
+                    { label: 'Качество связи', value: '96%', id: 'conference-quality' }
+                ],
+                status: 'НОРМА'
+            }
+        ];
+        
+        const statusData = [
+            { name: 'Электропитание', status: 'НОРМА', value: '100%', icon: 'bolt' },
+            { name: 'Сеть', status: 'НОРМА', value: '99.8%', icon: 'wifi' },
+            { name: 'Безопасность', status: 'НОРМА', value: '100%', icon: 'shield-alt' },
+            { name: 'Резервное копирование', status: 'НОРМА', value: 'Активно', icon: 'hdd' },
+            { name: 'Температура', status: 'НОРМА', value: '22-24°C', icon: 'thermometer-half' },
+            { name: 'Влажность', status: 'НОРМА', value: '45-55%', icon: 'tint' }
+        ];
+        
+        // ===== ИНИЦИАЛИЗАЦИЯ СТРАНИЦЫ =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Скрываем индикатор загрузки
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 500);
+            
+            // Инициализация времени
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Загрузка данных
+            loadEquipment();
+            loadSystems();
+            loadStatus();
+            initChart();
+            loadInitialEvents();
+            startAutoUpdate();
+            
+            // Настройка свайпа
+            setupSwipe();
+            
+            // Настройка кнопок
+            setupButtons();
+            
+            // Настройка модального окна
+            setupModal();
+            
+            // Настройка таймера обновления
+            setupUpdateTimer();
+        });
+        
+        // ===== ФУНКЦИИ ОБНОВЛЕНИЯ =====
         function updateTime() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString('ru-RU');
+            const timeString = now.toLocaleTimeString('ru-RU', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
             document.getElementById('current-time').textContent = timeString;
         }
         
-        // Генерация случайного числа в диапазоне
+        function updateQuickMonitoring() {
+            const temp = randomInRange(20, 26);
+            const power = randomInRange(5, 15, 1);
+            const users = randomInRange(15, 24);
+            const internet = randomInRange(80, 180);
+            
+            document.getElementById('quick-temp').textContent = temp + '°C';
+            document.getElementById('quick-power').textContent = power + ' кВт';
+            document.getElementById('quick-users').textContent = users;
+            document.getElementById('quick-internet').textContent = internet + ' Мб/с';
+            
+            // Обновляем тренды
+            updateTrend('quick-temp-trend', randomInRange(-1, 1, 1));
+            updateTrend('quick-power-trend', randomInRange(-0.5, 0.5, 1));
+            updateTrend('quick-users-trend', randomInRange(-2, 2, 0));
+            updateTrend('quick-internet-trend', randomInRange(-10, 10, 0));
+        }
+        
+        function updateTrend(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (value > 0) {
+                element.innerHTML = `<i class="fas fa-arrow-up" style="color: #4caf50;"></i> ${Math.abs(value).toFixed(1)}`;
+            } else if (value < 0) {
+                element.innerHTML = `<i class="fas fa-arrow-down" style="color: #f44336;"></i> ${Math.abs(value).toFixed(1)}`;
+            } else {
+                element.innerHTML = `<i class="fas fa-minus" style="color: #ffc107;"></i> 0`;
+            }
+        }
+        
         function randomInRange(min, max, decimals = 0) {
             const value = Math.random() * (max - min) + min;
             return decimals === 0 ? Math.round(value) : parseFloat(value.toFixed(decimals));
         }
         
-        // Генерация случайного статуса
-        function randomStatus() {
-            const statuses = ['НОРМА', 'НОРМА', 'НОРМА', 'НОРМА', 'НОРМА', 'ВНИМАНИЕ', 'НОРМА', 'НОРМА', 'НОРМА', 'НОРМА'];
-            return statuses[Math.floor(Math.random() * statuses.length)];
-        }
-        
-        // Обновление статуса оборудования
-        function updateStatus(elementId, status) {
-            const element = document.getElementById(elementId);
-            element.textContent = status;
-            element.className = 'equipment-status';
+        // ===== ЗАГРУЗКА ДАННЫХ =====
+        function loadEquipment() {
+            const container = document.getElementById('equipment-list');
+            container.innerHTML = '';
             
-            if (status === 'НОРМА') {
-                element.classList.add('status-normal');
-            } else if (status === 'ВНИМАНИЕ') {
-                element.classList.add('status-warning');
-            } else {
-                element.classList.add('status-critical');
-            }
-        }
-        
-        // Добавление события в лог и историю
-        function addEvent(type, message) {
-            const now = new Date();
-            const event = {
-                id: Date.now(),
-                type: type,
-                message: message,
-                time: now,
-                dateString: now.toLocaleDateString('ru-RU'),
-                timeString: now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'}),
-                timestamp: now.getTime()
-            };
-            
-            // Добавляем в массив истории
-            eventHistory.unshift(event);
-            
-            // Ограничиваем историю 500 событиями
-            if (eventHistory.length > 500) {
-                eventHistory.pop();
-            }
-            
-            // Добавляем в лог на главной странице
-            const eventsList = document.getElementById('events-list');
-            
-            const eventItem = document.createElement('div');
-            eventItem.className = 'event-item';
-            
-            const typeClass = type === 'info' ? 'type-info' : (type === 'warning' ? 'type-warning' : 'type-alert');
-            
-            eventItem.innerHTML = `
-                <div class="event-time">${event.timeString}</div>
-                <div class="event-type ${typeClass}">${type === 'info' ? 'ИНФОРМАЦИЯ' : (type === 'warning' ? 'ПРЕДУПРЕЖДЕНИЕ' : 'ТРЕВОГА')}</div>
-                <div class="event-info">${message}</div>
-            `;
-            
-            eventsList.prepend(eventItem);
-            
-            // Ограничиваем количество событий в логе
-            if (eventsList.children.length > 15) {
-                eventsList.removeChild(eventsList.lastChild);
-            }
-            
-            // Обновляем историю если модальное окно открыто
-            if (document.getElementById('historyModal').style.display === 'flex') {
-                updateHistoryView();
-            }
-        }
-        
-        // Показать модальное окно истории
-        function showHistoryModal() {
-            document.getElementById('historyModal').style.display = 'flex';
-            addEvent('info', 'Просмотр истории событий');
-            updateHistoryView();
-        }
-        
-        // Скрыть модальное окно истории
-        function hideHistoryModal() {
-            document.getElementById('historyModal').style.display = 'none';
-        }
-        
-        // Обновить отображение истории
-        function updateHistoryView() {
-            const historyList = document.getElementById('historyList');
-            const totalEvents = document.getElementById('totalEvents');
-            const historyPeriod = document.getElementById('historyPeriod');
-            
-            // Получаем активный фильтр
-            const activeFilter = document.querySelector('.filter-btn.active');
-            const filter = activeFilter ? activeFilter.dataset.filter : 'all';
-            
-            // Фильтрация событий
-            let filteredEvents = [...eventHistory];
-            const now = Date.now();
-            const dayMs = 24 * 60 * 60 * 1000;
-            
-            switch(filter) {
-                case 'info':
-                    filteredEvents = filteredEvents.filter(e => e.type === 'info');
-                    historyPeriod.textContent = 'Показаны только информационные события';
-                    break;
-                case 'warning':
-                    filteredEvents = filteredEvents.filter(e => e.type === 'warning');
-                    historyPeriod.textContent = 'Показаны только предупреждения';
-                    break;
-                case 'alert':
-                    filteredEvents = filteredEvents.filter(e => e.type === 'alert');
-                    historyPeriod.textContent = 'Показаны только тревоги';
-                    break;
-                case 'last24':
-                    filteredEvents = filteredEvents.filter(e => (now - e.timestamp) <= dayMs);
-                    historyPeriod.textContent = 'Показаны события за последние 24 часа';
-                    break;
-                case 'last7days':
-                    filteredEvents = filteredEvents.filter(e => (now - e.timestamp) <= 7 * dayMs);
-                    historyPeriod.textContent = 'Показаны события за последние 7 дней';
-                    break;
-                case 'last30days':
-                    filteredEvents = filteredEvents.filter(e => (now - e.timestamp) <= 30 * dayMs);
-                    historyPeriod.textContent = 'Показаны события за последние 30 дней';
-                    break;
-                default:
-                    filteredEvents = filteredEvents.filter(e => (now - e.timestamp) <= 30 * dayMs);
-                    historyPeriod.textContent = 'Показаны все события за последние 30 дней';
-                    break;
-            }
-            
-            // Обновляем счетчик
-            totalEvents.textContent = `Всего событий: ${filteredEvents.length}`;
-            
-            // Очищаем список
-            historyList.innerHTML = '';
-            
-            // Добавляем события в список
-            filteredEvents.forEach(event => {
-                const historyItem = document.createElement('div');
-                historyItem.className = `history-item ${event.type}`;
+            equipmentData.forEach(item => {
+                const equipment = document.createElement('div');
+                equipment.className = 'equipment-item';
+                equipment.style.borderLeftColor = item.color;
                 
-                const typeText = event.type === 'info' ? 'ИНФОРМАЦИЯ' : 
-                                event.type === 'warning' ? 'ПРЕДУПРЕЖДЕНИЕ' : 'ТРЕВОГА';
+                const statusClass = item.status === 'НОРМА' ? 'status-normal' : 
+                                  item.status === 'ВНИМАНИЕ' ? 'status-warning' : 'status-critical';
                 
-                historyItem.innerHTML = `
-                    <div class="history-date">${event.dateString} ${event.timeString}</div>
-                    <div class="history-type ${event.type}">${typeText}</div>
-                    <div class="history-message">${event.message}</div>
+                let metricsHTML = '';
+                item.metrics.forEach(metric => {
+                    metricsHTML += `
+                        <div class="metric-item">
+                            <span class="metric-label">${metric.label}</span>
+                            <span class="metric-value" id="${metric.id}">${metric.value}</span>
+                        </div>
+                    `;
+                });
+                
+                equipment.innerHTML = `
+                    <div class="equipment-header">
+                        <div class="equipment-name">${item.name}</div>
+                        <div class="equipment-status ${statusClass}">${item.status}</div>
+                    </div>
+                    <div class="metrics-grid">
+                        ${metricsHTML}
+                    </div>
                 `;
                 
-                historyList.appendChild(historyItem);
+                container.appendChild(equipment);
             });
+        }
+        
+        function loadSystems() {
+            const container = document.getElementById('systems-list');
+            container.innerHTML = '';
             
-            // Если нет событий, показываем сообщение
-            if (filteredEvents.length === 0) {
-                historyList.innerHTML = `
-                    <div class="history-item">
-                        <div class="history-message" style="text-align: center; width: 100%; color: #a3c7e6;">
-                            <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
-                            Нет событий для отображения с выбранным фильтром
+            systemsData.forEach(item => {
+                const system = document.createElement('div');
+                system.className = 'equipment-item';
+                system.style.borderLeftColor = '#9c27b0';
+                
+                const statusClass = 'status-normal';
+                
+                let metricsHTML = '';
+                item.metrics.forEach(metric => {
+                    metricsHTML += `
+                        <div class="metric-item">
+                            <span class="metric-label">${metric.label}</span>
+                            <span class="metric-value" id="${metric.id}">${metric.value}</span>
+                        </div>
+                    `;
+                });
+                
+                system.innerHTML = `
+                    <div class="equipment-header">
+                        <div class="equipment-name">${item.name}</div>
+                        <div class="equipment-status ${statusClass}">${item.status}</div>
+                    </div>
+                    <div class="metrics-grid">
+                        ${metricsHTML}
+                    </div>
+                `;
+                
+                container.appendChild(system);
+            });
+        }
+        
+        function loadStatus() {
+            const container = document.getElementById('status-list');
+            container.innerHTML = '';
+            
+            statusData.forEach(item => {
+                const status = document.createElement('div');
+                status.className = 'equipment-item';
+                
+                const statusClass = 'status-normal';
+                
+                status.innerHTML = `
+                    <div class="equipment-header">
+                        <div class="equipment-name">
+                            <i class="fas fa-${item.icon}" style="margin-right: 8px; color: #00a8ff;"></i>
+                            ${item.name}
+                        </div>
+                        <div class="equipment-status ${statusClass}">${item.status}</div>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <span class="metric-label">Текущее значение</span>
+                            <span class="metric-value">${item.value}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Стабильность</span>
+                            <span class="metric-value">Высокая</span>
                         </div>
                     </div>
                 `;
-            }
+                
+                container.appendChild(status);
+            });
         }
         
-        // Экспорт истории
-        function exportHistory() {
-            if (eventHistory.length === 0) {
-                alert('Нет данных для экспорта');
-                return;
-            }
+        // ===== ГРАФИКИ =====
+        function initChart() {
+            const ctx = document.getElementById('mobileChart').getContext('2d');
             
-            const csvContent = "data:text/csv;charset=utf-8," 
-                + "Дата;Время;Тип;Сообщение\n"
-                + eventHistory.map(event => 
-                    `${event.dateString};${event.timeString};${event.type === 'info' ? 'ИНФОРМАЦИЯ' : event.type === 'warning' ? 'ПРЕДУПРЕЖДЕНИЕ' : 'ТРЕВОГА'};"${event.message}"`
-                ).join("\n");
-            
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `история_событий_РН-Ванкор_${new Date().toISOString().split('T')[0]}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            addEvent('info', 'Экспорт истории событий выполнен');
-        }
-        
-        // Генерация данных для графиков
-        function generateChartData() {
             const hours = [];
             const now = new Date();
-            
-            // Генерируем метки для последних 24 часов
             for (let i = 23; i >= 0; i--) {
                 const hour = new Date(now);
                 hour.setHours(now.getHours() - i);
                 hours.push(hour.getHours().toString().padStart(2, '0') + ':00');
             }
             
-            // Генерируем данные для нагрузки на диски
-            const diskLoadData = {
+            const chartData = {
                 labels: hours,
                 datasets: [
                     {
-                        label: 'Сервер БД Kodeks',
+                        label: 'Сервер БД',
                         data: hours.map(() => randomInRange(30, 80)),
                         borderColor: '#007acc',
                         backgroundColor: 'rgba(0, 122, 204, 0.1)',
                         borderWidth: 2,
                         tension: 0.4,
-                        fill: true
+                        pointRadius: 0,
+                        pointHoverRadius: 6
                     },
                     {
                         label: 'Файловый сервер',
@@ -1421,7 +1228,8 @@
                         backgroundColor: 'rgba(76, 175, 80, 0.1)',
                         borderWidth: 2,
                         tension: 0.4,
-                        fill: true
+                        pointRadius: 0,
+                        pointHoverRadius: 6
                     },
                     {
                         label: 'Видеонаблюдение',
@@ -1430,116 +1238,28 @@
                         backgroundColor: 'rgba(255, 152, 0, 0.1)',
                         borderWidth: 2,
                         tension: 0.4,
-                        fill: true
+                        pointRadius: 0,
+                        pointHoverRadius: 6
                     }
                 ]
             };
             
-            // Генерируем данные для объема трафика
-            const trafficVolumeData = {
-                labels: hours,
-                datasets: [
-                    {
-                        label: 'Входящий трафик (Гб)',
-                        data: hours.map(() => randomInRange(5, 50, 1)),
-                        borderColor: '#9c27b0',
-                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Исходящий трафик (Гб)',
-                        data: hours.map(() => randomInRange(3, 30, 1)),
-                        borderColor: '#00bcd4',
-                        backgroundColor: 'rgba(0, 188, 212, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }
-                ]
-            };
-            
-            return { diskLoadData, trafficVolumeData };
-        }
-        
-        // Инициализация графиков
-        let diskLoadChart, trafficVolumeChart;
-        
-        function initCharts() {
-            const ctx1 = document.getElementById('diskLoadChart').getContext('2d');
-            const ctx2 = document.getElementById('trafficVolumeChart').getContext('2d');
-            
-            const chartData = generateChartData();
-            
-            // График нагрузки на диски
-            diskLoadChart = new Chart(ctx1, {
+            currentChart = new Chart(ctx, {
                 type: 'line',
-                data: chartData.diskLoadData,
+                data: chartData,
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
+                            position: 'top',
                             labels: {
                                 color: '#a3c7e6',
                                 font: {
-                                    size: 12
-                                }
-                            }
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: '#132f4c',
-                            titleColor: '#e6f1ff',
-                            bodyColor: '#e6f1ff',
-                            borderColor: '#1e4976',
-                            borderWidth: 1
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                color: '#1e4976'
-                            },
-                            ticks: {
-                                color: '#a3c7e6',
-                                maxRotation: 0,
-                                maxTicksLimit: 12
-                            }
-                        },
-                        y: {
-                            min: 0,
-                            max: 100,
-                            grid: {
-                                color: '#1e4976'
-                            },
-                            ticks: {
-                                color: '#a3c7e6',
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // График объема трафика
-            trafficVolumeChart = new Chart(ctx2, {
-                type: 'line',
-                data: chartData.trafficVolumeData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#a3c7e6',
-                                font: {
-                                    size: 12
-                                }
+                                    size: 11
+                                },
+                                padding: 15,
+                                usePointStyle: true
                             }
                         },
                         tooltip: {
@@ -1550,341 +1270,508 @@
                             bodyColor: '#e6f1ff',
                             borderColor: '#1e4976',
                             borderWidth: 1,
-                            callbacks: {
-                                label: function(context) {
-                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + ' Гб';
-                                }
+                            padding: 12,
+                            bodyFont: {
+                                size: 12
+                            },
+                            titleFont: {
+                                size: 11
                             }
                         }
                     },
                     scales: {
                         x: {
                             grid: {
-                                color: '#1e4976'
+                                color: '#1e4976',
+                                drawBorder: false
                             },
                             ticks: {
                                 color: '#a3c7e6',
                                 maxRotation: 0,
-                                maxTicksLimit: 12
+                                maxTicksLimit: 8,
+                                font: {
+                                    size: 10
+                                }
                             }
                         },
                         y: {
                             min: 0,
+                            max: 100,
                             grid: {
-                                color: '#1e4976'
+                                color: '#1e4976',
+                                drawBorder: false
                             },
                             ticks: {
                                 color: '#a3c7e6',
                                 callback: function(value) {
-                                    return value.toFixed(0) + ' Гб';
+                                    return value + '%';
+                                },
+                                font: {
+                                    size: 10
                                 }
                             }
                         }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
                     }
                 }
             });
+            
+            // Добавляем кликабельные точки после создания графика
+            setTimeout(addChartPoints, 500);
         }
         
-        // Обновление графиков
-        function updateCharts() {
-            const chartData = generateChartData();
+        function addChartPoints() {
+            // Очищаем старые точки
+            chartPoints.forEach(point => point.remove());
+            chartPoints = [];
             
-            diskLoadChart.data = chartData.diskLoadData;
-            trafficVolumeChart.data = chartData.trafficVolumeData;
+            const chart = currentChart;
+            if (!chart) return;
             
-            diskLoadChart.update();
-            trafficVolumeChart.update();
-        }
-        
-        // Обновление всех данных
-        function updateAllData() {
-            // Обновление времени
-            updateTime();
+            const meta = chart.getDatasetMeta(0);
+            const chartWrapper = document.querySelector('.chart-wrapper');
+            const canvas = document.getElementById('mobileChart');
+            const rect = canvas.getBoundingClientRect();
             
-            // Обновление серверной стойки
-            document.getElementById('server-cpu').textContent = randomInRange(5, 45) + '%';
-            document.getElementById('server-ram').textContent = randomInRange(30, 80) + '%';
-            document.getElementById('server-temp').textContent = randomInRange(18, 28) + '°C';
-            updateStatus('server-status', randomStatus());
-            
-            // Обновление сетевого коммутатора
-            document.getElementById('network-load').textContent = randomInRange(10, 60) + '%';
-            document.getElementById('network-packets').textContent = randomInRange(1000, 5000);
-            document.getElementById('network-uptime').textContent = randomInRange(30, 180) + 'д';
-            updateStatus('network-status', randomStatus());
-            
-            // Обновление ИБП
-            document.getElementById('ups-load').textContent = randomInRange(20, 70) + '%';
-            document.getElementById('ups-battery').textContent = randomInRange(80, 100) + '%';
-            document.getElementById('ups-voltage').textContent = randomInRange(215, 230) + 'В';
-            updateStatus('ups-status', randomStatus());
-            
-            // Обновление системы кондиционирования
-            document.getElementById('ac-temp').textContent = randomInRange(20, 25) + '°C';
-            document.getElementById('ac-humidity').textContent = randomInRange(40, 60) + '%';
-            document.getElementById('ac-power').textContent = randomInRange(60, 95) + '%';
-            updateStatus('ac-status', randomStatus());
-            
-            // Обновление системы видеонаблюдения
-            document.getElementById('cctv-online').textContent = randomInRange(10, 12) + '/12';
-            document.getElementById('cctv-recording').textContent = randomInRange(100, 500) + 'ч';
-            document.getElementById('cctv-disk').textContent = randomInRange(30, 85) + '%';
-            updateStatus('cctv-status', randomStatus());
-            
-            // Обновление рабочих станций
-            document.getElementById('workstation-active').textContent = randomInRange(15, 24) + '/24';
-            document.getElementById('workstation-load').textContent = randomInRange(10, 50) + '%';
-            document.getElementById('workstation-internet').textContent = randomInRange(50, 200) + ' Мб/с';
-            updateStatus('workstation-status', randomStatus());
-            
-            // Обновление серверных машин
-            document.getElementById('server-db-disk-c').textContent = randomInRange(15, 45) + '%';
-            document.getElementById('server-db-disk-d').textContent = randomInRange(40, 80) + '%';
-            document.getElementById('server-db-temp').textContent = randomInRange(25, 35) + '°C';
-            document.getElementById('server-db-uptime').textContent = randomInRange(60, 120) + 'д';
-            updateStatus('server-db-status', randomStatus());
-            
-            document.getElementById('server-files-disk-raid1').textContent = randomInRange(20, 50) + '%';
-            document.getElementById('server-files-disk-raid5').textContent = randomInRange(50, 85) + '%';
-            document.getElementById('server-files-temp').textContent = randomInRange(22, 30) + '°C';
-            document.getElementById('server-files-uptime').textContent = randomInRange(45, 90) + 'д';
-            updateStatus('server-files-status', randomStatus());
-            
-            // Обновление мониторинга
-            document.getElementById('monitor-temp').textContent = randomInRange(20, 26) + '°C';
-            document.getElementById('monitor-power').textContent = randomInRange(5, 15, 1) + ' кВт';
-            document.getElementById('monitor-internet').textContent = randomInRange(80, 180) + ' Мб/с';
-            document.getElementById('monitor-users').textContent = randomInRange(15, 24);
-            document.getElementById('monitor-humidity').textContent = randomInRange(40, 65) + '%';
-            document.getElementById('monitor-air').textContent = randomInRange(400, 800) + ' ppm';
-            
-            // Обновление дополнительных систем
-            document.getElementById('access-doors').textContent = randomInRange(5, 8);
-            document.getElementById('access-people').textContent = randomInRange(18, 24);
-            document.getElementById('access-last').textContent = new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
-            updateStatus('access-status', randomStatus());
-            
-            document.getElementById('fire-sensors').textContent = randomInRange(10, 12) + '/12';
-            document.getElementById('fire-temp-sensors').textContent = randomInRange(6, 8) + '/8';
-            document.getElementById('fire-last-check').textContent = randomInRange(1, 14) + ' дней';
-            updateStatus('fire-status', randomStatus());
-            
-            document.getElementById('conference-active').textContent = randomInRange(0, 3);
-            document.getElementById('conference-participants').textContent = randomInRange(0, 15);
-            document.getElementById('conference-quality').textContent = randomInRange(85, 100) + '%';
-            updateStatus('conference-status', randomStatus());
-            
-            document.getElementById('building-lights').textContent = randomInRange(30, 80) + '%';
-            document.getElementById('building-ventilation').textContent = randomInRange(40, 90) + '%';
-            document.getElementById('building-irrigation').textContent = Math.random() > 0.5 ? 'Вкл' : 'Выкл';
-            updateStatus('building-status', randomStatus());
-            
-            // Обновление графиков (раз в 5 минут)
-            if (Math.random() < 0.2) {
-                updateCharts();
-            }
-            
-            // Добавляем случайное событие в лог (с вероятностью 20% при автоматическом обновлении)
-            if (Math.random() < 0.2) {
-                const events = [
-                    {type: 'info', message: 'Плановое обновление данных системы мониторинга'},
-                    {type: 'info', message: 'Запущен процесс архивации лог-файлов'},
-                    {type: 'warning', message: 'Повышение температуры в серверной на 2°C'},
-                    {type: 'info', message: 'Обновление антивирусных баз выполнено успешно'},
-                    {type: 'info', message: 'Резервное копирование данных завершено'},
-                    {type: 'info', message: 'Проверка системы безопасности не выявила нарушений'},
-                    {type: 'info', message: 'Автоматическая проверка систем видеонаблюдения'},
-                    {type: 'info', message: 'Синхронизация данных с центральным офисом'},
-                ];
+            // Добавляем точки для каждого набора данных
+            chart.data.datasets.forEach((dataset, datasetIndex) => {
+                const meta = chart.getDatasetMeta(datasetIndex);
                 
-                const randomEvent = events[Math.floor(Math.random() * events.length)];
-                addEvent(randomEvent.type, randomEvent.message);
-            }
-            
-            // Обновляем тренды
-            updateTrends();
-        }
-        
-        // Обновление трендов (стрелочки вверх/вниз)
-        function updateTrends() {
-            const trendElements = [
-                {id: 'monitor-temp-trend', value: randomInRange(-1, 1, 1)},
-                {id: 'monitor-power-trend', value: randomInRange(-0.5, 0.5, 1)},
-                {id: 'monitor-internet-trend', value: randomInRange(-10, 10, 0)},
-                {id: 'monitor-users-trend', value: randomInRange(-2, 2, 0)},
-                {id: 'monitor-humidity-trend', value: randomInRange(-3, 3, 0)},
-                {id: 'monitor-air-trend', value: randomInRange(-20, 20, 0)}
-            ];
-            
-            trendElements.forEach(item => {
-                const element = document.getElementById(item.id);
-                if (item.value > 0) {
-                    element.innerHTML = `<i class="fas fa-arrow-up" style="color: #4caf50;"></i> +${Math.abs(item.value)}`;
-                } else if (item.value < 0) {
-                    element.innerHTML = `<i class="fas fa-arrow-down" style="color: #f44336;"></i> -${Math.abs(item.value)}`;
-                } else {
-                    element.innerHTML = `<i class="fas fa-minus" style="color: #ffc107;"></i> 0`;
-                }
-            });
-        }
-        
-        // Симуляция события (увеличенное количество событий)
-        function simulateEvent() {
-            const events = [
-                {type: 'alert', message: 'КРИТИЧЕСКОЕ СОБЫТИЕ: Отказ системы кондиционирования в серверной'},
-                {type: 'alert', message: 'КРИТИЧЕСКОЕ СОБЫТИЕ: Обрыв сетевого соединения с центральным офисом'},
-                {type: 'warning', message: 'ВНИМАНИЕ: Превышена температура в серверной на 5°C'},
-                {type: 'warning', message: 'ВНИМАНИЕ: Снижение заряда батарей ИБП до 30%'},
-                {type: 'alert', message: 'КРИТИЧЕСКОЕ СОБЫТИЕ: Сбой системы видеонаблюдения (8 камер offline)'},
-                {type: 'alert', message: 'ТРЕВОГА: Срабатывание пожарной сигнализации в коридоре 3-го этажа'},
-                {type: 'warning', message: 'ПРЕДУПРЕЖДЕНИЕ: Падение скорости интернет-соединения на 70%'},
-                {type: 'alert', message: 'КРИТИЧЕСКОЕ СОБЫТИЕ: Отключение электропитания в восточном крыле офиса'},
-                {type: 'warning', message: 'ВНИМАНИЕ: Несанкционированная попытка доступа к серверной'},
-                {type: 'alert', message: 'ТРЕВОГА: Утечка воды в серверном помещении'},
-                {type: 'warning', message: 'ПРЕДУПРЕЖДЕНИЕ: Высокий уровень CO2 в переговорной комнате №2'},
-                {type: 'alert', message: 'КРИТИЧЕСКОЕ СОБЫТИЕ: Сбой в системе контроля доступа (двери разблокированы)'},
-                {type: 'warning', message: 'ВНИМАНИЕ: Перегрев процессора на сервере БД'},
-                {type: 'alert', message: 'ТРЕВОГА: Обнаружена вредоносная активность в сети офиса'},
-                {type: 'warning', message: 'ПРЕДУПРЕЖДЕНИЕ: Снижение давления в системе пожаротушения'},
-                {type: 'alert', message: 'КРИТИЧЕСКОЕ СОБЫТИЕ: Заполнение дискового пространства на файловом сервере'},
-                {type: 'warning', message: 'ВНИМАНИЕ: Высокая загрузка процессора на сервере приложений'},
-                {type: 'alert', message: 'ТРЕВОГА: Сбой RAID массива на сервере БД'},
-            ];
-            
-            // Добавляем 3 случайных события при каждом нажатии
-            for (let i = 0; i < 3; i++) {
-                const randomEvent = events[Math.floor(Math.random() * events.length)];
-                addEvent(randomEvent.type, randomEvent.message);
-            }
-            
-            // Визуальный эффект для кнопки
-            const btn = document.getElementById('simulate-btn');
-            btn.innerHTML = '<i class="fas fa-check"></i> 3 события созданы';
-            btn.style.backgroundColor = '#4caf50';
-            
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-bolt"></i> Симуляция события';
-                btn.style.backgroundColor = '';
-            }, 3000);
-        }
-        
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Инициализируем графики
-            initCharts();
-            
-            // Заполняем начальные данные
-            updateAllData();
-            
-            // Добавляем начальные события в лог
-            addEvent('info', 'Система мониторинга цифрового двойника офиса запущена');
-            addEvent('info', 'Инициализация датчиков и оборудования выполнена успешно');
-            addEvent('info', 'Подключение к центральной системе РН-Ванкор установлено');
-            addEvent('info', 'Все системы работают в штатном режиме');
-            addEvent('info', 'Графики мониторинга инициализированы');
-            
-            // Добавляем демо-события в историю
-            const demoEvents = [
-                {type: 'info', message: 'Система мониторинга установлена и настроена'},
-                {type: 'info', message: 'Первое подключение оборудования к системе'},
-                {type: 'warning', message: 'Обнаружено повышение температуры в серверной на 3°C'},
-                {type: 'info', message: 'Температура в серверной нормализована'},
-                {type: 'info', message: 'Проведено плановое обновление программного обеспечения'},
-                {type: 'alert', message: 'Короткое отключение электропитания в восточном крыле'},
-                {type: 'info', message: 'Электропитание восстановлено, системы работают штатно'},
-                {type: 'warning', message: 'Обнаружена попытка несанкционированного доступа к сети'},
-                {type: 'info', message: 'Попытка доступа заблокирована, безопасность не нарушена'},
-                {type: 'info', message: 'Проведена проверка системы резервного копирования'},
-                {type: 'info', message: 'Резервное копирование данных выполнено успешно'},
-                {type: 'warning', message: 'Снижение скорости интернет-соединения на 40%'},
-                {type: 'info', message: 'Скорость интернет-соединения восстановлена'},
-                {type: 'info', message: 'Обновлены антивирусные базы на всех рабочих станциях'},
-                {type: 'alert', message: 'Сработала пожарная сигнализация в столовой (ложное срабатывание)'},
-                {type: 'info', message: 'Пожарная сигнализация проверена и переведена в рабочий режим'},
-                {type: 'warning', message: 'Обнаружена высокая загрузка процессора на файловом сервере'},
-                {type: 'info', message: 'Загрузка процессора на файловом сервере снижена до нормы'},
-                {type: 'info', message: 'Проведена проверка системы видеонаблюдения'},
-                {type: 'info', message: 'Все камеры видеонаблюдения работают исправно'},
-                {type: 'info', message: 'Обновление конфигурации сетевого оборудования'},
-                {type: 'info', message: 'Сетевое оборудование обновлено успешно'},
-                {type: 'warning', message: 'Снижение заряда батарей ИБП до 50%'},
-                {type: 'info', message: 'Батареи ИБП заменены, система работает штатно'},
-                {type: 'info', message: 'Проведена тренировка по эвакуации персонала'},
-                {type: 'info', message: 'Тренировка по эвакуации завершена успешно'},
-                {type: 'warning', message: 'Обнаружена утечка воды в техническом помещении'},
-                {type: 'info', message: 'Утечка воды устранена, оборудование не пострадало'},
-                {type: 'info', message: 'Проверка системы контроля доступа'},
-                {type: 'info', message: 'Система контроля доступа работает исправно'},
-            ];
-            
-            // Добавляем демо-события в историю с разными датами
-            const now = new Date();
-            demoEvents.forEach((event, index) => {
-                const eventDate = new Date(now);
-                eventDate.setDate(now.getDate() - Math.floor(Math.random() * 30)); // Случайная дата за последние 30 дней
-                eventDate.setHours(Math.floor(Math.random() * 24));
-                eventDate.setMinutes(Math.floor(Math.random() * 60));
-                
-                const demoEvent = {
-                    id: Date.now() - index * 100000,
-                    type: event.type,
-                    message: event.message,
-                    time: eventDate,
-                    dateString: eventDate.toLocaleDateString('ru-RU'),
-                    timeString: eventDate.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'}),
-                    timestamp: eventDate.getTime()
-                };
-                
-                eventHistory.unshift(demoEvent);
-            });
-            
-            // Настраиваем автоматическое обновление каждые 60 секунд
-            setInterval(updateAllData, 60000);
-            
-            // Настраиваем обработчики кнопок
-            document.getElementById('refresh-btn').addEventListener('click', function() {
-                updateAllData();
-                updateCharts();
-            });
-            
-            document.getElementById('simulate-btn').addEventListener('click', simulateEvent);
-            document.getElementById('export-btn').addEventListener('click', function() {
-                alert('Экспорт данных выполнен. Файл сохранен в формате CSV.');
-                addEvent('info', 'Экспорт данных мониторинга в CSV выполнен');
-            });
-            
-            document.getElementById('history-btn').addEventListener('click', showHistoryModal);
-            
-            // Обработчики для модального окна истории
-            document.getElementById('closeHistoryModal').addEventListener('click', hideHistoryModal);
-            document.getElementById('exportHistoryBtn').addEventListener('click', exportHistory);
-            
-            // Обработчик клика вне модального окна для закрытия
-            document.getElementById('historyModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    hideHistoryModal();
-                }
-            });
-            
-            // Обработчики фильтров истории
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Убираем активный класс у всех кнопок
-                    document.querySelectorAll('.filter-btn').forEach(b => {
-                        b.classList.remove('active');
+                meta.data.forEach((point, pointIndex) => {
+                    const model = point.getProps(['x', 'y'], true);
+                    
+                    // Создаем элемент точки
+                    const pointElement = document.createElement('div');
+                    pointElement.className = 'chart-point';
+                    pointElement.dataset.datasetIndex = datasetIndex;
+                    pointElement.dataset.pointIndex = pointIndex;
+                    pointElement.dataset.value = dataset.data[pointIndex];
+                    pointElement.dataset.time = chart.data.labels[pointIndex];
+                    pointElement.dataset.label = dataset.label;
+                    
+                    // Позиционируем точку
+                    pointElement.style.left = model.x + 'px';
+                    pointElement.style.top = model.y + 'px';
+                    
+                    // Добавляем обработчик клика
+                    pointElement.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        showChartModal(this);
                     });
                     
-                    // Добавляем активный класс нажатой кнопке
-                    this.classList.add('active');
+                    // Добавляем точку в контейнер
+                    chartWrapper.appendChild(pointElement);
+                    chartPoints.push(pointElement);
+                });
+            });
+        }
+        
+        function updateChartPoints() {
+            if (!currentChart) return;
+            
+            const chart = currentChart;
+            chartPoints.forEach((point, index) => {
+                const datasetIndex = parseInt(point.dataset.datasetIndex);
+                const pointIndex = parseInt(point.dataset.pointIndex);
+                
+                const meta = chart.getDatasetMeta(datasetIndex);
+                if (meta && meta.data[pointIndex]) {
+                    const model = meta.data[pointIndex].getProps(['x', 'y'], true);
+                    point.style.left = model.x + 'px';
+                    point.style.top = model.y + 'px';
+                    point.dataset.value = chart.data.datasets[datasetIndex].data[pointIndex];
+                }
+            });
+        }
+        
+        function showChartModal(pointElement) {
+            // Подсвечиваем активную точку
+            chartPoints.forEach(p => p.classList.remove('active'));
+            pointElement.classList.add('active');
+            
+            const time = pointElement.dataset.time;
+            const values = [];
+            
+            // Собираем все значения для этого времени
+            chartPoints.forEach(point => {
+                if (point.dataset.time === time) {
+                    values.push({
+                        label: point.dataset.label,
+                        value: point.dataset.value + '%',
+                        color: getDatasetColor(parseInt(point.dataset.datasetIndex))
+                    });
+                }
+            });
+            
+            // Заполняем модальное окно
+            document.getElementById('chartModalTitle').textContent = 'Нагрузка на диски';
+            document.getElementById('chartModalTime').textContent = `Время: ${time}`;
+            
+            const valuesContainer = document.getElementById('chartModalValues');
+            valuesContainer.innerHTML = '';
+            
+            values.forEach(item => {
+                const valueItem = document.createElement('div');
+                valueItem.className = 'modal-value-item';
+                valueItem.innerHTML = `
+                    <div class="modal-value-label">
+                        <div class="modal-value-color" style="background-color: ${item.color}"></div>
+                        <span>${item.label}</span>
+                    </div>
+                    <div class="modal-value-number">${item.value}</div>
+                `;
+                valuesContainer.appendChild(valueItem);
+            });
+            
+            // Показываем модальное окно
+            document.getElementById('chartModal').style.display = 'flex';
+        }
+        
+        function getDatasetColor(index) {
+            const colors = ['#007acc', '#4caf50', '#ff9800'];
+            return colors[index] || '#007acc';
+        }
+        
+        // ===== СОБЫТИЯ =====
+        function addEvent(type, message) {
+            const now = new Date();
+            const event = {
+                type: type,
+                message: message,
+                time: now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'})
+            };
+            
+            eventHistory.unshift(event);
+            if (eventHistory.length > 50) eventHistory.pop();
+            
+            updateEventsList();
+        }
+        
+        function updateEventsList() {
+            const container = document.getElementById('events-list');
+            container.innerHTML = '';
+            
+            // Показываем только последние 5 событий
+            const recentEvents = eventHistory.slice(0, 5);
+            
+            recentEvents.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item';
+                
+                const typeClass = event.type === 'info' ? 'type-info' : 
+                                 event.type === 'warning' ? 'type-warning' : 'type-alert';
+                
+                const typeText = event.type === 'info' ? 'ИНФО' : 
+                                event.type === 'warning' ? 'ВНИМ' : 'ТРЕВ';
+                
+                eventItem.innerHTML = `
+                    <div class="event-time">${event.time}</div>
+                    <div class="event-type ${typeClass}">${typeText}</div>
+                    <div class="event-info">${event.message}</div>
+                `;
+                
+                container.appendChild(eventItem);
+            });
+        }
+        
+        function loadInitialEvents() {
+            const initialEvents = [
+                {type: 'info', message: 'Система мониторинга запущена'},
+                {type: 'info', message: 'Все оборудование онлайн'},
+                {type: 'warning', message: 'Температура в серверной +2°C'},
+                {type: 'info', message: 'Плановое обновление данных'},
+                {type: 'info', message: 'Синхронизация с центральным офисом'}
+            ];
+            
+            initialEvents.forEach(event => addEvent(event.type, event.message));
+        }
+        
+        // ===== СВАЙП НАВИГАЦИЯ =====
+        function setupSwipe() {
+            const container = document.getElementById('swipeContainer');
+            const dots = document.querySelectorAll('.nav-dot');
+            let currentIndex = 0;
+            
+            // Обработчик свайпа
+            let startX, startY;
+            let isScrolling;
+            
+            container.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                isScrolling = undefined;
+            });
+            
+            container.addEventListener('touchmove', (e) => {
+                if (!startX || !startY) return;
+                
+                const x = e.touches[0].clientX;
+                const y = e.touches[0].clientY;
+                
+                const dx = startX - x;
+                const dy = startY - y;
+                
+                if (isScrolling === undefined) {
+                    isScrolling = Math.abs(dx) < Math.abs(dy);
+                }
+                
+                if (!isScrolling) {
+                    e.preventDefault();
+                }
+            });
+            
+            container.addEventListener('touchend', (e) => {
+                if (!startX || !startY || isScrolling) return;
+                
+                const x = e.changedTouches[0].clientX;
+                const y = e.changedTouches[0].clientY;
+                
+                const dx = startX - x;
+                const minSwipe = 50;
+                
+                if (Math.abs(dx) > minSwipe) {
+                    if (dx > 0 && currentIndex < dots.length - 1) {
+                        // Свайп влево
+                        currentIndex++;
+                    } else if (dx < 0 && currentIndex > 0) {
+                        // Свайп вправо
+                        currentIndex--;
+                    }
                     
-                    // Обновляем отображение истории
-                    updateHistoryView();
+                    updateSwipePosition();
+                }
+                
+                startX = null;
+                startY = null;
+            });
+            
+            // Клик по точкам навигации
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateSwipePosition();
                 });
             });
             
-            // Обновляем время каждую секунду
-            setInterval(updateTime, 1000);
-        });
+            function updateSwipePosition() {
+                const scrollPosition = currentIndex * container.offsetWidth;
+                container.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Обновляем активную точку
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Авто-скролл при прокрутке
+            container.addEventListener('scroll', () => {
+                const scrollLeft = container.scrollLeft;
+                const cardWidth = container.offsetWidth;
+                const newIndex = Math.round(scrollLeft / cardWidth);
+                
+                if (newIndex !== currentIndex) {
+                    currentIndex = newIndex;
+                    dots.forEach((dot, index) => {
+                        if (index === currentIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }
+        
+        // ===== КНОПКИ =====
+        function setupButtons() {
+            document.getElementById('refresh-btn').addEventListener('click', refreshData);
+            document.getElementById('simulate-btn').addEventListener('click', simulateEvent);
+            document.getElementById('history-btn').addEventListener('click', showHistory);
+            document.getElementById('export-btn').addEventListener('click', exportData);
+        }
+        
+        function refreshData() {
+            // Анимация кнопки
+            const btn = document.getElementById('refresh-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Обновление';
+            btn.disabled = true;
+            
+            // Обновляем данные
+            updateQuickMonitoring();
+            updateEquipmentData();
+            updateChartData();
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                addEvent('info', 'Данные обновлены вручную');
+            }, 1000);
+        }
+        
+        function simulateEvent() {
+            const events = [
+                {type: 'warning', message: 'Повышение температуры в серверной'},
+                {type: 'alert', message: 'Сбой системы кондиционирования'},
+                {type: 'warning', message: 'Снижение скорости интернета'},
+                {type: 'info', message: 'Плановое обслуживание оборудования'}
+            ];
+            
+            const randomEvent = events[Math.floor(Math.random() * events.length)];
+            addEvent(randomEvent.type, randomEvent.message);
+            
+            // Анимация кнопки
+            const btn = document.getElementById('simulate-btn');
+            btn.innerHTML = '<i class="fas fa-check"></i> Готово';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-bolt"></i> Событие';
+            }, 2000);
+        }
+        
+        function showHistory() {
+            alert('История событий будет доступна в следующем обновлении');
+            addEvent('info', 'Просмотр истории событий');
+        }
+        
+        function exportData() {
+            const data = {
+                time: new Date().toLocaleString('ru-RU'),
+                equipment: equipmentData,
+                systems: systemsData
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `РН-Ванкор_данные_${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            addEvent('info', 'Экспорт данных выполнен');
+        }
+        
+        // ===== ОБНОВЛЕНИЕ ДАННЫХ =====
+        function updateEquipmentData() {
+            // Обновляем метрики оборудования
+            equipmentData.forEach(item => {
+                item.metrics.forEach(metric => {
+                    if (metric.id.includes('temp')) {
+                        metric.value = randomInRange(18, 28) + '°C';
+                    } else if (metric.id.includes('cpu') || metric.id.includes('load')) {
+                        metric.value = randomInRange(20, 70) + '%';
+                    } else if (metric.id.includes('ram')) {
+                        metric.value = randomInRange(40, 85) + '%';
+                    } else if (metric.id.includes('battery')) {
+                        metric.value = randomInRange(80, 100) + '%';
+                    }
+                    
+                    const element = document.getElementById(metric.id);
+                    if (element) {
+                        element.textContent = metric.value;
+                    }
+                });
+            });
+        }
+        
+        function updateChartData() {
+            if (!currentChart) return;
+            
+            // Обновляем данные графика
+            currentChart.data.datasets.forEach(dataset => {
+                dataset.data = dataset.data.map(() => randomInRange(30, 85));
+            });
+            
+            currentChart.update();
+            
+            // Обновляем точки после обновления графика
+            setTimeout(updateChartPoints, 100);
+        }
+        
+        // ===== ТАЙМЕР ОБНОВЛЕНИЯ =====
+        function setupUpdateTimer() {
+            updateTimer = 60;
+            
+            updateInterval = setInterval(() => {
+                updateTimer--;
+                document.getElementById('update-timer').textContent = updateTimer;
+                
+                if (updateTimer <= 0) {
+                    updateTimer = 60;
+                    autoUpdateData();
+                }
+            }, 1000);
+        }
+        
+        function autoUpdateData() {
+            updateQuickMonitoring();
+            updateEquipmentData();
+            updateChartData();
+            
+            // Случайное событие при автообновлении
+            if (Math.random() < 0.3) {
+                const events = [
+                    {type: 'info', message: 'Автоматическое обновление данных'},
+                    {type: 'info', message: 'Проверка систем безопасности'},
+                    {type: 'info', message: 'Синхронизация данных с облаком'}
+                ];
+                const randomEvent = events[Math.floor(Math.random() * events.length)];
+                addEvent(randomEvent.type, randomEvent.message);
+            }
+        }
+        
+        function startAutoUpdate() {
+            setInterval(autoUpdateData, 60000);
+        }
+        
+        // ===== МОДАЛЬНОЕ ОКНО =====
+        function setupModal() {
+            const modal = document.getElementById('chartModal');
+            const closeBtn = document.getElementById('closeChartModal');
+            const exportBtn = document.getElementById('chartModalExport');
+            
+            // Закрытие по клику на кнопку
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+                chartPoints.forEach(p => p.classList.remove('active'));
+            });
+            
+            // Закрытие по клику вне окна
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    chartPoints.forEach(p => p.classList.remove('active'));
+                }
+            });
+            
+            // Экспорт данных из модального окна
+            exportBtn.addEventListener('click', () => {
+                const time = document.getElementById('chartModalTime').textContent;
+                alert(`Данные для ${time} будут экспортированы`);
+                modal.style.display = 'none';
+                chartPoints.forEach(p => p.classList.remove('active'));
+            });
+            
+            // Закрытие по клавише ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    modal.style.display = 'none';
+                    chartPoints.forEach(p => p.classList.remove('active'));
+                }
+            });
+        }
     </script>
 </body>
 </html>
