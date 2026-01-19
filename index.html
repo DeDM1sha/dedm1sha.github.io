@@ -613,7 +613,7 @@
             transition: width 30s linear;
         }
         
-        /* Бегущая строка обновлений */
+        /* Бегущая строка обновлений (исправленная) */
         .news-ticker {
             position: fixed;
             bottom: 60px;
@@ -627,12 +627,16 @@
             overflow: hidden;
             z-index: 999;
             font-size: 12px;
+            height: 32px;
+            display: flex;
+            align-items: center;
         }
         
         .ticker-container {
             display: flex;
-            animation: ticker-scroll 30s linear infinite;
             white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker-scroll 30s linear infinite;
         }
         
         .ticker-item {
@@ -640,6 +644,7 @@
             align-items: center;
             padding: 0 20px;
             color: #a3c7e6;
+            flex-shrink: 0;
         }
         
         .ticker-badge {
@@ -653,7 +658,7 @@
         
         @keyframes ticker-scroll {
             0% {
-                transform: translateX(100%);
+                transform: translateX(0);
             }
             100% {
                 transform: translateX(-100%);
@@ -1096,7 +1101,7 @@
             </div>
         </main>
         
-        <!-- Бегущая строка обновлений -->
+        <!-- Бегущая строка обновлений (исправленная) -->
         <div class="news-ticker" id="news-ticker">
             <div class="ticker-container" id="ticker-container">
                 <!-- Контент будет добавлен JavaScript -->
@@ -1237,6 +1242,28 @@
             traffic: []
         };
         
+        // Сообщения для бегущей строки (расширенный список)
+        const tickerMessages = [
+            { type: 'update', text: '✅ Данные обновлены' },
+            { type: 'system', text: '🖥️ Система работает стабильно' },
+            { type: 'warning', text: '⚠️ Температура в серверной в норме: 18-27°C' },
+            { type: 'update', text: '📊 Графики обновлены' },
+            { type: 'system', text: '🔒 Системы безопасности активны' },
+            { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' },
+            { type: 'update', text: '🔄 Автоматическое обновление через 30 секунд' },
+            { type: 'system', text: '💾 Дисковая нагрузка в норме' },
+            { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 8.5 кВт' },
+            { type: 'event', text: '🔔 Новое событие в системе' },
+            { type: 'event', text: '📈 Графики загружены и обновляются' },
+            { type: 'event', text: '⚡ Быстрое обновление интерфейса' },
+            { type: 'event', text: '🛡️ Антивирусная защита активна' },
+            { type: 'event', text: '📡 Сетевое соединение стабильное' },
+            { type: 'event', text: '💽 Использование дискового пространства в норме' },
+            { type: 'event', text: '🔋 ИБП: 95% заряда, питание стабильное' },
+            { type: 'event', text: '👥 Активные пользователи: 2850 человек' },
+            { type: 'event', text: '🌐 Интернет скорость: 150 Мб/с' }
+        ];
+        
         // Конфигурация оборудования
         const equipmentConfig = [
             { id: 'server1', name: 'Серверная', metrics: ['ЦП', 'Память'], icon: 'fa-server' },
@@ -1292,19 +1319,6 @@
             { floor: 10, department: 'Конференц-залы, архив', pcs: 0, printers: 0, active: false }
         ];
         
-        // Сообщения для бегущей строки
-        const tickerMessages = [
-            { type: 'update', text: '✅ Данные обновлены' },
-            { type: 'system', text: '🖥️ Система работает стабильно' },
-            { type: 'warning', text: '⚠️ Температура в серверной в норме: 18-27°C' },
-            { type: 'update', text: '📊 Графики обновлены' },
-            { type: 'system', text: '🔒 Системы безопасности активны' },
-            { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' },
-            { type: 'update', text: '🔄 Автоматическое обновление через 30 секунд' },
-            { type: 'system', text: '💾 Дисковая нагрузка в норме' },
-            { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 8.5 кВт' }
-        ];
-        
         // Исторические события (добавлены заранее)
         const historicalEvents = [
             { type: 'info', message: 'Система мониторинга установлена и настроена', time: '09:15', daysAgo: 5 },
@@ -1348,6 +1362,9 @@
             
             // Инициализируем температуру в серверной с диапазоном 18-27°C
             updateServerTemperature();
+            
+            // Запускаем обновление бегущей строки
+            setInterval(updateTickerContent, 10000); // Обновляем каждые 10 секунд
         });
         
         // Инициализация оборудования
@@ -1568,29 +1585,53 @@
             updateHddStats(hddData);
         }
         
-        // Генерация данных HDD за 24 часа
+        // Генерация данных HDD за 24 часа с разрозненными линиями
         function generateHddDataFor24Hours() {
             const diskC = [];
             const diskD = [];
             const diskE = [];
             
             for (let i = 0; i < 24; i++) {
-                // Утро: низкая нагрузка, днем: пик, вечером: снижение
-                let baseLoad = 20;
-                if (i >= 8 && i <= 10) baseLoad = 40; // Утренний пик
-                if (i >= 11 && i <= 13) baseLoad = 60; // Обеденный пик
-                if (i >= 14 && i <= 17) baseLoad = 75; // Основной рабочий день
-                if (i >= 18 && i <= 20) baseLoad = 45; // Вечером снижение
-                if (i >= 21 || i <= 5) baseLoad = 15; // Ночью минимальная нагрузка
+                // Создаем разные паттерны для каждого диска
                 
-                // Добавляем случайные колебания
-                const randomVariation = Math.random() * 15 - 7.5;
-                const finalLoad = Math.max(5, Math.min(95, baseLoad + randomVariation));
+                // Диск C - основной системный диск
+                let baseLoadC = 20;
+                if (i >= 8 && i <= 10) baseLoadC = 40; // Утренний пик
+                if (i >= 11 && i <= 13) baseLoadC = 60; // Обеденный пик
+                if (i >= 14 && i <= 17) baseLoadC = 75; // Основной рабочий день
+                if (i >= 18 && i <= 20) baseLoadC = 45; // Вечером снижение
+                if (i >= 21 || i <= 5) baseLoadC = 15; // Ночью минимальная нагрузка
                 
-                diskC.push(Math.round(finalLoad));
-                diskD.push(Math.round(finalLoad * 0.8)); // D диск обычно меньше загружен
-                diskE.push(Math.round(finalLoad * 0.6)); // E диск для архивов
+                // Диск D - пользовательские данные
+                let baseLoadD = 15;
+                if (i >= 9 && i <= 11) baseLoadD = 35; // Позже начинается
+                if (i >= 12 && i <= 15) baseLoadD = 55; // Обеденный пик
+                if (i >= 16 && i <= 18) baseLoadD = 70; // Вечерний пик
+                if (i >= 19 && i <= 22) baseLoadD = 40; // Вечером снижение
+                if (i >= 23 || i <= 6) baseLoadD = 10; // Ночью минимальная нагрузка
+                
+                // Диск E - архивные данные
+                let baseLoadE = 10;
+                if (i >= 10 && i <= 12) baseLoadE = 25; // Утренний пик
+                if (i >= 13 && i <= 16) baseLoadE = 40; // Дневной пик
+                if (i >= 17 && i <= 19) baseLoadE = 50; // Вечерний пик
+                if (i >= 20 && i <= 23) baseLoadE = 30; // Вечером снижение
+                if (i >= 0 || i <= 7) baseLoadE = 5; // Ночью минимальная нагрузка
+                
+                // Добавляем разные случайные колебания для каждого диска
+                const randomVariationC = Math.random() * 20 - 10;
+                const randomVariationD = Math.random() * 15 - 7.5;
+                const randomVariationE = Math.random() * 12 - 6;
+                
+                diskC.push(Math.max(5, Math.min(95, Math.round(baseLoadC + randomVariationC))));
+                diskD.push(Math.max(3, Math.min(90, Math.round(baseLoadD + randomVariationD))));
+                diskE.push(Math.max(2, Math.min(85, Math.round(baseLoadE + randomVariationE))));
             }
+            
+            // Добавляем случайные выбросы для большей разрозненности
+            diskC[10] += 15; // Пик в 10 утра
+            diskD[15] += 20; // Пик в 15:00
+            diskE[13] += 12; // Пик в 13:00
             
             return { diskC, diskD, diskE };
         }
@@ -1792,6 +1833,108 @@
             modal.style.display = 'flex';
             
             addEvent('info', '📊 Открыт график нагрузки HDD за сутки');
+        }
+        
+        // Инициализация бегущей строки
+        function initTicker() {
+            const tickerContainer = document.getElementById('ticker-container');
+            
+            // Начальное сообщение
+            const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            const initialMessage = {
+                type: 'update',
+                text: `🔄 Обновлено: ${time} | Система мониторинга активна`
+            };
+            
+            addTickerItem(initialMessage);
+            
+            // Добавляем несколько начальных сообщений
+            const initialMessages = [
+                { type: 'system', text: '🖥️ Все системы работают стабильно' },
+                { type: 'info', text: '🌡️ Температура серверной: 18-27°C' },
+                { type: 'event', text: '🔔 Система готова к работе' }
+            ];
+            
+            initialMessages.forEach(msg => addTickerItem(msg));
+        }
+        
+        // Добавить элемент в бегущую строку
+        function addTickerItem(message) {
+            const tickerContainer = document.getElementById('ticker-container');
+            
+            const tickerItem = document.createElement('div');
+            tickerItem.className = 'ticker-item';
+            tickerItem.innerHTML = `
+                <span class="ticker-badge">${getTickerBadge(message.type)}</span>
+                <span>${message.text}</span>
+            `;
+            
+            tickerContainer.appendChild(tickerItem);
+            
+            // Удаляем старые элементы, если их слишком много
+            while (tickerContainer.children.length > 15) {
+                tickerContainer.removeChild(tickerContainer.firstChild);
+            }
+        }
+        
+        // Обновление содержимого бегущей строки
+        function updateTickerContent() {
+            const messages = [
+                // Время обновления
+                { type: 'update', text: `🔄 ${new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })} | Обновление данных` },
+                
+                // События из истории
+                ...eventHistory.slice(0, 3).map(event => ({
+                    type: 'event',
+                    text: `${getEventIcon(event.type)} ${event.time} | ${event.message.substring(0, 50)}${event.message.length > 50 ? '...' : ''}`
+                })),
+                
+                // Системные сообщения
+                { type: 'system', text: `🖥️ ЦП: ${getRandomValue(15, 45)}% | Память: ${getRandomValue(40, 75)}%` },
+                { type: 'system', text: `🌡️ Серверная: ${document.getElementById('metric-temp').textContent} | Влажность: ${getRandomValue(40, 60)}%` },
+                { type: 'system', text: `💾 Диски: C:${getRandomValue(25, 65)}% D:${getRandomValue(20, 50)}% E:${getRandomValue(15, 40)}%` },
+                { type: 'system', text: `📡 Сеть: ${document.getElementById('metric-internet').textContent} | Задержка: ${getRandomValue(5, 35)}мс` },
+                { type: 'system', text: `👥 Пользователи: ${document.getElementById('metric-users').textContent} | Активные сессии: ${getRandomValue(120, 350)}` },
+                
+                // Случайные сообщения из списка
+                ...tickerMessages.filter(() => Math.random() > 0.7).slice(0, 2)
+            ];
+            
+            // Выбираем случайное сообщение
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            // Добавляем новое сообщение
+            addTickerItem(randomMessage);
+            
+            // Перезапускаем анимацию для плавного перехода
+            const tickerContainer = document.getElementById('ticker-container');
+            const animation = tickerContainer.style.animation;
+            tickerContainer.style.animation = 'none';
+            setTimeout(() => {
+                tickerContainer.style.animation = animation;
+            }, 10);
+        }
+        
+        // Получить иконку для события
+        function getEventIcon(type) {
+            const icons = {
+                'info': 'ℹ️',
+                'warning': '⚠️',
+                'alert': '🚨'
+            };
+            return icons[type] || '📌';
+        }
+        
+        // Получить иконку для бегущей строки
+        function getTickerBadge(type) {
+            const badges = {
+                'update': 'ОБНОВЛЕНИЕ',
+                'system': 'СИСТЕМА',
+                'warning': 'ВНИМАНИЕ',
+                'info': 'ИНФО',
+                'event': 'СОБЫТИЕ'
+            };
+            return badges[type] || 'ИНФО';
         }
         
         // Добавить исторические события
@@ -2061,6 +2204,12 @@
             eventHistory.unshift(event);
             addEventToList(type, message, time);
             
+            // Добавляем в бегущую строку
+            addTickerItem({
+                type: 'event',
+                text: `${getEventIcon(type)} ${time} | ${message.substring(0, 40)}${message.length > 40 ? '...' : ''}`
+            });
+            
             // Ограничиваем историю
             if (eventHistory.length > 100) {
                 eventHistory.pop();
@@ -2102,11 +2251,15 @@
             // Обновляем графики
             updateCharts();
             
-            // Обновляем бегущую строку
-            updateTicker();
-            
             // Сбрасываем таймер
             resetUpdateTimer();
+            
+            // Добавляем сообщение об обновлении в бегущую строку
+            const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            addTickerItem({
+                type: 'update',
+                text: `✅ ${time} | Данные обновлены`
+            });
         }
         
         // Обновление температуры в серверной с диапазоном 18-27°C
@@ -2137,75 +2290,6 @@
             // Обновляем графики
             currentCharts.disk.update('none');
             currentCharts.traffic.update('none');
-        }
-        
-        // Инициализация бегущей строки
-        function initTicker() {
-            const tickerContainer = document.getElementById('ticker-container');
-            
-            // Добавляем сообщения в бегущую строку
-            tickerMessages.forEach(message => {
-                const tickerItem = document.createElement('div');
-                tickerItem.className = 'ticker-item';
-                tickerItem.innerHTML = `
-                    <span class="ticker-badge">${getTickerBadge(message.type)}</span>
-                    <span>${message.text}</span>
-                `;
-                tickerContainer.appendChild(tickerItem);
-            });
-            
-            // Дублируем для бесконечной прокрутки
-            const clone = tickerContainer.cloneNode(true);
-            tickerContainer.parentNode.appendChild(clone);
-        }
-        
-        // Получить иконку для бегущей строки
-        function getTickerBadge(type) {
-            const badges = {
-                'update': 'ОБНОВЛЕНИЕ',
-                'system': 'СИСТЕМА',
-                'warning': 'ВНИМАНИЕ',
-                'info': 'ИНФО'
-            };
-            return badges[type] || 'ИНФО';
-        }
-        
-        // Обновить бегущую строку
-        function updateTicker() {
-            const tickerContainer = document.getElementById('ticker-container');
-            
-            // Добавляем новое сообщение об обновлении
-            const newMessage = {
-                type: 'update',
-                text: `🔄 Обновлено: ${new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
-            };
-            
-            const tickerItem = document.createElement('div');
-            tickerItem.className = 'ticker-item';
-            tickerItem.innerHTML = `
-                <span class="ticker-badge">ОБНОВЛЕНИЕ</span>
-                <span>${newMessage.text}</span>
-            `;
-            
-            // Вставляем в начало
-            tickerContainer.insertBefore(tickerItem, tickerContainer.firstChild);
-            
-            // Удаляем последний элемент, если их слишком много
-            if (tickerContainer.children.length > 20) {
-                tickerContainer.removeChild(tickerContainer.lastChild);
-            }
-            
-            // Также обновляем клон
-            const tickerClones = document.querySelectorAll('.ticker-container');
-            if (tickerClones.length > 1) {
-                const clone = tickerClones[1];
-                const cloneItem = tickerItem.cloneNode(true);
-                clone.insertBefore(cloneItem, clone.firstChild);
-                
-                if (clone.children.length > 20) {
-                    clone.removeChild(clone.lastChild);
-                }
-            }
         }
         
         // Запустить цикл обновлений
