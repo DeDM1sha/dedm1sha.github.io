@@ -613,6 +613,212 @@
             transition: width 30s linear;
         }
         
+        /* Бегущая строка обновлений */
+        .news-ticker {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(19, 47, 76, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #1e4976;
+            border-bottom: 1px solid #1e4976;
+            padding: 8px 0;
+            overflow: hidden;
+            z-index: 999;
+            font-size: 12px;
+        }
+        
+        .ticker-container {
+            display: flex;
+            animation: ticker-scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+        
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #a3c7e6;
+        }
+        
+        .ticker-badge {
+            background: rgba(0, 122, 204, 0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-right: 10px;
+            color: #00a8ff;
+        }
+        
+        @keyframes ticker-scroll {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        /* Модальное окно визуализации офиса */
+        .office-visualization-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .office-content {
+            background: #0a1929;
+            border-radius: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #1e4976;
+            overflow: hidden;
+        }
+        
+        .office-header {
+            padding: 15px;
+            background: #132f4c;
+            border-bottom: 1px solid #1e4976;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .office-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e6f1ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .office-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .floors-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .floor-card {
+            background: rgba(19, 47, 76, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #1e4976;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .floor-card:hover {
+            transform: translateY(-2px);
+            border-color: #007acc;
+            box-shadow: 0 5px 15px rgba(0, 122, 204, 0.2);
+        }
+        
+        .floor-card:active {
+            transform: translateY(0);
+        }
+        
+        .floor-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00a8ff;
+            margin-bottom: 8px;
+        }
+        
+        .floor-department {
+            font-size: 12px;
+            color: #a3c7e6;
+            margin-bottom: 10px;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .floor-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+        
+        .stat-item {
+            background: rgba(10, 25, 41, 0.9);
+            padding: 5px;
+            border-radius: 6px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #e6f1ff;
+        }
+        
+        .stat-label {
+            color: #a3c7e6;
+            font-size: 9px;
+        }
+        
+        /* График нагрузки HDD */
+        .hdd-chart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hdd-chart-content {
+            background: #0a1929;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid #1e4976;
+            overflow: hidden;
+        }
+        
+        .hdd-chart-wrapper {
+            height: 300px;
+            padding: 20px;
+        }
+        
+        .hdd-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background: rgba(19, 47, 76, 0.5);
+        }
+        
+        .hdd-stat {
+            text-align: center;
+            padding: 10px;
+            background: rgba(10, 25, 41, 0.9);
+            border-radius: 8px;
+        }
+        
         /* Адаптация для очень маленьких экранов */
         @media (max-width: 350px) {
             .quick-metrics {
@@ -640,6 +846,18 @@
             .nav-icon {
                 font-size: 16px;
             }
+            
+            .floors-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .floor-card {
+                padding: 12px;
+            }
+            
+            .floor-number {
+                font-size: 20px;
+            }
         }
         
         @media (min-width: 768px) {
@@ -651,6 +869,10 @@
             
             .app-container {
                 padding-bottom: 0;
+            }
+            
+            .floors-container {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
         
@@ -734,6 +956,12 @@
             .nav-btn:hover {
                 background: rgba(0, 122, 204, 0.1);
                 color: #00a8ff;
+            }
+            
+            .floor-card:hover {
+                transform: translateY(-2px);
+                border-color: #007acc;
+                box-shadow: 0 5px 15px rgba(0, 122, 204, 0.2);
             }
         }
     </style>
@@ -868,6 +1096,13 @@
             </div>
         </main>
         
+        <!-- Бегущая строка обновлений -->
+        <div class="news-ticker" id="news-ticker">
+            <div class="ticker-container" id="ticker-container">
+                <!-- Контент будет добавлен JavaScript -->
+            </div>
+        </div>
+        
         <!-- Нижнее меню -->
         <nav class="bottom-nav">
             <button class="nav-btn active" data-action="refresh">
@@ -885,9 +1120,10 @@
                 <span>Графики</span>
             </button>
             
-            <button class="nav-btn" data-action="export">
-                <i class="fas fa-download nav-icon"></i>
-                <span>Экспорт</span>
+            <!-- Кнопка Визуализация офиса вместо Экспорт -->
+            <button class="nav-btn" data-action="office-visualization">
+                <i class="fas fa-building nav-icon"></i>
+                <span>Офис</span>
             </button>
             
             <button class="nav-btn" data-action="history">
@@ -913,6 +1149,53 @@
                 <div class="chart-details" id="chart-details-content">
                     <!-- Контент будет заполнен JavaScript -->
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно визуализации офиса -->
+    <div class="office-visualization-modal" id="office-modal">
+        <div class="office-content">
+            <div class="office-header">
+                <h2 class="office-title">
+                    <i class="fas fa-building"></i>
+                    Визуализация офиса РН-Ванкор
+                </h2>
+                <button class="modal-close" id="close-office-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="office-body">
+                <div class="text-center mb-10" style="color: #a3c7e6; font-size: 14px;">
+                    Нажмите на этаж для просмотра подробной информации
+                </div>
+                <div class="floors-container" id="floors-container">
+                    <!-- Этажи будут сгенерированы JavaScript -->
+                </div>
+                <div class="mt-10" style="font-size: 12px; color: #a3c7e6; text-align: center;">
+                    <i class="fas fa-info-circle"></i> Всего этажей: 10 | Активных этажей: 6
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно графика нагрузки HDD -->
+    <div class="hdd-chart-modal" id="hdd-chart-modal">
+        <div class="hdd-chart-content">
+            <div class="office-header">
+                <h2 class="office-title">
+                    <i class="fas fa-hdd"></i>
+                    Нагрузка на HDD за сутки
+                </h2>
+                <button class="modal-close" id="close-hdd-chart-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="hdd-chart-wrapper">
+                <canvas id="hddChart"></canvas>
+            </div>
+            <div class="hdd-stats" id="hdd-stats">
+                <!-- Статистика будет добавлена JavaScript -->
             </div>
         </div>
     </div>
@@ -964,7 +1247,7 @@
             { id: 'db', name: 'База данных', metrics: ['Диск C', 'Диск D'], icon: 'fa-database' }
         ];
         
-        // Конфигурация дополнительных систем
+        // Конфигурация дополнительных систем (убрали систему управления зданием)
         const systemsConfig = [
             {
                 id: 'access',
@@ -992,16 +1275,34 @@
                     { label: 'Участников всего', value: '10', unit: '' },
                     { label: 'Качество связи', value: '87', unit: '%' }
                 ]
-            },
-            {
-                id: 'building',
-                name: 'Система управления зданием',
-                metrics: [
-                    { label: 'Освещение', value: '54', unit: '%' },
-                    { label: 'Вентиляция', value: '41', unit: '%' },
-                    { label: 'Полив растений', value: 'Вкл', unit: '' }
-                ]
             }
+        ];
+        
+        // Конфигурация этажей офиса
+        const floorsConfig = [
+            { floor: 1, department: 'Лобби, охрана, ресепшен', pcs: 2, printers: 0, active: true },
+            { floor: 2, department: 'Технические помещения, склад', pcs: 0, printers: 1, active: false },
+            { floor: 3, department: 'ИТ-отдел, серверная', pcs: 4, printers: 1, active: true },
+            { floor: 4, department: 'Финансовый отдел, бухгалтерия', pcs: 4, printers: 1, active: true },
+            { floor: 5, department: 'Отдел кадров, HR', pcs: 3, printers: 0, active: true },
+            { floor: 6, department: 'Юридический отдел', pcs: 3, printers: 0, active: true },
+            { floor: 7, department: 'Отдел маркетинга', pcs: 4, printers: 1, active: true },
+            { floor: 8, department: 'Отдел продаж', pcs: 6, printers: 1, active: true },
+            { floor: 9, department: 'Руководство, переговорные', pcs: 2, printers: 0, active: false },
+            { floor: 10, department: 'Конференц-залы, архив', pcs: 0, printers: 0, active: false }
+        ];
+        
+        // Сообщения для бегущей строки
+        const tickerMessages = [
+            { type: 'update', text: '✅ Данные обновлены' },
+            { type: 'system', text: '🖥️ Система работает стабильно' },
+            { type: 'warning', text: '⚠️ Температура в серверной в норме: 18-27°C' },
+            { type: 'update', text: '📊 Графики обновлены' },
+            { type: 'system', text: '🔒 Системы безопасности активны' },
+            { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' },
+            { type: 'update', text: '🔄 Автоматическое обновление через 30 секунд' },
+            { type: 'system', text: '💾 Дисковая нагрузка в норме' },
+            { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 8.5 кВт' }
         ];
         
         // Исторические события (добавлены заранее)
@@ -1038,9 +1339,15 @@
             // Добавляем исторические события
             addHistoricalEvents();
             
+            // Инициализируем бегущую строку
+            initTicker();
+            
             // Добавляем начальные события
             addEvent('info', '✅ Система мониторинга запущена и работает');
             addEvent('info', '📊 Все метрики загружены и обновляются');
+            
+            // Инициализируем температуру в серверной с диапазоном 18-27°C
+            updateServerTemperature();
         });
         
         // Инициализация оборудования
@@ -1167,6 +1474,155 @@
                 },
                 options: getChartOptions('traffic')
             });
+            
+            // График нагрузки HDD за сутки (для модального окна)
+            initHddChart();
+        }
+        
+        // Инициализация графика HDD
+        function initHddChart() {
+            const ctx = document.getElementById('hddChart').getContext('2d');
+            const hddData = generateHddDataFor24Hours();
+            
+            currentCharts.hdd = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: generateHourLabels(24),
+                    datasets: [
+                        {
+                            label: 'Диск C (%)',
+                            data: hddData.diskC,
+                            borderColor: '#007acc',
+                            backgroundColor: 'rgba(0, 122, 204, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Диск D (%)',
+                            data: hddData.diskD,
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Диск E (%)',
+                            data: hddData.diskE,
+                            borderColor: '#ff9800',
+                            backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#e6f1ff',
+                                font: { size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(19, 47, 76, 0.9)',
+                            titleColor: '#e6f1ff',
+                            bodyColor: '#e6f1ff',
+                            borderColor: '#1e4976',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(30, 73, 118, 0.2)' },
+                            ticks: {
+                                color: '#a3c7e6',
+                                font: { size: 10 },
+                                maxRotation: 0,
+                                maxTicksLimit: 12
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100,
+                            grid: { color: 'rgba(30, 73, 118, 0.2)' },
+                            ticks: {
+                                color: '#a3c7e6',
+                                font: { size: 10 },
+                                callback: value => value + '%'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Обновляем статистику HDD
+            updateHddStats(hddData);
+        }
+        
+        // Генерация данных HDD за 24 часа
+        function generateHddDataFor24Hours() {
+            const diskC = [];
+            const diskD = [];
+            const diskE = [];
+            
+            for (let i = 0; i < 24; i++) {
+                // Утро: низкая нагрузка, днем: пик, вечером: снижение
+                let baseLoad = 20;
+                if (i >= 8 && i <= 10) baseLoad = 40; // Утренний пик
+                if (i >= 11 && i <= 13) baseLoad = 60; // Обеденный пик
+                if (i >= 14 && i <= 17) baseLoad = 75; // Основной рабочий день
+                if (i >= 18 && i <= 20) baseLoad = 45; // Вечером снижение
+                if (i >= 21 || i <= 5) baseLoad = 15; // Ночью минимальная нагрузка
+                
+                // Добавляем случайные колебания
+                const randomVariation = Math.random() * 15 - 7.5;
+                const finalLoad = Math.max(5, Math.min(95, baseLoad + randomVariation));
+                
+                diskC.push(Math.round(finalLoad));
+                diskD.push(Math.round(finalLoad * 0.8)); // D диск обычно меньше загружен
+                diskE.push(Math.round(finalLoad * 0.6)); // E диск для архивов
+            }
+            
+            return { diskC, diskD, diskE };
+        }
+        
+        // Обновление статистики HDD
+        function updateHddStats(hddData) {
+            const statsContainer = document.getElementById('hdd-stats');
+            
+            const avgC = Math.round(hddData.diskC.reduce((a, b) => a + b, 0) / 24);
+            const avgD = Math.round(hddData.diskD.reduce((a, b) => a + b, 0) / 24);
+            const avgE = Math.round(hddData.diskE.reduce((a, b) => a + b, 0) / 24);
+            const maxC = Math.max(...hddData.diskC);
+            const maxD = Math.max(...hddData.diskD);
+            const maxE = Math.max(...hddData.diskE);
+            
+            statsContainer.innerHTML = `
+                <div class="hdd-stat">
+                    <div style="color: #007acc; font-size: 14px; font-weight: 600;">Диск C</div>
+                    <div style="font-size: 18px; font-weight: 700; margin: 5px 0;">${avgC}%</div>
+                    <div style="color: #a3c7e6; font-size: 11px;">Макс: ${maxC}%</div>
+                </div>
+                <div class="hdd-stat">
+                    <div style="color: #4caf50; font-size: 14px; font-weight: 600;">Диск D</div>
+                    <div style="font-size: 18px; font-weight: 700; margin: 5px 0;">${avgD}%</div>
+                    <div style="color: #a3c7e6; font-size: 11px;">Макс: ${maxD}%</div>
+                </div>
+                <div class="hdd-stat">
+                    <div style="color: #ff9800; font-size: 14px; font-weight: 600;">Диск E</div>
+                    <div style="font-size: 18px; font-weight: 700; margin: 5px 0;">${avgE}%</div>
+                    <div style="color: #a3c7e6; font-size: 11px;">Макс: ${maxE}%</div>
+                </div>
+            `;
         }
         
         // Получить настройки для графика
@@ -1180,6 +1636,9 @@
                     if (elements.length > 0) {
                         const index = elements[0].index;
                         showChartDetails(type, index);
+                    } else {
+                        // Если клик не по точке, показываем график нагрузки HDD за сутки
+                        showHddChartModal();
                     }
                 },
                 plugins: {
@@ -1316,6 +1775,25 @@
             modal.style.display = 'flex';
         }
         
+        // Показать график нагрузки HDD за сутки
+        function showHddChartModal() {
+            const modal = document.getElementById('hdd-chart-modal');
+            
+            // Обновляем данные графика
+            const hddData = generateHddDataFor24Hours();
+            currentCharts.hdd.data.datasets[0].data = hddData.diskC;
+            currentCharts.hdd.data.datasets[1].data = hddData.diskD;
+            currentCharts.hdd.data.datasets[2].data = hddData.diskE;
+            currentCharts.hdd.update('none');
+            
+            // Обновляем статистику
+            updateHddStats(hddData);
+            
+            modal.style.display = 'flex';
+            
+            addEvent('info', '📊 Открыт график нагрузки HDD за сутки');
+        }
+        
         // Добавить исторические события
         function addHistoricalEvents() {
             const now = new Date();
@@ -1369,6 +1847,14 @@
                 document.getElementById('history-modal').style.display = 'none';
             });
             
+            document.getElementById('close-office-modal').addEventListener('click', function() {
+                document.getElementById('office-modal').style.display = 'none';
+            });
+            
+            document.getElementById('close-hdd-chart-modal').addEventListener('click', function() {
+                document.getElementById('hdd-chart-modal').style.display = 'none';
+            });
+            
             // Клик вне модального окна
             document.querySelectorAll('.modal-overlay').forEach(modal => {
                 modal.addEventListener('click', function(e) {
@@ -1376,6 +1862,18 @@
                         this.style.display = 'none';
                     }
                 });
+            });
+            
+            document.getElementById('office-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('hdd-chart-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
             });
         }
         
@@ -1402,11 +1900,11 @@
                             simulateEvent();
                             break;
                         case 'charts':
-                            // Показываем информацию о первом графике
-                            showChartDetails('disk', 3);
+                            // Показываем график нагрузки HDD за сутки
+                            showHddChartModal();
                             break;
-                        case 'export':
-                            exportData();
+                        case 'office-visualization':
+                            showOfficeVisualization();
                             break;
                         case 'history':
                             showHistory();
@@ -1414,6 +1912,72 @@
                     }
                 });
             });
+        }
+        
+        // Показать визуализацию офиса
+        function showOfficeVisualization() {
+            const modal = document.getElementById('office-modal');
+            const floorsContainer = document.getElementById('floors-container');
+            
+            floorsContainer.innerHTML = '';
+            
+            // Сортируем этажи по номеру
+            const sortedFloors = [...floorsConfig].sort((a, b) => b.floor - a.floor);
+            
+            sortedFloors.forEach(floor => {
+                const floorCard = document.createElement('div');
+                floorCard.className = 'floor-card';
+                floorCard.dataset.floor = floor.floor;
+                
+                // Определяем цвет статуса
+                const statusColor = floor.active ? '#4caf50' : '#9e9e9e';
+                const statusText = floor.active ? 'АКТИВЕН' : 'НЕАКТИВЕН';
+                
+                floorCard.innerHTML = `
+                    <div class="floor-number">${floor.floor}</div>
+                    <div class="floor-department">${floor.department}</div>
+                    <div style="margin-bottom: 8px;">
+                        <span style="background: ${statusColor}; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px;">
+                            ${statusText}
+                        </span>
+                    </div>
+                    <div class="floor-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${floor.pcs}</div>
+                            <div class="stat-label">ПК</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${floor.printers}</div>
+                            <div class="stat-label">Принтеры</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Добавляем обработчик клика
+                floorCard.addEventListener('click', function() {
+                    const floorNum = this.dataset.floor;
+                    const floorData = floorsConfig.find(f => f.floor == floorNum);
+                    
+                    let details = `Этаж ${floorNum}: ${floorData.department}\n\n`;
+                    details += `Статус: ${floorData.active ? 'Активен' : 'Неактивен'}\n`;
+                    details += `Рабочих ПК: ${floorData.pcs}\n`;
+                    details += `Принтеров: ${floorData.printers}\n`;
+                    
+                    if (floorNum == 3) {
+                        details += `\nСерверная этаж 3:\n`;
+                        details += `Температура: ${document.getElementById('metric-temp').textContent}\n`;
+                        details += `Диапазон: 18-27°C\n`;
+                    }
+                    
+                    alert(details);
+                });
+                
+                floorsContainer.appendChild(floorCard);
+            });
+            
+            modal.style.display = 'block';
+            
+            addEvent('info', '🏢 Открыта визуализация офиса РН-Ванкор');
         }
         
         // Ручное обновление
@@ -1453,43 +2017,6 @@
             setTimeout(() => {
                 eventBtn.innerHTML = '<i class="fas fa-bolt nav-icon"></i><span>Событие</span>';
             }, 1000);
-        }
-        
-        // Экспорт данных
-        function exportData() {
-            const data = {
-                timestamp: new Date().toISOString(),
-                system: 'РН-Ванкор Цифровой двойник',
-                version: '3.0',
-                metrics: {
-                    temp: document.getElementById('metric-temp').textContent,
-                    power: document.getElementById('metric-power').textContent,
-                    users: document.getElementById('metric-users').textContent,
-                    internet: document.getElementById('metric-internet').textContent
-                },
-                chartData: {
-                    disk: chartDataCache.disk,
-                    traffic: chartDataCache.traffic
-                },
-                eventsCount: eventHistory.length,
-                systems: systemsConfig.map(sys => ({
-                    name: sys.name,
-                    metrics: sys.metrics
-                }))
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `РН-Ванкор_${new Date().toISOString().split('T')[0]}_${new Date().getHours()}${new Date().getMinutes()}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('Данные экспортированы в JSON');
-            addEvent('info', '📥 Экспорт данных выполнен');
         }
         
         // Показать историю
@@ -1564,7 +2091,7 @@
         // Обновить все данные
         function updateAllData() {
             // Обновляем быстрые метрики
-            document.getElementById('metric-temp').textContent = `${getRandomValue(20, 26)}°C`;
+            updateServerTemperature();
             document.getElementById('metric-power').textContent = `${getRandomValue(5, 15, 1)} кВт`;
             document.getElementById('metric-users').textContent = formatNumber(getRandomValue(2300, 3400));
             document.getElementById('metric-internet').textContent = `${getRandomValue(80, 180)} Мб/с`;
@@ -1575,8 +2102,26 @@
             // Обновляем графики
             updateCharts();
             
+            // Обновляем бегущую строку
+            updateTicker();
+            
             // Сбрасываем таймер
             resetUpdateTimer();
+        }
+        
+        // Обновление температуры в серверной с диапазоном 18-27°C
+        function updateServerTemperature() {
+            // Генерируем температуру в диапазоне 18-27°C
+            const temp = getRandomValue(18, 27, 1);
+            document.getElementById('metric-temp').textContent = `${temp}°C`;
+            
+            // Обновляем тренд
+            const trendElement = document.querySelector('.metric-card .metric-trend');
+            const diff = (temp - 22).toFixed(1); // Относительно 22°C
+            trendElement.innerHTML = diff >= 0 ? 
+                `<i class="fas fa-arrow-up"></i> ${Math.abs(diff)}°C` : 
+                `<i class="fas fa-arrow-down"></i> ${Math.abs(diff)}°C`;
+            trendElement.className = `metric-trend ${diff >= 0 ? 'trend-up' : 'trend-down'}`;
         }
         
         // Обновить графики
@@ -1592,6 +2137,75 @@
             // Обновляем графики
             currentCharts.disk.update('none');
             currentCharts.traffic.update('none');
+        }
+        
+        // Инициализация бегущей строки
+        function initTicker() {
+            const tickerContainer = document.getElementById('ticker-container');
+            
+            // Добавляем сообщения в бегущую строку
+            tickerMessages.forEach(message => {
+                const tickerItem = document.createElement('div');
+                tickerItem.className = 'ticker-item';
+                tickerItem.innerHTML = `
+                    <span class="ticker-badge">${getTickerBadge(message.type)}</span>
+                    <span>${message.text}</span>
+                `;
+                tickerContainer.appendChild(tickerItem);
+            });
+            
+            // Дублируем для бесконечной прокрутки
+            const clone = tickerContainer.cloneNode(true);
+            tickerContainer.parentNode.appendChild(clone);
+        }
+        
+        // Получить иконку для бегущей строки
+        function getTickerBadge(type) {
+            const badges = {
+                'update': 'ОБНОВЛЕНИЕ',
+                'system': 'СИСТЕМА',
+                'warning': 'ВНИМАНИЕ',
+                'info': 'ИНФО'
+            };
+            return badges[type] || 'ИНФО';
+        }
+        
+        // Обновить бегущую строку
+        function updateTicker() {
+            const tickerContainer = document.getElementById('ticker-container');
+            
+            // Добавляем новое сообщение об обновлении
+            const newMessage = {
+                type: 'update',
+                text: `🔄 Обновлено: ${new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
+            };
+            
+            const tickerItem = document.createElement('div');
+            tickerItem.className = 'ticker-item';
+            tickerItem.innerHTML = `
+                <span class="ticker-badge">ОБНОВЛЕНИЕ</span>
+                <span>${newMessage.text}</span>
+            `;
+            
+            // Вставляем в начало
+            tickerContainer.insertBefore(tickerItem, tickerContainer.firstChild);
+            
+            // Удаляем последний элемент, если их слишком много
+            if (tickerContainer.children.length > 20) {
+                tickerContainer.removeChild(tickerContainer.lastChild);
+            }
+            
+            // Также обновляем клон
+            const tickerClones = document.querySelectorAll('.ticker-container');
+            if (tickerClones.length > 1) {
+                const clone = tickerClones[1];
+                const cloneItem = tickerItem.cloneNode(true);
+                clone.insertBefore(cloneItem, clone.firstChild);
+                
+                if (clone.children.length > 20) {
+                    clone.removeChild(clone.lastChild);
+                }
+            }
         }
         
         // Запустить цикл обновлений
@@ -1669,6 +2283,12 @@
                 const hour = new Date(now);
                 hour.setHours(hour.getHours() - (hours - 1 - i) * 2); // Каждые 2 часа
                 return hour.getHours().toString().padStart(2, '0') + ':00';
+            });
+        }
+        
+        function generateHourLabels(hours) {
+            return Array.from({ length: hours }, (_, i) => {
+                return i.toString().padStart(2, '0') + ':00';
             });
         }
         
