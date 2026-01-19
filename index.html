@@ -34,6 +34,7 @@
             height: 100vh;
             max-height: 100vh;
             overflow: hidden;
+            padding-bottom: env(safe-area-inset-bottom, 60px); /* Защита от выреза в iPhone */
         }
         
         /* Компактная шапка */
@@ -45,6 +46,7 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            padding-top: env(safe-area-inset-top, 12px); /* Защита для iPhone X+ */
         }
         
         .header-left {
@@ -117,6 +119,7 @@
             padding: 15px;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            padding-bottom: 70px; /* Место для нижней панели */
         }
         
         .main-content::-webkit-scrollbar {
@@ -367,7 +370,7 @@
             color: #e6f1ff;
         }
         
-        /* Нижнее меню */
+        /* Нижнее меню - ИСПРАВЛЕНО для смартфонов */
         .bottom-nav {
             background: linear-gradient(135deg, #132f4c 0%, #0a1929 100%);
             border-top: 1px solid #1e4976;
@@ -376,6 +379,14 @@
             justify-content: space-around;
             align-items: center;
             flex-shrink: 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 0)); /* Защита для iPhone */
+            padding-top: 10px;
+            height: 60px;
         }
         
         .nav-btn {
@@ -392,6 +403,8 @@
             transition: all 0.2s;
             touch-action: manipulation;
             min-width: 60px;
+            height: 50px;
+            justify-content: center;
         }
         
         .nav-btn:active {
@@ -406,6 +419,7 @@
         
         .nav-icon {
             font-size: 18px;
+            margin-bottom: 2px;
         }
         
         /* Модальные окна */
@@ -416,11 +430,12 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
+            z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
         }
         
         .modal-content {
@@ -428,7 +443,7 @@
             border-radius: 16px;
             width: 100%;
             max-width: 400px;
-            max-height: 80vh;
+            max-height: 70vh;
             overflow: hidden;
             border: 1px solid #1e4976;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -467,7 +482,7 @@
             overflow-y: auto;
         }
         
-        /* Подробности графика */
+        /* Подробности графика - ИСПРАВЛЕНО для отображения информации */
         .chart-details {
             text-align: center;
             padding: 10px 0;
@@ -476,32 +491,41 @@
         .detail-time {
             font-size: 14px;
             color: #a3c7e6;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: 500;
         }
         
         .detail-values {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
+            gap: 15px;
+            margin-top: 20px;
         }
         
         .detail-value {
             background: rgba(19, 47, 76, 0.8);
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(30, 73, 118, 0.3);
         }
         
         .detail-label {
-            font-size: 11px;
+            font-size: 12px;
             color: #a3c7e6;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            opacity: 0.9;
         }
         
         .detail-number {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
             color: #e6f1ff;
+        }
+        
+        .detail-status {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
         }
         
         /* Прогресс обновления */
@@ -544,6 +568,33 @@
             
             .metric-value {
                 font-size: 20px;
+            }
+            
+            .bottom-nav {
+                padding: 8px 10px;
+            }
+            
+            .nav-btn {
+                min-width: 50px;
+                padding: 6px 8px;
+                font-size: 9px;
+            }
+            
+            .nav-icon {
+                font-size: 16px;
+            }
+        }
+        
+        /* Для десктопа - уменьшаем высоту нижней панели */
+        @media (min-width: 768px) {
+            .bottom-nav {
+                position: relative;
+                margin-top: auto;
+                padding-bottom: 10px;
+            }
+            
+            .app-container {
+                padding-bottom: 0;
             }
         }
         
@@ -630,6 +681,12 @@
                 color: #00a8ff;
             }
         }
+        
+        /* График в модальном окне */
+        .detail-chart-container {
+            height: 180px;
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
@@ -709,6 +766,7 @@
                         <i class="fas fa-chart-line"></i>
                         Графики
                     </h2>
+                    <div class="time-badge">12 часов</div>
                 </div>
                 
                 <div class="chart-wrapper">
@@ -748,7 +806,7 @@
             </div>
         </main>
         
-        <!-- Нижнее меню -->
+        <!-- Нижнее меню - ИСПРАВЛЕНО: всегда видно на смартфонах -->
         <nav class="bottom-nav">
             <button class="nav-btn active" data-action="refresh">
                 <i class="fas fa-sync-alt nav-icon"></i>
@@ -781,21 +839,17 @@
     <div class="modal-overlay" id="chart-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">
+                <h2 class="modal-title" id="chart-modal-title">
                     <i class="fas fa-chart-line"></i>
-                    <span id="chart-modal-title">Детали графика</span>
+                    <span>Нагрузка на диски</span>
                 </h2>
                 <button class="modal-close" id="close-chart-modal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="chart-details">
-                    <div class="detail-time" id="chart-detail-time">--:--</div>
-                    <canvas id="detail-chart" height="200"></canvas>
-                    <div class="detail-values" id="chart-detail-values">
-                        <!-- Детали будут вставлены сюда -->
-                    </div>
+                <div class="chart-details" id="chart-details-content">
+                    <!-- Контент будет заполнен JavaScript -->
                 </div>
             </div>
         </div>
@@ -833,16 +887,19 @@
         let updateTimer = 30;
         let eventHistory = [];
         let currentCharts = {};
-        let lastUpdateTime = new Date();
+        let chartDataCache = {
+            disk: [],
+            traffic: []
+        };
         
         // Конфигурация оборудования
         const equipmentConfig = [
-            { id: 'server1', name: 'Серверная', metrics: ['ЦП', 'Память'] },
-            { id: 'network', name: 'Сеть', metrics: ['Загрузка', 'Пакеты'] },
-            { id: 'ups', name: 'ИБП', metrics: ['Нагрузка', 'Батарея'] },
-            { id: 'ac', name: 'Кондиционер', metrics: ['Температура', 'Влажность'] },
-            { id: 'workstations', name: 'Рабочие места', metrics: ['Активные', 'Загрузка'] },
-            { id: 'db', name: 'База данных', metrics: ['Диск C', 'Диск D'] }
+            { id: 'server1', name: 'Серверная', metrics: ['ЦП', 'Память'], icon: 'fa-server' },
+            { id: 'network', name: 'Сеть', metrics: ['Загрузка', 'Пакеты'], icon: 'fa-network-wired' },
+            { id: 'ups', name: 'ИБП', metrics: ['Нагрузка', 'Батарея'], icon: 'fa-battery-full' },
+            { id: 'ac', name: 'Кондиционер', metrics: ['Температура', 'Влажность'], icon: 'fa-snowflake' },
+            { id: 'workstations', name: 'Рабочие места', metrics: ['Активные', 'Загрузка'], icon: 'fa-desktop' },
+            { id: 'db', name: 'База данных', metrics: ['Диск C', 'Диск D'], icon: 'fa-database' }
         ];
         
         // Инициализация
@@ -860,6 +917,7 @@
             // Добавляем начальные события
             addEvent('info', 'Система мониторинга запущена');
             addEvent('info', 'Все системы работают нормально');
+            addEvent('info', 'Автоматическое обновление каждые 30 секунд');
         });
         
         // Инициализация оборудования
@@ -885,11 +943,11 @@
                     <div class="item-metrics">
                         <div class="mini-metric">
                             <div class="mini-label">${item.metrics[0]}</div>
-                            <div class="mini-value">${metric1}${item.metrics[0] === 'ЦП' || item.metrics[0] === 'Загрузка' || item.metrics[0] === 'Нагрузка' || item.metrics[0] === 'Батарея' || item.metrics[0] === 'Память' || item.metrics[0] === 'Влажность' ? '%' : item.metrics[0] === 'Температура' ? '°C' : ''}</div>
+                            <div class="mini-value">${metric1}${getMetricUnit(item.metrics[0])}</div>
                         </div>
                         <div class="mini-metric">
                             <div class="mini-label">${item.metrics[1]}</div>
-                            <div class="mini-value">${metric2}${item.metrics[1] === 'ЦП' || item.metrics[1] === 'Загрузка' || item.metrics[1] === 'Память' || item.metrics[1] === 'Влажность' ? '%' : item.metrics[1] === 'Температура' ? '°C' : item.metrics[1] === 'Пакеты' ? '/с' : ''}</div>
+                            <div class="mini-value">${metric2}${getMetricUnit(item.metrics[1])}</div>
                         </div>
                     </div>
                 `;
@@ -898,184 +956,205 @@
             });
         }
         
+        // Получить единицу измерения для метрики
+        function getMetricUnit(metricName) {
+            const units = {
+                'ЦП': '%', 'Память': '%', 'Загрузка': '%', 'Нагрузка': '%',
+                'Батарея': '%', 'Температура': '°C', 'Влажность': '%',
+                'Активные': '', 'Диск C': '%', 'Диск D': '%', 'Пакеты': '/с'
+            };
+            return units[metricName] || '';
+        }
+        
         // Инициализация графиков
         function initCharts() {
-            // График 1: Нагрузка на диски (12 точек вместо 24)
+            // Генерируем данные для кэша
+            chartDataCache.disk = generateRandomData(12, 30, 80);
+            chartDataCache.traffic = generateRandomData(12, 5, 50);
+            
+            // График 1: Нагрузка на диски
             const ctx1 = document.getElementById('compactChart1').getContext('2d');
             currentCharts.disk = new Chart(ctx1, {
                 type: 'line',
                 data: {
-                    labels: generateTimeLabels(12), // 12 точек вместо 24
+                    labels: generateTimeLabels(12),
                     datasets: [{
                         label: 'Дисковая нагрузка (%)',
-                        data: generateRandomData(12, 30, 80),
+                        data: chartDataCache.disk,
                         borderColor: '#007acc',
                         backgroundColor: 'rgba(0, 122, 204, 0.1)',
                         borderWidth: 2,
                         tension: 0.4,
                         fill: true,
-                        pointRadius: 6, // Увеличиваем точки для кликабельности
+                        pointRadius: 6,
                         pointHoverRadius: 8,
                         pointBackgroundColor: '#007acc',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    onClick: (event, elements) => {
-                        if (elements.length > 0) {
-                            const index = elements[0].index;
-                            showChartDetails('disk', index);
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(19, 47, 76, 0.9)',
-                            titleColor: '#e6f1ff',
-                            bodyColor: '#e6f1ff',
-                            borderColor: '#1e4976',
-                            borderWidth: 1
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: {
-                                color: '#a3c7e6',
-                                font: { size: 9 },
-                                maxRotation: 0
-                            }
-                        },
-                        y: {
-                            min: 0,
-                            max: 100,
-                            grid: { color: 'rgba(30, 73, 118, 0.2)' },
-                            ticks: {
-                                color: '#a3c7e6',
-                                font: { size: 9 },
-                                callback: value => value + '%'
-                            }
-                        }
-                    },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    }
-                }
+                options: getChartOptions('disk')
             });
             
-            // График 2: Сетевой трафик (12 точек вместо 24)
+            // График 2: Сетевой трафик
             const ctx2 = document.getElementById('compactChart2').getContext('2d');
             currentCharts.traffic = new Chart(ctx2, {
                 type: 'bar',
                 data: {
-                    labels: generateTimeLabels(12), // 12 точек вместо 24
+                    labels: generateTimeLabels(12),
                     datasets: [{
                         label: 'Трафик (Мб)',
-                        data: generateRandomData(12, 5, 50),
+                        data: chartDataCache.traffic,
                         backgroundColor: 'rgba(156, 39, 176, 0.7)',
                         borderColor: '#9c27b0',
                         borderWidth: 1,
                         borderRadius: 3
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    onClick: (event, elements) => {
-                        if (elements.length > 0) {
-                            const index = elements[0].index;
-                            showChartDetails('traffic', index);
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(19, 47, 76, 0.9)',
-                            titleColor: '#e6f1ff',
-                            bodyColor: '#e6f1ff',
-                            borderColor: '#1e4976',
-                            borderWidth: 1,
-                            callbacks: {
-                                label: context => `Трафик: ${context.parsed.y} Мб`
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: {
-                                color: '#a3c7e6',
-                                font: { size: 9 },
-                                maxRotation: 0
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(30, 73, 118, 0.2)' },
-                            ticks: {
-                                color: '#a3c7e6',
-                                font: { size: 9 },
-                                callback: value => value + ' Мб'
-                            }
-                        }
-                    },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    }
-                }
+                options: getChartOptions('traffic')
             });
         }
         
-        // Показать детали графика
+        // Получить настройки для графика
+        function getChartOptions(type) {
+            const isDisk = type === 'disk';
+            
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        showChartDetails(type, index);
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(19, 47, 76, 0.9)',
+                        titleColor: '#e6f1ff',
+                        bodyColor: '#e6f1ff',
+                        borderColor: '#1e4976',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: context => isDisk ? 
+                                `Нагрузка: ${context.parsed.y}%` : 
+                                `Трафик: ${context.parsed.y} Мб`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            color: '#a3c7e6',
+                            font: { size: 9 },
+                            maxRotation: 0,
+                            maxTicksLimit: 6
+                        }
+                    },
+                    y: {
+                        beginAtZero: !isDisk,
+                        min: isDisk ? 0 : undefined,
+                        max: isDisk ? 100 : undefined,
+                        grid: { color: 'rgba(30, 73, 118, 0.2)' },
+                        ticks: {
+                            color: '#a3c7e6',
+                            font: { size: 9 },
+                            callback: value => isDisk ? value + '%' : value + ' Мб'
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            };
+        }
+        
+        // Показать детали графика - ИСПРАВЛЕНО: теперь показывается информация
         function showChartDetails(chartType, pointIndex) {
             const modal = document.getElementById('chart-modal');
             const title = document.getElementById('chart-modal-title');
-            const detailTime = document.getElementById('chart-detail-time');
-            const detailValues = document.getElementById('chart-detail-values');
+            const detailsContent = document.getElementById('chart-details-content');
             
-            // Устанавливаем заголовок
+            const timeLabel = currentCharts[chartType].data.labels[pointIndex];
+            const value = chartType === 'disk' ? 
+                chartDataCache.disk[pointIndex] : 
+                chartDataCache.traffic[pointIndex];
+            
+            // Определяем статус
+            let status, statusColor;
             if (chartType === 'disk') {
-                title.textContent = 'Нагрузка на диски';
-                detailTime.textContent = `Время: ${currentCharts.disk.data.labels[pointIndex]}`;
+                if (value > 90) {
+                    status = 'Критическая';
+                    statusColor = '#f44336';
+                } else if (value > 70) {
+                    status = 'Высокая';
+                    statusColor = '#ffc107';
+                } else {
+                    status = 'Нормальная';
+                    statusColor = '#4caf50';
+                }
                 
-                // Показываем детали
-                const value = currentCharts.disk.data.datasets[0].data[pointIndex];
-                detailValues.innerHTML = `
-                    <div class="detail-value">
-                        <div class="detail-label">Текущая нагрузка</div>
-                        <div class="detail-number">${value}%</div>
-                    </div>
-                    <div class="detail-value">
-                        <div class="detail-label">Статус</div>
-                        <div class="detail-number" style="color: ${value > 70 ? '#ffc107' : value > 90 ? '#f44336' : '#4caf50'}">
-                            ${value > 70 ? 'Высокая' : value > 90 ? 'Критическая' : 'Нормальная'}
+                title.innerHTML = `<i class="fas fa-hdd"></i><span>Нагрузка на диски</span>`;
+                
+                detailsContent.innerHTML = `
+                    <div class="detail-time">Время: ${timeLabel}</div>
+                    <div class="detail-values">
+                        <div class="detail-value">
+                            <div class="detail-label">Текущая нагрузка</div>
+                            <div class="detail-number">${value}%</div>
+                            <div class="detail-status" style="color: ${statusColor}">${status}</div>
                         </div>
+                        <div class="detail-value">
+                            <div class="detail-label">Средняя нагрузка</div>
+                            <div class="detail-number">${Math.round(chartDataCache.disk.reduce((a,b) => a + b, 0) / chartDataCache.disk.length)}%</div>
+                            <div class="detail-label">за 12 часов</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 12px; color: #a3c7e6;">
+                        <i class="fas fa-info-circle"></i> 
+                        ${value > 90 ? 'Требуется немедленное вмешательство' : 
+                          value > 70 ? 'Рекомендуется проверить систему' : 
+                          'Система работает в норме'}
                     </div>
                 `;
             } else {
-                title.textContent = 'Сетевой трафик';
-                detailTime.textContent = `Время: ${currentCharts.traffic.data.labels[pointIndex]}`;
+                if (value > 45) {
+                    status = 'Критическая';
+                    statusColor = '#f44336';
+                } else if (value > 35) {
+                    status = 'Высокая';
+                    statusColor = '#ffc107';
+                } else {
+                    status = 'Нормальная';
+                    statusColor = '#4caf50';
+                }
                 
-                const value = currentCharts.traffic.data.datasets[0].data[pointIndex];
-                detailValues.innerHTML = `
-                    <div class="detail-value">
-                        <div class="detail-label">Трафик</div>
-                        <div class="detail-number">${value} Мб</div>
-                    </div>
-                    <div class="detail-value">
-                        <div class="detail-label">Статус</div>
-                        <div class="detail-number" style="color: ${value > 35 ? '#ffc107' : value > 45 ? '#f44336' : '#4caf50'}">
-                            ${value > 35 ? 'Высокая' : value > 45 ? 'Критическая' : 'Нормальная'}
+                title.innerHTML = `<i class="fas fa-network-wired"></i><span>Сетевой трафик</span>`;
+                
+                detailsContent.innerHTML = `
+                    <div class="detail-time">Время: ${timeLabel}</div>
+                    <div class="detail-values">
+                        <div class="detail-value">
+                            <div class="detail-label">Трафик</div>
+                            <div class="detail-number">${value} Мб</div>
+                            <div class="detail-status" style="color: ${statusColor}">${status}</div>
                         </div>
+                        <div class="detail-value">
+                            <div class="detail-label">Средний трафик</div>
+                            <div class="detail-number">${Math.round(chartDataCache.traffic.reduce((a,b) => a + b, 0) / chartDataCache.traffic.length)} Мб</div>
+                            <div class="detail-label">за 12 часов</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 12px; color: #a3c7e6;">
+                        <i class="fas fa-info-circle"></i> 
+                        ${value > 45 ? 'Возможна перегрузка сети' : 
+                          value > 35 ? 'Повышенная нагрузка на сеть' : 
+                          'Сетевая нагрузка в норме'}
                     </div>
                 `;
             }
@@ -1089,8 +1168,11 @@
             
             // Очистка событий
             document.getElementById('clear-events').addEventListener('click', function() {
-                eventsList.innerHTML = '';
-                showToast('Лог событий очищен');
+                if (eventsList.children.length > 0) {
+                    eventsList.innerHTML = '';
+                    showToast('Лог событий очищен');
+                    addEvent('info', 'Лог событий очищен вручную');
+                }
             });
             
             // Закрытие модальных окон
@@ -1135,7 +1217,8 @@
                             simulateEvent();
                             break;
                         case 'charts':
-                            showChartModal();
+                            // Показываем информацию о первом графике
+                            showChartDetails('disk', 6);
                             break;
                         case 'export':
                             exportData();
@@ -1151,22 +1234,38 @@
         // Ручное обновление
         function manualUpdate() {
             updateAllData();
-            showToast('Данные обновлены');
-            resetUpdateTimer();
+            showToast('Данные обновлены вручную');
+            addEvent('info', 'Ручное обновление данных выполнено');
+            
+            // Визуальная обратная связь
+            const refreshBtn = document.querySelector('[data-action="refresh"]');
+            refreshBtn.innerHTML = '<i class="fas fa-check nav-icon"></i><span>Готово</span>';
+            setTimeout(() => {
+                refreshBtn.innerHTML = '<i class="fas fa-sync-alt nav-icon"></i><span>Обновить</span>';
+            }, 1000);
         }
         
         // Симуляция события
         function simulateEvent() {
             const events = [
-                { type: 'warning', message: 'Повышение температуры в серверной' },
-                { type: 'alert', message: 'Отказ системы кондиционирования' },
-                { type: 'info', message: 'Плановое обновление ПО' },
-                { type: 'warning', message: 'Снижение скорости интернета' }
+                { type: 'warning', message: '⚠️ Повышение температуры в серверной на 3°C' },
+                { type: 'alert', message: '🚨 Отказ системы кондиционирования' },
+                { type: 'info', message: '🔄 Плановое обновление ПО' },
+                { type: 'warning', message: '⚠️ Снижение скорости интернета на 40%' },
+                { type: 'alert', message: '🚨 Срабатывание пожарной сигнализации (тест)' },
+                { type: 'info', message: '✅ Резервное копирование завершено' }
             ];
             
             const randomEvent = events[Math.floor(Math.random() * events.length)];
             addEvent(randomEvent.type, randomEvent.message);
             showToast('Тестовое событие создано');
+            
+            // Визуальная обратная связь
+            const eventBtn = document.querySelector('[data-action="simulate"]');
+            eventBtn.innerHTML = '<i class="fas fa-check nav-icon"></i><span>Создано</span>';
+            setTimeout(() => {
+                eventBtn.innerHTML = '<i class="fas fa-bolt nav-icon"></i><span>Событие</span>';
+            }, 1000);
         }
         
         // Показать окно графиков
@@ -1179,25 +1278,33 @@
         function exportData() {
             const data = {
                 timestamp: new Date().toISOString(),
+                system: 'РН-Ванкор Цифровой двойник',
+                version: '3.0',
                 metrics: {
                     temp: document.getElementById('metric-temp').textContent,
                     power: document.getElementById('metric-power').textContent,
                     users: document.getElementById('metric-users').textContent,
                     internet: document.getElementById('metric-internet').textContent
-                }
+                },
+                chartData: {
+                    disk: chartDataCache.disk,
+                    traffic: chartDataCache.traffic
+                },
+                eventsCount: eventHistory.length
             };
             
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `РН-Ванкор_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `РН-Ванкор_${new Date().toISOString().split('T')[0]}_${new Date().getHours()}${new Date().getMinutes()}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            showToast('Данные экспортированы');
+            showToast('Данные экспортированы в JSON');
+            addEvent('info', 'Экспорт данных выполнен');
         }
         
         // Показать историю
@@ -1210,9 +1317,9 @@
             if (eventHistory.length === 0) {
                 list.innerHTML = '<div class="text-center" style="color: #a3c7e6; padding: 20px;">История событий пуста</div>';
             } else {
-                eventHistory.slice(0, 20).forEach(event => {
+                eventHistory.slice(0, 50).forEach(event => {
                     const eventDiv = document.createElement('div');
-                    eventDiv.className = 'event-row';
+                    eventDiv.className = 'event-row animate-in';
                     eventDiv.innerHTML = `
                         <div class="event-time">${event.time}</div>
                         <div class="event-type type-${event.type}">
@@ -1268,8 +1375,6 @@
         
         // Обновить все данные
         function updateAllData() {
-            lastUpdateTime = new Date();
-            
             // Обновляем быстрые метрики
             document.getElementById('metric-temp').textContent = `${getRandomValue(20, 26)}°C`;
             document.getElementById('metric-power').textContent = `${getRandomValue(5, 15, 1)} кВт`;
@@ -1282,22 +1387,23 @@
             // Обновляем графики
             updateCharts();
             
-            // Добавляем событие об обновлении
-            addEvent('info', 'Автоматическое обновление данных');
-            
             // Сбрасываем таймер
             resetUpdateTimer();
         }
         
         // Обновить графики
         function updateCharts() {
+            // Обновляем данные в кэше
+            chartDataCache.disk = generateRandomData(12, 30, 80);
+            chartDataCache.traffic = generateRandomData(12, 5, 50);
+            
             // Обновляем данные графиков
-            currentCharts.disk.data.datasets[0].data = generateRandomData(12, 30, 80);
-            currentCharts.traffic.data.datasets[0].data = generateRandomData(12, 5, 50);
+            currentCharts.disk.data.datasets[0].data = chartDataCache.disk;
+            currentCharts.traffic.data.datasets[0].data = chartDataCache.traffic;
             
             // Обновляем графики
-            currentCharts.disk.update();
-            currentCharts.traffic.update();
+            currentCharts.disk.update('none');
+            currentCharts.traffic.update('none');
         }
         
         // Запустить цикл обновлений
@@ -1305,6 +1411,7 @@
             // Обновляем каждые 30 секунд
             setInterval(() => {
                 updateAllData();
+                addEvent('info', 'Автоматическое обновление данных');
             }, UPDATE_INTERVAL);
             
             // Запускаем таймер обратного отсчета
@@ -1359,9 +1466,9 @@
         
         function getRandomStatus() {
             const rand = Math.random();
-            if (rand < 0.8) return 'ok';
-            if (rand < 0.95) return 'warn';
-            return 'bad';
+            if (rand < 0.85) return 'ok';     // 85% норма
+            if (rand < 0.95) return 'warn';   // 10% предупреждение
+            return 'bad';                     // 5% ошибка
         }
         
         function generateRandomData(count, min, max) {
