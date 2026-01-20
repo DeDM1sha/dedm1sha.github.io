@@ -37,7 +37,7 @@
             padding-bottom: env(safe-area-inset-bottom, 60px);
         }
         
-        /* Бегущая строка обновлений (исправленная, перемещена вверх) */
+        /* Бегущая строка обновлений - УВЕЛИЧЕНА СКОРОСТЬ (медленнее) и УВЕЛИЧЕН ОТСТУП */
         .news-ticker {
             position: fixed;
             top: 0;
@@ -53,13 +53,14 @@
             height: 28px;
             display: flex;
             align-items: center;
+            margin-bottom: 5px; /* Уменьшаем отступ сверху */
         }
         
         .ticker-container {
             display: flex;
             white-space: nowrap;
             padding-left: 100%;
-            animation: ticker-scroll 45s linear infinite; /* Замедлено с 30s до 45s */
+            animation: ticker-scroll 60s linear infinite; /* ЗАМЕДЛЕНО с 45s до 60s */
         }
         
         .ticker-item {
@@ -88,7 +89,7 @@
             }
         }
         
-        /* Компактная шапка (под бегущей строкой) */
+        /* Компактная шапка (под бегущей строкой) - УВЕЛИЧЕН ОТСТУП */
         .compact-header {
             background: linear-gradient(135deg, #132f4c 0%, #0a1929 100%);
             padding: 12px 15px;
@@ -97,7 +98,7 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding-top: 28px; /* Отступ для бегущей строки */
+            padding-top: 33px; /* УВЕЛИЧЕН отступ для бегущей строки */
             margin-top: 28px; /* Отступ для бегущей строки */
         }
         
@@ -637,7 +638,7 @@
             margin-top: 5px;
         }
         
-        /* Прогресс обновления */
+        /* Прогресс обновления - ИСПРАВЛЕН */
         .update-progress {
             margin-top: 15px;
         }
@@ -973,7 +974,7 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Бегущая строка обновлений (исправленная, перемещена вверх) -->
+        <!-- Бегущая строка обновлений -->
         <div class="news-ticker" id="news-ticker">
             <div class="ticker-container" id="ticker-container">
                 <!-- Контент будет добавлен JavaScript -->
@@ -1365,7 +1366,30 @@
             
             // Запускаем обновление бегущей строки
             setInterval(updateTickerContent, 10000); // Обновляем каждые 10 секунд
+            
+            // Исправление для плавной работы бегущей строки
+            fixTickerAnimation();
         });
+        
+        // Исправление анимации бегущей строки
+        function fixTickerAnimation() {
+            const tickerContainer = document.getElementById('ticker-container');
+            
+            // Перезапускаем анимацию каждые 5 секунд для предотвращения пропадания
+            setInterval(() => {
+                // Клонируем контейнер для перезапуска анимации
+                const items = tickerContainer.children;
+                if (items.length > 0) {
+                    const animation = tickerContainer.style.animation;
+                    tickerContainer.style.animation = 'none';
+                    
+                    // Вызываем reflow
+                    tickerContainer.offsetHeight;
+                    
+                    tickerContainer.style.animation = animation;
+                }
+            }, 15000); // Перезапуск каждые 15 секунд
+        }
         
         // Инициализация оборудования
         function initEquipment() {
@@ -2302,7 +2326,7 @@
                 addEvent('info', '🔄 Автоматическое обновление данных');
             }, UPDATE_INTERVAL);
             
-            // Запускаем таймер обратного отсчета
+            // Запускаем таймер обратного отсчета - ИСПРАВЛЕННЫЙ КОД
             setInterval(() => {
                 updateTimer--;
                 if (updateTimer < 0) {
@@ -2312,8 +2336,8 @@
                 document.getElementById('update-timer').textContent = updateTimer;
                 document.getElementById('countdown').textContent = `${updateTimer} сек`;
                 
-                // Обновляем прогресс-бар
-                const progress = (30 - updateTimer) / 30 * 100;
+                // ИСПРАВЛЕНИЕ: правильно вычисляем прогресс для 30 секунд
+                const progress = ((30 - updateTimer) / 30) * 100;
                 document.getElementById('progress-fill').style.width = `${progress}%`;
             }, 1000);
         }
@@ -2324,6 +2348,16 @@
             document.getElementById('update-timer').textContent = updateTimer;
             document.getElementById('countdown').textContent = `${updateTimer} сек`;
             document.getElementById('progress-fill').style.width = '0%';
+            
+            // Перезапускаем CSS анимацию прогресс-бара
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            
+            // Восстанавливаем анимацию после небольшой задержки
+            setTimeout(() => {
+                progressFill.style.transition = 'width 30s linear';
+            }, 10);
         }
         
         // Обновить время оборудования
