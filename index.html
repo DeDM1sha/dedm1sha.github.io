@@ -37,7 +37,7 @@
             padding-bottom: env(safe-area-inset-bottom, 60px);
         }
         
-        /* Бегущая строка обновлений - УВЕЛИЧЕНА СКОРОСТЬ (медленнее) и УВЕЛИЧЕН ОТСТУП */
+        /* Бегущая строка обновлений */
         .news-ticker {
             position: fixed;
             top: 0;
@@ -53,14 +53,14 @@
             height: 28px;
             display: flex;
             align-items: center;
-            margin-bottom: 5px; /* Уменьшаем отступ сверху */
+            margin-bottom: 5px;
         }
         
         .ticker-container {
             display: flex;
             white-space: nowrap;
             padding-left: 100%;
-            animation: ticker-scroll 60s linear infinite; /* ЗАМЕДЛЕНО с 45s до 60s */
+            animation: ticker-scroll 60s linear infinite;
         }
         
         .ticker-item {
@@ -81,15 +81,11 @@
         }
         
         @keyframes ticker-scroll {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
         }
         
-        /* Компактная шапка (под бегущей строкой) - УВЕЛИЧЕН ОТСТУП */
+        /* Компактная шапка */
         .compact-header {
             background: linear-gradient(135deg, #132f4c 0%, #0a1929 100%);
             padding: 12px 15px;
@@ -98,8 +94,8 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding-top: 33px; /* УВЕЛИЧЕН отступ для бегущей строки */
-            margin-top: 28px; /* Отступ для бегущей строки */
+            padding-top: 33px;
+            margin-top: 28px;
         }
         
         .header-left {
@@ -638,7 +634,7 @@
             margin-top: 5px;
         }
         
-        /* Прогресс обновления - ИСПРАВЛЕН */
+        /* Прогресс обновления */
         .update-progress {
             margin-top: 15px;
         }
@@ -825,152 +821,7 @@
             border-radius: 8px;
         }
         
-        /* Адаптация для очень маленьких экранов */
-        @media (max-width: 350px) {
-            .quick-metrics {
-                grid-template-columns: 1fr;
-            }
-            
-            .compact-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .metric-value {
-                font-size: 20px;
-            }
-            
-            .bottom-nav {
-                padding: 8px 10px;
-            }
-            
-            .nav-btn {
-                min-width: 50px;
-                padding: 6px 8px;
-                font-size: 9px;
-            }
-            
-            .nav-icon {
-                font-size: 16px;
-            }
-            
-            .floors-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .floor-card {
-                padding: 12px;
-            }
-            
-            .floor-number {
-                font-size: 20px;
-            }
-        }
-        
-        @media (min-width: 768px) {
-            .bottom-nav {
-                position: relative;
-                margin-top: auto;
-                padding-bottom: 10px;
-            }
-            
-            .app-container {
-                padding-bottom: 0;
-            }
-            
-            .floors-container {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-        
-        /* Анимации */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animate-in {
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        /* Утилиты */
-        .hidden {
-            display: none !important;
-        }
-        
-        .text-center {
-            text-align: center;
-        }
-        
-        .mb-10 {
-            margin-bottom: 10px;
-        }
-        
-        .mt-10 {
-            margin-top: 10px;
-        }
-        
-        /* Индикатор загрузки */
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(30, 73, 118, 0.3);
-            border-radius: 50%;
-            border-top-color: #007acc;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Нотификации */
-        .toast {
-            position: fixed;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(19, 47, 76, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid #1e4976;
-            border-radius: 10px;
-            padding: 10px 15px;
-            font-size: 13px;
-            z-index: 999;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .toast.show {
-            display: flex;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @media (hover: hover) {
-            .metric-card:hover {
-                transform: translateY(-2px);
-            }
-            
-            .nav-btn:hover {
-                background: rgba(0, 122, 204, 0.1);
-                color: #00a8ff;
-            }
-            
-            .floor-card:hover {
-                transform: translateY(-2px);
-                border-color: #007acc;
-                box-shadow: 0 5px 15px rgba(0, 122, 204, 0.2);
-            }
-        }
-        /* СТИЛИ ДЛЯ МОДУЛЯ ПЕРЕГОВОРНЫХ */
+        /* Стили для модуля переговорных */
         .rooms-filter {
             display: flex;
             gap: 8px;
@@ -1194,16 +1045,133 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        /* Адаптация */
+        /* Адаптация для очень маленьких экранов */
         @media (max-width: 350px) {
-            .service-request-btn {
-                bottom: 60px;
-                padding: 10px 12px;
-                font-size: 12px;
+            .quick-metrics {
+                grid-template-columns: 1fr;
             }
-            .rooms-filter {
-                justify-content: center;
+            
+            .compact-grid {
+                grid-template-columns: 1fr;
             }
+            
+            .metric-value {
+                font-size: 20px;
+            }
+            
+            .bottom-nav {
+                padding: 8px 10px;
+            }
+            
+            .nav-btn {
+                min-width: 50px;
+                padding: 6px 8px;
+                font-size: 9px;
+            }
+            
+            .nav-icon {
+                font-size: 16px;
+            }
+            
+            .floors-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .floor-card {
+                padding: 12px;
+            }
+            
+            .floor-number {
+                font-size: 20px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .bottom-nav {
+                position: relative;
+                margin-top: auto;
+                padding-bottom: 10px;
+            }
+            
+            .app-container {
+                padding-bottom: 0;
+            }
+            
+            .floors-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        /* Анимации */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        /* Утилиты */
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        /* Индикатор загрузки */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(30, 73, 118, 0.3);
+            border-radius: 50%;
+            border-top-color: #007acc;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Нотификации */
+        .toast {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(19, 47, 76, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #1e4976;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 13px;
+            z-index: 999;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .toast.show {
+            display: flex;
+            animation: slideIn 0.3s ease-out;
         }
     </style>
 </head>
@@ -1211,9 +1179,7 @@
     <div class="app-container">
         <!-- Бегущая строка обновлений -->
         <div class="news-ticker" id="news-ticker">
-            <div class="ticker-container" id="ticker-container">
-                <!-- Контент будет добавлен JavaScript -->
-            </div>
+            <div class="ticker-container" id="ticker-container"></div>
         </div>
         
         <!-- Компактная шапка -->
@@ -1279,9 +1245,7 @@
                     </h2>
                     <div class="time-badge" id="equipment-time">--:--</div>
                 </div>
-                <div class="compact-grid" id="equipment-grid">
-                    <!-- Генерируется JavaScript -->
-                </div>
+                <div class="compact-grid" id="equipment-grid"></div>
             </div>
             
             <!-- Дополнительные системы -->
@@ -1292,9 +1256,7 @@
                         Дополнительные системы
                     </h2>
                 </div>
-                <div class="systems-grid" id="systems-grid">
-                    <!-- Генерируется JavaScript -->
-                </div>
+                <div class="systems-grid" id="systems-grid"></div>
             </div>
             
             <!-- Графики -->
@@ -1327,9 +1289,7 @@
                         Очистить
                     </button>
                 </div>
-                <div id="events-list">
-                    <!-- События генерируются JavaScript -->
-                </div>
+                <div id="events-list"></div>
             </div>
             
             <!-- Прогресс обновления -->
@@ -1361,7 +1321,7 @@
                 <span>Графики</span>
             </button>
             
-            <!-- НОВАЯ КНОПКА: Управление переговорными -->
+            <!-- Новая кнопка управления переговорными -->
             <button class="nav-btn" data-action="meeting-rooms">
                 <i class="fas fa-calendar-alt nav-icon"></i>
                 <span>Переговорки</span>
@@ -1393,9 +1353,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="chart-details" id="chart-details-content">
-                    <!-- Контент будет заполнен JavaScript -->
-                </div>
+                <div class="chart-details" id="chart-details-content"></div>
             </div>
         </div>
     </div>
@@ -1416,9 +1374,7 @@
                 <div class="text-center mb-10" style="color: #a3c7e6; font-size: 14px;">
                     Нажмите на этаж для просмотра подробной информации
                 </div>
-                <div class="floors-container" id="floors-container">
-                    <!-- Этажи будут сгенерированы JavaScript -->
-                </div>
+                <div class="floors-container" id="floors-container"></div>
                 <div class="mt-10" style="font-size: 12px; color: #a3c7e6; text-align: center;">
                     <i class="fas fa-info-circle"></i> Всего этажей: 10 | Активных этажей: 6
                 </div>
@@ -1441,13 +1397,11 @@
             <div class="hdd-chart-wrapper">
                 <canvas id="hddChart"></canvas>
             </div>
-            <div class="hdd-stats" id="hdd-stats">
-                <!-- Статистика будет добавлена JavaScript -->
-            </div>
+            <div class="hdd-stats" id="hdd-stats"></div>
         </div>
     </div>
     
-    <!-- НОВОЕ МОДАЛЬНОЕ ОКНО: Управление переговорными -->
+    <!-- Модальное окно управления переговорными -->
     <div class="modal-overlay" id="meeting-rooms-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1467,11 +1421,9 @@
                     <div class="filter-item" data-floor="8">8 этаж</div>
                 </div>
                 
-                <div class="rooms-list" id="rooms-list">
-                    <!-- Переговорные будут добавлены JS -->
-                </div>
+                <div class="rooms-list" id="rooms-list"></div>
 
-                <!-- Форма бронирования (скрыта по умолчанию) -->
+                <!-- Форма бронирования -->
                 <div class="booking-form" id="booking-form">
                     <h3 style="margin-bottom: 15px; color: #e6f1ff;">Бронирование: <span id="booking-room-name"></span></h3>
                     <div class="form-group">
@@ -1514,9 +1466,7 @@
                 
                 <div class="current-booking" id="current-booking">
                     <h3 style="margin: 20px 0 10px; color: #e6f1ff;">Мои бронирования</h3>
-                    <div id="bookings-list">
-                        <!-- Активные брони будут добавлены JS -->
-                    </div>
+                    <div id="bookings-list"></div>
                 </div>
             </div>
         </div>
@@ -1530,16 +1480,13 @@
     
     <script>
         // Конфигурация
-        const UPDATE_INTERVAL = 30000; // 30 секунд
+        const UPDATE_INTERVAL = 30000;
         let updateTimer = 30;
         let eventHistory = [];
         let currentCharts = {};
-        let chartDataCache = {
-            disk: [],
-            traffic: []
-        };
+        let chartDataCache = { disk: [], traffic: [] };
 
-        // КОНФИГУРАЦИЯ ПЕРЕГОВОРНЫХ
+        // Конфигурация переговорных
         const meetingRooms = [
             { id: 'mr-301', name: 'Сибирь', floor: 3, capacity: 6, booked: false, nextAvailable: '14:00' },
             { id: 'mr-302', name: 'Ванкор', floor: 3, capacity: 10, booked: true, bookedUntil: '13:30', bookedBy: 'Иванов А.И.' },
@@ -1550,32 +1497,19 @@
             { id: 'mr-802', name: 'Переговоры', floor: 8, capacity: 12, booked: true, bookedUntil: '16:45', bookedBy: 'Петров В.С.' }
         ];
 
-        // Текущие бронирования пользователя
         let userBookings = [
             { id: 'b-001', roomId: 'mr-303', roomName: 'Нефтяник', time: '14:00-15:30', date: 'Сегодня', purpose: 'Планерка отдела' },
             { id: 'b-002', roomId: 'mr-401', roomName: 'Финансы', time: '09:00-10:00', date: 'Завтра', purpose: 'Обсуждение бюджета' }
         ];
 
-        // Сообщения для бегущей строки (расширенный список)
+        // Сообщения для бегущей строки
         const tickerMessages = [
             { type: 'update', text: '✅ Данные обновлены' },
             { type: 'system', text: '🖥️ Система работает штатно' },
             { type: 'warning', text: '⚠️ Температура в серверной в норме: 18-27°C' },
             { type: 'update', text: '📊 Графики обновлены' },
             { type: 'system', text: '🔒 Системы безопасности активны' },
-            { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' },
-            { type: 'update', text: '🔄 Автоматическое обновление через 30 секунд' },
-            { type: 'system', text: '💾 Дисковая нагрузка в норме' },
-            { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 8.5 кВт' },
-            { type: 'event', text: '🔔 Новое событие в системе' },
-            { type: 'event', text: '📈 Графики загружены и обновляются' },
-            { type: 'event', text: '⚡ Быстрое обновление интерфейса' },
-            { type: 'event', text: '🛡️ Антивирусная защита активна' },
-            { type: 'event', text: '📡 Сетевое соединение стабильное' },
-            { type: 'event', text: '💽 Использование дискового пространства в норме' },
-            { type: 'event', text: '🔋 ИБП: 95% заряда, питание стабильное' },
-            { type: 'event', text: '👥 Активные пользователи: 2850 человек' },
-            { type: 'event', text: '🌐 Интернет скорость: 150 Мб/с' }
+            { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' }
         ];
         
         // Конфигурация оборудования
@@ -1588,7 +1522,7 @@
             { id: 'db', name: 'База данных', metrics: ['Диск C', 'Диск D'], icon: 'fa-database' }
         ];
         
-        // Конфигурация дополнительных систем (убрали систему управления зданием)
+        // Конфигурация дополнительных систем
         const systemsConfig = [
             {
                 id: 'access',
@@ -1633,22 +1567,10 @@
             { floor: 10, department: 'Конференц-залы, архив', pcs: 0, printers: 0, active: false }
         ];
         
-        // Исторические события (добавлены заранее)
+        // Исторические события
         const historicalEvents = [
             { type: 'info', message: 'Система мониторинга установлена и настроена', time: '09:15', daysAgo: 5 },
-            { type: 'info', message: 'Первое подключение оборудования к системе', time: '09:30', daysAgo: 5 },
-            { type: 'warning', message: 'Обнаружено повышение температуры в серверной на 3°C', time: '14:20', daysAgo: 4 },
-            { type: 'info', message: 'Температура в серверной нормализована', time: '15:45', daysAgo: 4 },
-            { type: 'info', message: 'Проведено плановое обновление ПО', time: '23:00', daysAgo: 3 },
-            { type: 'alert', message: 'Короткое отключение электропитания в восточном крыле', time: '03:15', daysAgo: 2 },
-            { type: 'info', message: 'Электропитание восстановлено, системы работают штатно', time: '03:25', daysAgo: 2 },
-            { type: 'warning', message: 'Обнаружена попытка несанкционированного доступа к сети', time: '11:30', daysAgo: 2 },
-            { type: 'info', message: 'Попытка доступа заблокирована, безопасность не нарушена', time: '11:32', daysAgo: 2 },
-            { type: 'info', message: 'Проверка системы резервного копирования', time: '02:00', daysAgo: 1 },
-            { type: 'info', message: 'Резервное копирование данных выполнено успешно', time: '04:30', daysAgo: 1 },
-            { type: 'warning', message: 'Снижение скорости интернет-соединения на 40%', time: '13:15', daysAgo: 1 },
-            { type: 'info', message: 'Скорость интернета восстановлена', time: '13:45', daysAgo: 1 },
-            { type: 'info', message: 'Обновлены антивирусные базы на всех рабочих станциях', time: '17:00', daysAgo: 1 }
+            { type: 'info', message: 'Первое подключение оборудования к системе', time: '09:30', daysAgo: 5 }
         ];
         
         // Инициализация
@@ -1658,48 +1580,34 @@
             initCharts();
             initEvents();
             initNavigation();
+            initMeetingRoomsModule();
             startUpdateCycle();
             
-            // Обновляем время оборудования
             updateEquipmentTime();
             setInterval(updateEquipmentTime, 60000);
             
-            // Добавляем исторические события
             addHistoricalEvents();
-            
-            // Инициализируем бегущую строку
             initTicker();
             
-            // Добавляем начальные события
             addEvent('info', '✅ Система мониторинга запущена и работает штатно');
             addEvent('info', '📊 Все метрики загружены и обновляются');
             
-            // Инициализируем температуру в серверной с диапазоном 18-27°C
             updateServerTemperature();
-            
-            // Запускаем обновление бегущей строки
-            setInterval(updateTickerContent, 10000); // Обновляем каждые 10 секунд
-            
-            // Исправление для плавной работы бегущей строки
-            fixTickerAnimation();
-
-            // ИНИЦИАЛИЗАЦИЯ МОДУЛЯ ПЕРЕГОВОРНЫХ
-            initMeetingRoomsModule();
+            setInterval(updateTickerContent, 10000);
         });
 
         // ФУНКЦИИ МОДУЛЯ ПЕРЕГОВОРНЫХ
         function initMeetingRoomsModule() {
-            // Устанавливаем сегодняшнюю дату по умолчанию в форме
+            // Устанавливаем сегодняшнюю дату
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('booking-date').value = today;
-            document.getElementById('booking-date').min = today; // Нельзя выбрать прошедшие даты
+            document.getElementById('booking-date').min = today;
 
-            // Обработчик для кнопки закрытия модального окна
+            // Обработчики для модального окна
             document.getElementById('close-meeting-rooms-modal').addEventListener('click', function() {
                 document.getElementById('meeting-rooms-modal').style.display = 'none';
             });
 
-            // Клик вне модального окна для закрытия
             document.getElementById('meeting-rooms-modal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     this.style.display = 'none';
@@ -1724,7 +1632,7 @@
 
             document.getElementById('confirm-booking-btn').addEventListener('click', confirmBooking);
 
-            // Обработчик для кнопки "Заявка"
+            // Кнопка "Заявка"
             document.getElementById('service-request-btn').addEventListener('click', function() {
                 showToast('Функция заявки на обслуживание в разработке');
                 addEvent('info', '📋 Создана заявка на обслуживание переговорной');
@@ -1772,7 +1680,6 @@
                     <div class="room-schedule">${scheduleInfo}</div>
                 `;
 
-                // Добавляем обработчик клика только для свободных комнат
                 if (!room.booked) {
                     roomCard.addEventListener('click', function() {
                         openBookingForm(room);
@@ -1789,7 +1696,6 @@
             document.getElementById('booking-form').style.display = 'block';
             document.getElementById('rooms-list').style.display = 'none';
             
-            // Прокручиваем к форме
             document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
@@ -1801,12 +1707,10 @@
             const duration = document.getElementById('booking-duration').value;
             const purpose = document.getElementById('booking-purpose').value || 'Встреча';
 
-            // Преобразуем время окончания
             const [hours, minutes] = timeStart.split(':').map(Number);
             const endHours = hours + parseInt(duration);
             const timeEnd = `${endHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 
-            // Создаем новое бронирование
             const newBooking = {
                 id: 'b-' + Date.now(),
                 roomId: 'temp-id',
@@ -1818,20 +1722,12 @@
 
             userBookings.push(newBooking);
             
-            // Обновляем интерфейс
             renderUserBookings();
             document.getElementById('booking-form').style.display = 'none';
             document.getElementById('rooms-list').style.display = 'grid';
             
-            // Показываем уведомление
             showToast(`Переговорная "${roomName}" забронирована на ${date} с ${timeStart} до ${timeEnd}`);
             addEvent('info', `📅 Забронирована переговорная "${roomName}" на ${date} ${timeStart}-${timeEnd}`);
-            
-            // Обновляем бегущую строку
-            addTickerItem({
-                type: 'event',
-                text: `📅 ${roomName} забронирована на ${timeStart}-${timeEnd}`
-            });
         }
 
         // Отображение бронирований пользователя
@@ -1863,7 +1759,6 @@
                 bookingsList.appendChild(bookingItem);
             });
 
-            // Добавляем обработчики для кнопок отмены
             document.querySelectorAll('.cancel-booking').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const bookingId = this.dataset.id;
@@ -1902,26 +1797,6 @@
             addEvent('info', '📅 Открыт модуль управления переговорными');
         }
 
-        // Исправление анимации бегущей строки
-        function fixTickerAnimation() {
-            const tickerContainer = document.getElementById('ticker-container');
-            
-            // Перезапускаем анимацию каждые 5 секунд для предотвращения пропадания
-            setInterval(() => {
-                // Клонируем контейнер для перезапуска анимации
-                const items = tickerContainer.children;
-                if (items.length > 0) {
-                    const animation = tickerContainer.style.animation;
-                    tickerContainer.style.animation = 'none';
-                    
-                    // Вызываем reflow
-                    tickerContainer.offsetHeight;
-                    
-                    tickerContainer.style.animation = animation;
-                }
-            }, 15000); // Перезапуск каждые 15 секунд
-        }
-        
         // Инициализация оборудования
         function initEquipment() {
             const grid = document.getElementById('equipment-grid');
@@ -1929,14 +1804,12 @@
             
             equipmentConfig.forEach(item => {
                 const status = getRandomStatus();
-                const card = document.createElement('div');
-                card.className = 'compact-item';
-                card.dataset.id = item.id;
-                
-                // Генерируем случайные значения для метрик
                 const metric1 = getRandomValue(10, 90);
                 const metric2 = getRandomValue(20, 85);
                 
+                const card = document.createElement('div');
+                card.className = 'compact-item';
+                card.dataset.id = item.id;
                 card.innerHTML = `
                     <div class="item-header">
                         <div class="item-name">${item.name}</div>
@@ -1953,7 +1826,6 @@
                         </div>
                     </div>
                 `;
-                
                 grid.appendChild(card);
             });
         }
@@ -1984,7 +1856,6 @@
                         ${metricsHtml}
                     </div>
                 `;
-                
                 grid.appendChild(card);
             });
         }
@@ -2001,7 +1872,6 @@
         
         // Инициализация графиков
         function initCharts() {
-            // Генерируем данные для кэша - 6 точек вместо 12
             chartDataCache.disk = generateRandomData(6, 30, 80);
             chartDataCache.traffic = generateRandomData(6, 5, 50);
             
@@ -2010,7 +1880,7 @@
             currentCharts.disk = new Chart(ctx1, {
                 type: 'line',
                 data: {
-                    labels: generateTimeLabels(6), // 6 точек вместо 12
+                    labels: generateTimeLabels(6),
                     datasets: [{
                         label: 'Дисковая нагрузка (%)',
                         data: chartDataCache.disk,
@@ -2019,7 +1889,7 @@
                         borderWidth: 2,
                         tension: 0.4,
                         fill: true,
-                        pointRadius: 8, // Увеличиваем точки для лучшей кликабельности
+                        pointRadius: 8,
                         pointHoverRadius: 10,
                         pointBackgroundColor: '#007acc',
                         pointBorderColor: '#ffffff',
@@ -2034,7 +1904,7 @@
             currentCharts.traffic = new Chart(ctx2, {
                 type: 'bar',
                 data: {
-                    labels: generateTimeLabels(6), // 6 точек вместо 12
+                    labels: generateTimeLabels(6),
                     datasets: [{
                         label: 'Трафик (Мб)',
                         data: chartDataCache.traffic,
@@ -2047,7 +1917,7 @@
                 options: getChartOptions('traffic')
             });
             
-            // График нагрузки HDD за сутки (для модального окна)
+            // График нагрузки HDD за сутки
             initHddChart();
         }
         
@@ -2136,44 +2006,37 @@
                 }
             });
             
-            // Обновляем статистику HDD
             updateHddStats(hddData);
         }
         
-        // Генерация данных HDD за 24 часа с разрозненными линиями
+        // Генерация данных HDD за 24 часа
         function generateHddDataFor24Hours() {
             const diskC = [];
             const diskD = [];
             const diskE = [];
             
             for (let i = 0; i < 24; i++) {
-                // Создаем разные паттерны для каждого диска
-                
-                // Диск C - основной системный диск
                 let baseLoadC = 20;
-                if (i >= 8 && i <= 10) baseLoadC = 40; // Утренний пик
-                if (i >= 11 && i <= 13) baseLoadC = 60; // Обеденный пик
-                if (i >= 14 && i <= 17) baseLoadC = 75; // Основной рабочий день
-                if (i >= 18 && i <= 20) baseLoadC = 45; // Вечером снижение
-                if (i >= 21 || i <= 5) baseLoadC = 15; // Ночью минимальная нагрузка
+                if (i >= 8 && i <= 10) baseLoadC = 40;
+                if (i >= 11 && i <= 13) baseLoadC = 60;
+                if (i >= 14 && i <= 17) baseLoadC = 75;
+                if (i >= 18 && i <= 20) baseLoadC = 45;
+                if (i >= 21 || i <= 5) baseLoadC = 15;
                 
-                // Диск D - пользовательские данные
                 let baseLoadD = 15;
-                if (i >= 9 && i <= 11) baseLoadD = 35; // Позже начинается
-                if (i >= 12 && i <= 15) baseLoadD = 55; // Обеденный пик
-                if (i >= 16 && i <= 18) baseLoadD = 70; // Вечерний пик
-                if (i >= 19 && i <= 22) baseLoadD = 40; // Вечером снижение
-                if (i >= 23 || i <= 6) baseLoadD = 10; // Ночью минимальная нагрузка
+                if (i >= 9 && i <= 11) baseLoadD = 35;
+                if (i >= 12 && i <= 15) baseLoadD = 55;
+                if (i >= 16 && i <= 18) baseLoadD = 70;
+                if (i >= 19 && i <= 22) baseLoadD = 40;
+                if (i >= 23 || i <= 6) baseLoadD = 10;
                 
-                // Диск E - архивные данные
                 let baseLoadE = 10;
-                if (i >= 10 && i <= 12) baseLoadE = 25; // Утренний пик
-                if (i >= 13 && i <= 16) baseLoadE = 40; // Дневной пик
-                if (i >= 17 && i <= 19) baseLoadE = 50; // Вечерний пик
-                if (i >= 20 && i <= 23) baseLoadE = 30; // Вечером снижение
-                if (i >= 0 || i <= 7) baseLoadE = 5; // Ночью минимальная нагрузка
+                if (i >= 10 && i <= 12) baseLoadE = 25;
+                if (i >= 13 && i <= 16) baseLoadE = 40;
+                if (i >= 17 && i <= 19) baseLoadE = 50;
+                if (i >= 20 && i <= 23) baseLoadE = 30;
+                if (i >= 0 || i <= 7) baseLoadE = 5;
                 
-                // Добавляем разные случайные колебания для каждого диска
                 const randomVariationC = Math.random() * 20 - 10;
                 const randomVariationD = Math.random() * 15 - 7.5;
                 const randomVariationE = Math.random() * 12 - 6;
@@ -2183,10 +2046,9 @@
                 diskE.push(Math.max(2, Math.min(85, Math.round(baseLoadE + randomVariationE))));
             }
             
-            // Добавляем случайные выбросы для большей разрозненности
-            diskC[10] += 15; // Пик в 10 утра
-            diskD[15] += 20; // Пик в 15:00
-            diskE[13] += 12; // Пик в 13:00
+            diskC[10] += 15;
+            diskD[15] += 20;
+            diskE[13] += 12;
             
             return { diskC, diskD, diskE };
         }
@@ -2233,7 +2095,6 @@
                         const index = elements[0].index;
                         showChartDetails(type, index);
                     } else {
-                        // Если клик не по точке, показываем график нагрузки HDD за сутки
                         showHddChartModal();
                     }
                 },
@@ -2294,7 +2155,6 @@
                 chartDataCache.disk[pointIndex] : 
                 chartDataCache.traffic[pointIndex];
             
-            // Определяем статус
             let status, statusColor;
             if (chartType === 'disk') {
                 if (value > 90) {
@@ -2304,7 +2164,7 @@
                     status = 'Высокая';
                     statusColor = '#ffc107';
                 } else {
-                    status = 'Оптимальная'; // Изменено с "Нормальная" на "Оптимальная"
+                    status = 'Оптимальная';
                     statusColor = '#4caf50';
                 }
                 
@@ -2328,7 +2188,7 @@
                         <i class="fas fa-info-circle"></i> 
                         ${value > 90 ? 'Требуется немедленное вмешательство' : 
                           value > 70 ? 'Рекомендуется проверить систему' : 
-                          'Система работает штатно'} <!-- Изменено с "в норме" на "штатно" -->
+                          'Система работает штатно'}
                     </div>
                 `;
             } else {
@@ -2339,7 +2199,7 @@
                     status = 'Высокая';
                     statusColor = '#ffc107';
                 } else {
-                    status = 'Оптимальная'; // Изменено с "Нормальная" на "Оптимальная"
+                    status = 'Оптимальная';
                     statusColor = '#4caf50';
                 }
                 
@@ -2363,7 +2223,7 @@
                         <i class="fas fa-info-circle"></i> 
                         ${value > 45 ? 'Возможна перегрузка сети' : 
                           value > 35 ? 'Повышенная нагрузка на сеть' : 
-                          'Сетевая нагрузка оптимальна'} <!-- Изменено с "в норме" на "оптимальна" -->
+                          'Сетевая нагрузка оптимальна'}
                     </div>
                 `;
             }
@@ -2375,14 +2235,12 @@
         function showHddChartModal() {
             const modal = document.getElementById('hdd-chart-modal');
             
-            // Обновляем данные графика
             const hddData = generateHddDataFor24Hours();
             currentCharts.hdd.data.datasets[0].data = hddData.diskC;
             currentCharts.hdd.data.datasets[1].data = hddData.diskD;
             currentCharts.hdd.data.datasets[2].data = hddData.diskE;
             currentCharts.hdd.update('none');
             
-            // Обновляем статистику
             updateHddStats(hddData);
             
             modal.style.display = 'flex';
@@ -2394,7 +2252,6 @@
         function initTicker() {
             const tickerContainer = document.getElementById('ticker-container');
             
-            // Начальное сообщение
             const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
             const initialMessage = {
                 type: 'update',
@@ -2403,9 +2260,8 @@
             
             addTickerItem(initialMessage);
             
-            // Добавляем несколько начальных сообщений
             const initialMessages = [
-                { type: 'system', text: '🖥️ Все системы работают штатно' }, // Изменено
+                { type: 'system', text: '🖥️ Все системы работают штатно' },
                 { type: 'info', text: '🌡️ Температура серверной: 18-27°C' },
                 { type: 'event', text: '🔔 Система готова к работе' }
             ];
@@ -2426,7 +2282,6 @@
             
             tickerContainer.appendChild(tickerItem);
             
-            // Удаляем старые элементы, если их слишком много
             while (tickerContainer.children.length > 15) {
                 tickerContainer.removeChild(tickerContainer.firstChild);
             }
@@ -2435,34 +2290,26 @@
         // Обновление содержимого бегущей строки
         function updateTickerContent() {
             const messages = [
-                // Время обновления
                 { type: 'update', text: `🔄 ${new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })} | Обновление данных` },
                 
-                // События из истории
                 ...eventHistory.slice(0, 3).map(event => ({
                     type: 'event',
                     text: `${getEventIcon(event.type)} ${event.time} | ${event.message.substring(0, 50)}${event.message.length > 50 ? '...' : ''}`
                 })),
                 
-                // Системные сообщения
                 { type: 'system', text: `🖥️ ЦП: ${getRandomValue(15, 45)}% | Память: ${getRandomValue(40, 75)}%` },
                 { type: 'system', text: `🌡️ Серверная: ${document.getElementById('metric-temp').textContent} | Влажность: ${getRandomValue(40, 60)}%` },
                 { type: 'system', text: `💾 Диски: C:${getRandomValue(25, 65)}% D:${getRandomValue(20, 50)}% E:${getRandomValue(15, 40)}%` },
                 { type: 'system', text: `📡 Сеть: ${document.getElementById('metric-internet').textContent} | Задержка: ${getRandomValue(5, 35)}мс` },
                 { type: 'system', text: `👥 Пользователи: ${document.getElementById('metric-users').textContent} | Активные сессии: ${getRandomValue(120, 350)}` },
-                { type: 'system', text: `⚡ Питание: ${document.getElementById('metric-power').textContent} | Система работает штатно` }, // Изменено
+                { type: 'system', text: `⚡ Питание: ${document.getElementById('metric-power').textContent} | Система работает штатно` },
                 
-                // Случайные сообщения из списка
                 ...tickerMessages.filter(() => Math.random() > 0.7).slice(0, 2)
             ];
             
-            // Выбираем случайное сообщение
             const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            
-            // Добавляем новое сообщение
             addTickerItem(randomMessage);
             
-            // Перезапускаем анимацию для плавного перехода
             const tickerContainer = document.getElementById('ticker-container');
             const animation = tickerContainer.style.animation;
             tickerContainer.style.animation = 'none';
@@ -2512,13 +2359,11 @@
                 
                 eventHistory.unshift(historicalEvent);
                 
-                // Добавляем в список событий (только сегодняшние)
                 if (event.daysAgo === 0) {
                     addEventToList(event.type, event.message, event.time);
                 }
             });
             
-            // Ограничиваем историю
             if (eventHistory.length > 100) {
                 eventHistory = eventHistory.slice(0, 100);
             }
@@ -2528,7 +2373,6 @@
         function initEvents() {
             const eventsList = document.getElementById('events-list');
             
-            // Очистка событий
             document.getElementById('clear-events').addEventListener('click', function() {
                 if (eventsList.children.length > 0) {
                     eventsList.innerHTML = '';
@@ -2537,13 +2381,8 @@
                 }
             });
             
-            // Закрытие модальных окон
             document.getElementById('close-chart-modal').addEventListener('click', function() {
                 document.getElementById('chart-modal').style.display = 'none';
-            });
-            
-            document.getElementById('close-history-modal').addEventListener('click', function() {
-                document.getElementById('history-modal').style.display = 'none';
             });
             
             document.getElementById('close-office-modal').addEventListener('click', function() {
@@ -2554,7 +2393,6 @@
                 document.getElementById('hdd-chart-modal').style.display = 'none';
             });
             
-            // Клик вне модального окна
             document.querySelectorAll('.modal-overlay').forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === this) {
@@ -2582,15 +2420,12 @@
                 btn.addEventListener('click', function() {
                     const action = this.dataset.action;
                     
-                    // Убираем активный класс у всех кнопок
                     document.querySelectorAll('.nav-btn').forEach(b => {
                         b.classList.remove('active');
                     });
                     
-                    // Добавляем активный класс текущей кнопке
                     this.classList.add('active');
                     
-                    // Выполняем действие
                     switch(action) {
                         case 'refresh':
                             manualUpdate();
@@ -2599,7 +2434,6 @@
                             simulateEvent();
                             break;
                         case 'charts':
-                            // Показываем график нагрузки HDD за сутки
                             showHddChartModal();
                             break;
                         case 'meeting-rooms':
@@ -2620,7 +2454,6 @@
             
             floorsContainer.innerHTML = '';
             
-            // Сортируем этажи по номеру
             const sortedFloors = [...floorsConfig].sort((a, b) => b.floor - a.floor);
             
             sortedFloors.forEach(floor => {
@@ -2628,7 +2461,6 @@
                 floorCard.className = 'floor-card';
                 floorCard.dataset.floor = floor.floor;
                 
-                // Определяем цвет статуса
                 const statusColor = floor.active ? '#4caf50' : '#9e9e9e';
                 const statusText = floor.active ? 'АКТИВЕН' : 'НЕАКТИВЕН';
                 
@@ -2652,7 +2484,6 @@
                     </div>
                 `;
                 
-                // Добавляем обработчик клика
                 floorCard.addEventListener('click', function() {
                     const floorNum = this.dataset.floor;
                     const floorData = floorsConfig.find(f => f.floor == floorNum);
@@ -2666,7 +2497,7 @@
                         details += `\nСерверная этаж 3:\n`;
                         details += `Температура: ${document.getElementById('metric-temp').textContent}\n`;
                         details += `Диапазон: 18-27°C\n`;
-                        details += `Система работает штатно\n`; // Изменено
+                        details += `Система работает штатно\n`;
                     }
                     
                     alert(details);
@@ -2686,7 +2517,6 @@
             showToast('Данные обновлены вручную');
             addEvent('info', '🔄 Ручное обновление данных выполнено');
             
-            // Визуальная обратная связь
             const refreshBtn = document.querySelector('[data-action="refresh"]');
             refreshBtn.innerHTML = '<i class="fas fa-check nav-icon"></i><span>Готово</span>';
             setTimeout(() => {
@@ -2711,7 +2541,6 @@
             addEvent(randomEvent.type, randomEvent.message);
             showToast('Тестовое событие создано');
             
-            // Визуальная обратная связь
             const eventBtn = document.querySelector('[data-action="simulate"]');
             eventBtn.innerHTML = '<i class="fas fa-check nav-icon"></i><span>Создано</span>';
             setTimeout(() => {
@@ -2734,13 +2563,11 @@
             eventHistory.unshift(event);
             addEventToList(type, message, time);
             
-            // Добавляем в бегущую строку
             addTickerItem({
                 type: 'event',
                 text: `${getEventIcon(type)} ${time} | ${message.substring(0, 40)}${message.length > 40 ? '...' : ''}`
             });
             
-            // Ограничиваем историю
             if (eventHistory.length > 100) {
                 eventHistory.pop();
             }
@@ -2761,7 +2588,6 @@
             
             eventsList.prepend(eventDiv);
             
-            // Ограничиваем количество видимых событий
             while (eventsList.children.length > 10) {
                 eventsList.removeChild(eventsList.lastChild);
             }
@@ -2769,38 +2595,29 @@
         
         // Обновить все данные
         function updateAllData() {
-            // Обновляем быстрые метрики
             updateServerTemperature();
             document.getElementById('metric-power').textContent = `${getRandomValue(5, 15, 1)} кВт`;
             document.getElementById('metric-users').textContent = formatNumber(getRandomValue(2300, 3400));
             document.getElementById('metric-internet').textContent = `${getRandomValue(80, 180)} Мб/с`;
             
-            // Обновляем оборудование
             initEquipment();
-            
-            // Обновляем графики
             updateCharts();
-            
-            // Сбрасываем таймер
             resetUpdateTimer();
             
-            // Добавляем сообщение об обновлении в бегущую строку
             const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
             addTickerItem({
                 type: 'update',
-                text: `✅ ${time} | Данные обновлены | Система работает штатно` // Изменено
+                text: `✅ ${time} | Данные обновлены | Система работает штатно`
             });
         }
         
-        // Обновление температуры в серверной с диапазоном 18-27°C
+        // Обновление температуры в серверной
         function updateServerTemperature() {
-            // Генерируем температуру в диапазоне 18-27°C
             const temp = getRandomValue(18, 27, 1);
             document.getElementById('metric-temp').textContent = `${temp}°C`;
             
-            // Обновляем тренд
             const trendElement = document.querySelector('.metric-card .metric-trend');
-            const diff = (temp - 22).toFixed(1); // Относительно 22°C
+            const diff = (temp - 22).toFixed(1);
             trendElement.innerHTML = diff >= 0 ? 
                 `<i class="fas fa-arrow-up"></i> ${Math.abs(diff)}°C` : 
                 `<i class="fas fa-arrow-down"></i> ${Math.abs(diff)}°C`;
@@ -2809,28 +2626,23 @@
         
         // Обновить графики
         function updateCharts() {
-            // Обновляем данные в кэше
             chartDataCache.disk = generateRandomData(6, 30, 80);
             chartDataCache.traffic = generateRandomData(6, 5, 50);
             
-            // Обновляем данные графиков
             currentCharts.disk.data.datasets[0].data = chartDataCache.disk;
             currentCharts.traffic.data.datasets[0].data = chartDataCache.traffic;
             
-            // Обновляем графики
             currentCharts.disk.update('none');
             currentCharts.traffic.update('none');
         }
         
         // Запустить цикл обновлений
         function startUpdateCycle() {
-            // Обновляем каждые 30 секунд
             setInterval(() => {
                 updateAllData();
                 addEvent('info', '🔄 Автоматическое обновление данных');
             }, UPDATE_INTERVAL);
             
-            // Запускаем таймер обратного отсчета - ИСПРАВЛЕННЫЙ КОД
             setInterval(() => {
                 updateTimer--;
                 if (updateTimer < 0) {
@@ -2840,7 +2652,6 @@
                 document.getElementById('update-timer').textContent = updateTimer;
                 document.getElementById('countdown').textContent = `${updateTimer} сек`;
                 
-                // ИСПРАВЛЕНИЕ: правильно вычисляем прогресс для 30 секунд
                 const progress = ((30 - updateTimer) / 30) * 100;
                 document.getElementById('progress-fill').style.width = `${progress}%`;
             }, 1000);
@@ -2853,12 +2664,10 @@
             document.getElementById('countdown').textContent = `${updateTimer} сек`;
             document.getElementById('progress-fill').style.width = '0%';
             
-            // Перезапускаем CSS анимацию прогресс-бара
             const progressFill = document.getElementById('progress-fill');
             progressFill.style.transition = 'none';
             progressFill.style.width = '0%';
             
-            // Восстанавливаем анимацию после небольшой задержки
             setTimeout(() => {
                 progressFill.style.transition = 'width 30s linear';
             }, 10);
@@ -2905,7 +2714,7 @@
             const now = new Date();
             return Array.from({ length: hours }, (_, i) => {
                 const hour = new Date(now);
-                hour.setHours(hour.getHours() - (hours - 1 - i) * 2); // Каждые 2 часа
+                hour.setHours(hour.getHours() - (hours - 1 - i) * 2);
                 return hour.getHours().toString().padStart(2, '0') + ':00';
             });
         }
