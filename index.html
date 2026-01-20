@@ -37,7 +37,7 @@
             padding-bottom: env(safe-area-inset-bottom, 60px);
         }
         
-        /* Бегущая строка обновлений */
+        /* Бегущая строка обновлений - УВЕЛИЧЕНА СКОРОСТЬ (медленнее) и УВЕЛИЧЕН ОТСТУП */
         .news-ticker {
             position: fixed;
             top: 0;
@@ -53,7 +53,7 @@
             height: 28px;
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            /* Уменьшен отступ сверху */
         }
         
         .ticker-container {
@@ -81,11 +81,15 @@
         }
         
         @keyframes ticker-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
         }
         
-        /* Компактная шапка */
+        /* Компактная шапка (под бегущей строкой) - УМЕНЬШЕН ОТСТУП */
         .compact-header {
             background: linear-gradient(135deg, #132f4c 0%, #0a1929 100%);
             padding: 12px 15px;
@@ -94,8 +98,8 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding-top: 33px;
-            margin-top: 28px;
+            padding-top: 20px; /* УМЕНЬШЕН отступ для бегущей строки */
+            margin-top: 28px; /* Отступ для бегущей строки */
         }
         
         .header-left {
@@ -821,230 +825,6 @@
             border-radius: 8px;
         }
         
-        /* Стили для модуля переговорных */
-        .rooms-filter {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .filter-item {
-            padding: 6px 12px;
-            background: rgba(19, 47, 76, 0.8);
-            border-radius: 8px;
-            font-size: 12px;
-            color: #a3c7e6;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid rgba(30, 73, 118, 0.3);
-        }
-
-        .filter-item.active {
-            background: rgba(0, 122, 204, 0.3);
-            color: #00a8ff;
-            border-color: #007acc;
-        }
-
-        .rooms-list {
-            display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        .rooms-list::-webkit-scrollbar {
-            width: 4px;
-        }
-        .rooms-list::-webkit-scrollbar-track {
-            background: rgba(30, 73, 118, 0.2);
-            border-radius: 2px;
-        }
-        .rooms-list::-webkit-scrollbar-thumb {
-            background: #007acc;
-            border-radius: 2px;
-        }
-
-        .room-card {
-            background: rgba(19, 47, 76, 0.8);
-            border-radius: 10px;
-            padding: 12px;
-            border-left: 3px solid #007acc;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .room-card:hover {
-            transform: translateY(-2px);
-            background: rgba(19, 47, 76, 0.9);
-        }
-
-        .room-card.booked {
-            border-left-color: #f44336;
-            opacity: 0.8;
-        }
-
-        .room-card.available {
-            border-left-color: #4caf50;
-        }
-
-        .room-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .room-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #e6f1ff;
-        }
-
-        .room-capacity {
-            font-size: 11px;
-            background: rgba(0, 122, 204, 0.2);
-            padding: 2px 6px;
-            border-radius: 10px;
-            color: #00a8ff;
-        }
-
-        .room-status {
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        .status-available {
-            background: rgba(76, 175, 80, 0.15);
-            color: #4caf50;
-        }
-
-        .status-booked {
-            background: rgba(244, 67, 54, 0.15);
-            color: #f44336;
-        }
-
-        .room-schedule {
-            font-size: 11px;
-            color: #a3c7e6;
-            margin-top: 5px;
-        }
-
-        .booking-item {
-            background: rgba(19, 47, 76, 0.6);
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-left: 3px solid #007acc;
-        }
-
-        .booking-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .booking-room {
-            font-size: 13px;
-            font-weight: 600;
-            color: #e6f1ff;
-        }
-
-        .booking-time {
-            font-size: 11px;
-            color: #a3c7e6;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 2px 6px;
-            border-radius: 6px;
-        }
-
-        .booking-user {
-            font-size: 12px;
-            color: #a3c7e6;
-        }
-
-        .service-request-btn {
-            position: fixed;
-            bottom: 70px;
-            right: 15px;
-            background: linear-gradient(135deg, #007acc 0%, #00a8ff 100%);
-            border: none;
-            color: white;
-            padding: 12px 15px;
-            border-radius: 50px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
-            cursor: pointer;
-            z-index: 999;
-            transition: all 0.3s;
-        }
-
-        .service-request-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 122, 204, 0.4);
-        }
-
-        /* Стили для формы бронирования */
-        .booking-form {
-            display: none;
-            background: rgba(19, 47, 76, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            border: 1px solid rgba(30, 73, 118, 0.5);
-        }
-        .form-group {
-            margin-bottom: 12px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            color: #a3c7e6;
-            margin-bottom: 5px;
-        }
-        .form-input, .form-select {
-            width: 100%;
-            padding: 8px 10px;
-            background: rgba(10, 25, 41, 0.9);
-            border: 1px solid rgba(30, 73, 118, 0.5);
-            border-radius: 6px;
-            color: #e6f1ff;
-            font-size: 13px;
-        }
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            flex: 1;
-            transition: all 0.2s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #007acc 0%, #00a8ff 100%);
-            color: white;
-        }
-        .btn-secondary {
-            background: rgba(30, 73, 118, 0.5);
-            color: #a3c7e6;
-        }
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
         /* Адаптация для очень маленьких экранов */
         @media (max-width: 350px) {
             .quick-metrics {
@@ -1173,13 +953,32 @@
             display: flex;
             animation: slideIn 0.3s ease-out;
         }
+        
+        @media (hover: hover) {
+            .metric-card:hover {
+                transform: translateY(-2px);
+            }
+            
+            .nav-btn:hover {
+                background: rgba(0, 122, 204, 0.1);
+                color: #00a8ff;
+            }
+            
+            .floor-card:hover {
+                transform: translateY(-2px);
+                border-color: #007acc;
+                box-shadow: 0 5px 15px rgba(0, 122, 204, 0.2);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="app-container">
         <!-- Бегущая строка обновлений -->
         <div class="news-ticker" id="news-ticker">
-            <div class="ticker-container" id="ticker-container"></div>
+            <div class="ticker-container" id="ticker-container">
+                <!-- Контент будет добавлен JavaScript -->
+            </div>
         </div>
         
         <!-- Компактная шапка -->
@@ -1245,7 +1044,9 @@
                     </h2>
                     <div class="time-badge" id="equipment-time">--:--</div>
                 </div>
-                <div class="compact-grid" id="equipment-grid"></div>
+                <div class="compact-grid" id="equipment-grid">
+                    <!-- Генерируется JavaScript -->
+                </div>
             </div>
             
             <!-- Дополнительные системы -->
@@ -1256,7 +1057,9 @@
                         Дополнительные системы
                     </h2>
                 </div>
-                <div class="systems-grid" id="systems-grid"></div>
+                <div class="systems-grid" id="systems-grid">
+                    <!-- Генерируется JavaScript -->
+                </div>
             </div>
             
             <!-- Графики -->
@@ -1289,7 +1092,9 @@
                         Очистить
                     </button>
                 </div>
-                <div id="events-list"></div>
+                <div id="events-list">
+                    <!-- События генерируются JavaScript -->
+                </div>
             </div>
             
             <!-- Прогресс обновления -->
@@ -1321,24 +1126,19 @@
                 <span>Графики</span>
             </button>
             
-            <!-- Новая кнопка управления переговорными -->
-            <button class="nav-btn" data-action="meeting-rooms">
-                <i class="fas fa-calendar-alt nav-icon"></i>
-                <span>Переговорки</span>
-            </button>
-            
+            <!-- Кнопка Визуализация офиса -->
             <button class="nav-btn" data-action="office-visualization">
                 <i class="fas fa-building nav-icon"></i>
                 <span>Офис</span>
             </button>
+            
+            <!-- Кнопка Истории событий -->
+            <button class="nav-btn" data-action="history">
+                <i class="fas fa-history nav-icon"></i>
+                <span>История</span>
+            </button>
         </nav>
     </div>
-    
-    <!-- Кнопка для быстрой заявки на обслуживание -->
-    <button class="service-request-btn" id="service-request-btn">
-        <i class="fas fa-tools"></i>
-        <span>Заявка</span>
-    </button>
     
     <!-- Модальное окно деталей графика -->
     <div class="modal-overlay" id="chart-modal">
@@ -1353,7 +1153,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="chart-details" id="chart-details-content"></div>
+                <div class="chart-details" id="chart-details-content">
+                    <!-- Контент будет заполнен JavaScript -->
+                </div>
             </div>
         </div>
     </div>
@@ -1374,7 +1176,9 @@
                 <div class="text-center mb-10" style="color: #a3c7e6; font-size: 14px;">
                     Нажмите на этаж для просмотра подробной информации
                 </div>
-                <div class="floors-container" id="floors-container"></div>
+                <div class="floors-container" id="floors-container">
+                    <!-- Этажи будут сгенерированы JavaScript -->
+                </div>
                 <div class="mt-10" style="font-size: 12px; color: #a3c7e6; text-align: center;">
                     <i class="fas fa-info-circle"></i> Всего этажей: 10 | Активных этажей: 6
                 </div>
@@ -1397,76 +1201,27 @@
             <div class="hdd-chart-wrapper">
                 <canvas id="hddChart"></canvas>
             </div>
-            <div class="hdd-stats" id="hdd-stats"></div>
+            <div class="hdd-stats" id="hdd-stats">
+                <!-- Статистика будет добавлена JavaScript -->
+            </div>
         </div>
     </div>
     
-    <!-- Модальное окно управления переговорными -->
-    <div class="modal-overlay" id="meeting-rooms-modal">
+    <!-- Модальное окно истории -->
+    <div class="modal-overlay" id="history-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">
-                    <i class="fas fa-calendar-alt"></i>
-                    Бронирование переговорных
+                    <i class="fas fa-history"></i>
+                    История событий
                 </h2>
-                <button class="modal-close" id="close-meeting-rooms-modal">
+                <button class="modal-close" id="close-history-modal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="rooms-filter">
-                    <div class="filter-item active" data-floor="all">Все этажи</div>
-                    <div class="filter-item" data-floor="3">3 этаж</div>
-                    <div class="filter-item" data-floor="4">4 этаж</div>
-                    <div class="filter-item" data-floor="8">8 этаж</div>
-                </div>
-                
-                <div class="rooms-list" id="rooms-list"></div>
-
-                <!-- Форма бронирования -->
-                <div class="booking-form" id="booking-form">
-                    <h3 style="margin-bottom: 15px; color: #e6f1ff;">Бронирование: <span id="booking-room-name"></span></h3>
-                    <div class="form-group">
-                        <label for="booking-date">Дата:</label>
-                        <input type="date" id="booking-date" class="form-input" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="booking-time-start">Время начала:</label>
-                        <select id="booking-time-start" class="form-select">
-                            <option value="09:00">09:00</option>
-                            <option value="10:00">10:00</option>
-                            <option value="11:00">11:00</option>
-                            <option value="12:00">12:00</option>
-                            <option value="13:00">13:00</option>
-                            <option value="14:00">14:00</option>
-                            <option value="15:00">15:00</option>
-                            <option value="16:00">16:00</option>
-                            <option value="17:00">17:00</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="booking-duration">Продолжительность:</label>
-                        <select id="booking-duration" class="form-select">
-                            <option value="0.5">30 минут</option>
-                            <option value="1" selected>1 час</option>
-                            <option value="1.5">1.5 часа</option>
-                            <option value="2">2 часа</option>
-                            <option value="3">3 часа</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="booking-purpose">Цель встречи:</label>
-                        <input type="text" id="booking-purpose" class="form-input" placeholder="Например: Совещание по проекту" maxlength="50">
-                    </div>
-                    <div class="form-actions">
-                        <button class="btn btn-secondary" id="cancel-booking-btn">Отмена</button>
-                        <button class="btn btn-primary" id="confirm-booking-btn">Забронировать</button>
-                    </div>
-                </div>
-                
-                <div class="current-booking" id="current-booking">
-                    <h3 style="margin: 20px 0 10px; color: #e6f1ff;">Мои бронирования</h3>
-                    <div id="bookings-list"></div>
+                <div id="history-list">
+                    <!-- История будет вставлена сюда -->
                 </div>
             </div>
         </div>
@@ -1480,36 +1235,35 @@
     
     <script>
         // Конфигурация
-        const UPDATE_INTERVAL = 30000;
+        const UPDATE_INTERVAL = 30000; // 30 секунд
         let updateTimer = 30;
         let eventHistory = [];
         let currentCharts = {};
-        let chartDataCache = { disk: [], traffic: [] };
-
-        // Конфигурация переговорных
-        const meetingRooms = [
-            { id: 'mr-301', name: 'Сибирь', floor: 3, capacity: 6, booked: false, nextAvailable: '14:00' },
-            { id: 'mr-302', name: 'Ванкор', floor: 3, capacity: 10, booked: true, bookedUntil: '13:30', bookedBy: 'Иванов А.И.' },
-            { id: 'mr-303', name: 'Нефтяник', floor: 3, capacity: 4, booked: false, nextAvailable: 'Свободно' },
-            { id: 'mr-401', name: 'Финансы', floor: 4, capacity: 8, booked: true, bookedUntil: '15:00', bookedBy: 'Сидорова М.П.' },
-            { id: 'mr-402', name: 'Бухгалтерия', floor: 4, capacity: 6, booked: false, nextAvailable: 'Свободно' },
-            { id: 'mr-801', name: 'Совет директоров', floor: 8, capacity: 20, booked: false, nextAvailable: 'Свободно' },
-            { id: 'mr-802', name: 'Переговоры', floor: 8, capacity: 12, booked: true, bookedUntil: '16:45', bookedBy: 'Петров В.С.' }
-        ];
-
-        let userBookings = [
-            { id: 'b-001', roomId: 'mr-303', roomName: 'Нефтяник', time: '14:00-15:30', date: 'Сегодня', purpose: 'Планерка отдела' },
-            { id: 'b-002', roomId: 'mr-401', roomName: 'Финансы', time: '09:00-10:00', date: 'Завтра', purpose: 'Обсуждение бюджета' }
-        ];
-
-        // Сообщения для бегущей строки
+        let chartDataCache = {
+            disk: [],
+            traffic: []
+        };
+        
+        // Сообщения для бегущей строки (расширенный список)
         const tickerMessages = [
             { type: 'update', text: '✅ Данные обновлены' },
             { type: 'system', text: '🖥️ Система работает штатно' },
             { type: 'warning', text: '⚠️ Температура в серверной в норме: 18-27°C' },
             { type: 'update', text: '📊 Графики обновлены' },
             { type: 'system', text: '🔒 Системы безопасности активны' },
-            { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' }
+            { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' },
+            { type: 'update', text: '🔄 Автоматическое обновление через 30 секунд' },
+            { type: 'system', text: '💾 Дисковая нагрузка в норме' },
+            { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 8.5 кВт' },
+            { type: 'event', text: '🔔 Новое событие в системе' },
+            { type: 'event', text: '📈 Графики загружены и обновляются' },
+            { type: 'event', text: '⚡ Быстрое обновление интерфейса' },
+            { type: 'event', text: '🛡️ Антивирусная защита активна' },
+            { type: 'event', text: '📡 Сетевое соединение стабильное' },
+            { type: 'event', text: '💽 Использование дискового пространства в норме' },
+            { type: 'event', text: '🔋 ИБП: 95% заряда, питание стабильное' },
+            { type: 'event', text: '👥 Активные пользователи: 2850 человек' },
+            { type: 'event', text: '🌐 Интернет скорость: 150 Мб/с' }
         ];
         
         // Конфигурация оборудования
@@ -1567,10 +1321,22 @@
             { floor: 10, department: 'Конференц-залы, архив', pcs: 0, printers: 0, active: false }
         ];
         
-        // Исторические события
+        // Исторические события (добавлены заранее)
         const historicalEvents = [
             { type: 'info', message: 'Система мониторинга установлена и настроена', time: '09:15', daysAgo: 5 },
-            { type: 'info', message: 'Первое подключение оборудования к системе', time: '09:30', daysAgo: 5 }
+            { type: 'info', message: 'Первое подключение оборудования к системе', time: '09:30', daysAgo: 5 },
+            { type: 'warning', message: 'Обнаружено повышение температуры в серверной на 3°C', time: '14:20', daysAgo: 4 },
+            { type: 'info', message: 'Температура в серверной нормализована', time: '15:45', daysAgo: 4 },
+            { type: 'info', message: 'Проведено плановое обновление ПО', time: '23:00', daysAgo: 3 },
+            { type: 'alert', message: 'Короткое отключение электропитания в восточном крыле', time: '03:15', daysAgo: 2 },
+            { type: 'info', message: 'Электропитание восстановлено, системы работают штатно', time: '03:25', daysAgo: 2 },
+            { type: 'warning', message: 'Обнаружена попытка несанкционированного доступа к сети', time: '11:30', daysAgo: 2 },
+            { type: 'info', message: 'Попытка доступа заблокирована, безопасность не нарушена', time: '11:32', daysAgo: 2 },
+            { type: 'info', message: 'Проверка системы резервного копирования', time: '02:00', daysAgo: 1 },
+            { type: 'info', message: 'Резервное копирование данных выполнено успешно', time: '04:30', daysAgo: 1 },
+            { type: 'warning', message: 'Снижение скорости интернет-соединения на 40%', time: '13:15', daysAgo: 1 },
+            { type: 'info', message: 'Скорость интернета восстановлена', time: '13:45', daysAgo: 1 },
+            { type: 'info', message: 'Обновлены антивирусные базы на всех рабочих станциях', time: '17:00', daysAgo: 1 }
         ];
         
         // Инициализация
@@ -1580,223 +1346,49 @@
             initCharts();
             initEvents();
             initNavigation();
-            initMeetingRoomsModule();
             startUpdateCycle();
             
+            // Обновляем время оборудования
             updateEquipmentTime();
             setInterval(updateEquipmentTime, 60000);
             
+            // Добавляем исторические события
             addHistoricalEvents();
+            
+            // Инициализируем бегущую строку
             initTicker();
             
+            // Добавляем начальные события
             addEvent('info', '✅ Система мониторинга запущена и работает штатно');
             addEvent('info', '📊 Все метрики загружены и обновляются');
             
+            // Инициализируем температуру в серверной с диапазоном 18-27°C
             updateServerTemperature();
+            
+            // Запускаем обновление бегущей строки
             setInterval(updateTickerContent, 10000);
+            
+            // Исправление для плавной работы бегущей строки
+            fixTickerAnimation();
         });
-
-        // ФУНКЦИИ МОДУЛЯ ПЕРЕГОВОРНЫХ
-        function initMeetingRoomsModule() {
-            // Устанавливаем сегодняшнюю дату
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('booking-date').value = today;
-            document.getElementById('booking-date').min = today;
-
-            // Обработчики для модального окна
-            document.getElementById('close-meeting-rooms-modal').addEventListener('click', function() {
-                document.getElementById('meeting-rooms-modal').style.display = 'none';
-            });
-
-            document.getElementById('meeting-rooms-modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.style.display = 'none';
+        
+        // Исправление анимации бегущей строки
+        function fixTickerAnimation() {
+            const tickerContainer = document.getElementById('ticker-container');
+            
+            setInterval(() => {
+                const items = tickerContainer.children;
+                if (items.length > 0) {
+                    const animation = tickerContainer.style.animation;
+                    tickerContainer.style.animation = 'none';
+                    
+                    tickerContainer.offsetHeight;
+                    
+                    tickerContainer.style.animation = animation;
                 }
-            });
-
-            // Фильтры по этажам
-            document.querySelectorAll('.filter-item').forEach(filter => {
-                filter.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-item').forEach(f => f.classList.remove('active'));
-                    this.classList.add('active');
-                    const floor = this.dataset.floor;
-                    renderMeetingRooms(floor);
-                });
-            });
-
-            // Обработчики для формы бронирования
-            document.getElementById('cancel-booking-btn').addEventListener('click', function() {
-                document.getElementById('booking-form').style.display = 'none';
-                document.getElementById('rooms-list').style.display = 'grid';
-            });
-
-            document.getElementById('confirm-booking-btn').addEventListener('click', confirmBooking);
-
-            // Кнопка "Заявка"
-            document.getElementById('service-request-btn').addEventListener('click', function() {
-                showToast('Функция заявки на обслуживание в разработке');
-                addEvent('info', '📋 Создана заявка на обслуживание переговорной');
-            });
-
-            // Инициализируем отображение комнат
-            renderMeetingRooms('all');
-            renderUserBookings();
+            }, 15000);
         }
-
-        // Отображение списка переговорных
-        function renderMeetingRooms(filterFloor) {
-            const roomsList = document.getElementById('rooms-list');
-            roomsList.innerHTML = '';
-
-            const filteredRooms = filterFloor === 'all' 
-                ? meetingRooms 
-                : meetingRooms.filter(room => room.floor == filterFloor);
-
-            if (filteredRooms.length === 0) {
-                roomsList.innerHTML = '<div style="text-align: center; color: #a3c7e6; padding: 20px;">Нет переговорных на этом этаже</div>';
-                return;
-            }
-
-            filteredRooms.forEach(room => {
-                const roomCard = document.createElement('div');
-                roomCard.className = `room-card ${room.booked ? 'booked' : 'available'}`;
-                roomCard.dataset.id = room.id;
-                
-                const statusText = room.booked ? 'ЗАНЯТО' : 'СВОБОДНО';
-                const statusClass = room.booked ? 'status-booked' : 'status-available';
-                const scheduleInfo = room.booked 
-                    ? `Занято до ${room.bookedUntil} (${room.bookedBy})` 
-                    : `Свободно с ${room.nextAvailable}`;
-
-                roomCard.innerHTML = `
-                    <div class="room-header">
-                        <div class="room-name">${room.name}</div>
-                        <div class="room-capacity">до ${room.capacity} чел.</div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div class="room-status ${statusClass}">${statusText}</div>
-                        <div style="font-size: 11px; color: #a3c7e6;">${room.floor} этаж</div>
-                    </div>
-                    <div class="room-schedule">${scheduleInfo}</div>
-                `;
-
-                if (!room.booked) {
-                    roomCard.addEventListener('click', function() {
-                        openBookingForm(room);
-                    });
-                }
-
-                roomsList.appendChild(roomCard);
-            });
-        }
-
-        // Открытие формы бронирования
-        function openBookingForm(room) {
-            document.getElementById('booking-room-name').textContent = room.name;
-            document.getElementById('booking-form').style.display = 'block';
-            document.getElementById('rooms-list').style.display = 'none';
-            
-            document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // Подтверждение бронирования
-        function confirmBooking() {
-            const roomName = document.getElementById('booking-room-name').textContent;
-            const date = document.getElementById('booking-date').value;
-            const timeStart = document.getElementById('booking-time-start').value;
-            const duration = document.getElementById('booking-duration').value;
-            const purpose = document.getElementById('booking-purpose').value || 'Встреча';
-
-            const [hours, minutes] = timeStart.split(':').map(Number);
-            const endHours = hours + parseInt(duration);
-            const timeEnd = `${endHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-            const newBooking = {
-                id: 'b-' + Date.now(),
-                roomId: 'temp-id',
-                roomName: roomName,
-                time: `${timeStart}-${timeEnd}`,
-                date: formatDate(date),
-                purpose: purpose
-            };
-
-            userBookings.push(newBooking);
-            
-            renderUserBookings();
-            document.getElementById('booking-form').style.display = 'none';
-            document.getElementById('rooms-list').style.display = 'grid';
-            
-            showToast(`Переговорная "${roomName}" забронирована на ${date} с ${timeStart} до ${timeEnd}`);
-            addEvent('info', `📅 Забронирована переговорная "${roomName}" на ${date} ${timeStart}-${timeEnd}`);
-        }
-
-        // Отображение бронирований пользователя
-        function renderUserBookings() {
-            const bookingsList = document.getElementById('bookings-list');
-            
-            if (userBookings.length === 0) {
-                bookingsList.innerHTML = '<div style="text-align: center; color: #a3c7e6; padding: 10px;">У вас нет активных бронирований</div>';
-                return;
-            }
-
-            bookingsList.innerHTML = '';
-            userBookings.forEach(booking => {
-                const bookingItem = document.createElement('div');
-                bookingItem.className = 'booking-item';
-                bookingItem.innerHTML = `
-                    <div class="booking-header">
-                        <div class="booking-room">${booking.roomName}</div>
-                        <div class="booking-time">${booking.date}</div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-                        <div style="font-size: 13px; font-weight: 600; color: #e6f1ff;">${booking.time}</div>
-                        <button class="cancel-booking" data-id="${booking.id}" style="background: none; border: none; color: #f44336; font-size: 12px; cursor: pointer;">
-                            <i class="fas fa-times"></i> Отменить
-                        </button>
-                    </div>
-                    <div style="font-size: 12px; color: #a3c7e6; margin-top: 5px;">${booking.purpose}</div>
-                `;
-                bookingsList.appendChild(bookingItem);
-            });
-
-            document.querySelectorAll('.cancel-booking').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const bookingId = this.dataset.id;
-                    cancelBooking(bookingId);
-                });
-            });
-        }
-
-        // Отмена бронирования
-        function cancelBooking(bookingId) {
-            userBookings = userBookings.filter(booking => booking.id !== bookingId);
-            renderUserBookings();
-            showToast('Бронирование отменено');
-            addEvent('info', '❌ Бронирование переговорной отменено');
-        }
-
-        // Форматирование даты
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-
-            if (date.toDateString() === today.toDateString()) return 'Сегодня';
-            if (date.toDateString() === tomorrow.toDateString()) return 'Завтра';
-            
-            return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-        }
-
-        // Показ модального окна переговорных
-        function showMeetingRoomsModal() {
-            const modal = document.getElementById('meeting-rooms-modal');
-            modal.style.display = 'flex';
-            renderMeetingRooms('all');
-            renderUserBookings();
-            addEvent('info', '📅 Открыт модуль управления переговорными');
-        }
-
+        
         // Инициализация оборудования
         function initEquipment() {
             const grid = document.getElementById('equipment-grid');
@@ -1804,12 +1396,13 @@
             
             equipmentConfig.forEach(item => {
                 const status = getRandomStatus();
-                const metric1 = getRandomValue(10, 90);
-                const metric2 = getRandomValue(20, 85);
-                
                 const card = document.createElement('div');
                 card.className = 'compact-item';
                 card.dataset.id = item.id;
+                
+                const metric1 = getRandomValue(10, 90);
+                const metric2 = getRandomValue(20, 85);
+                
                 card.innerHTML = `
                     <div class="item-header">
                         <div class="item-name">${item.name}</div>
@@ -1826,6 +1419,7 @@
                         </div>
                     </div>
                 `;
+                
                 grid.appendChild(card);
             });
         }
@@ -1856,6 +1450,7 @@
                         ${metricsHtml}
                     </div>
                 `;
+                
                 grid.appendChild(card);
             });
         }
@@ -2308,6 +1903,7 @@
             ];
             
             const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
             addTickerItem(randomMessage);
             
             const tickerContainer = document.getElementById('ticker-container');
@@ -2385,6 +1981,10 @@
                 document.getElementById('chart-modal').style.display = 'none';
             });
             
+            document.getElementById('close-history-modal').addEventListener('click', function() {
+                document.getElementById('history-modal').style.display = 'none';
+            });
+            
             document.getElementById('close-office-modal').addEventListener('click', function() {
                 document.getElementById('office-modal').style.display = 'none';
             });
@@ -2436,11 +2036,11 @@
                         case 'charts':
                             showHddChartModal();
                             break;
-                        case 'meeting-rooms':
-                            showMeetingRoomsModal();
-                            break;
                         case 'office-visualization':
                             showOfficeVisualization();
+                            break;
+                        case 'history':
+                            showHistory();
                             break;
                     }
                 });
@@ -2548,6 +2148,33 @@
             }, 1000);
         }
         
+        // Показать историю
+        function showHistory() {
+            const modal = document.getElementById('history-modal');
+            const list = document.getElementById('history-list');
+            
+            list.innerHTML = '';
+            
+            if (eventHistory.length === 0) {
+                list.innerHTML = '<div class="text-center" style="color: #a3c7e6; padding: 20px;">История событий пуста</div>';
+            } else {
+                eventHistory.slice(0, 50).forEach(event => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.className = 'event-row animate-in';
+                    eventDiv.innerHTML = `
+                        <div class="event-time">${event.time}</div>
+                        <div class="event-type type-${event.type}">
+                            <i class="fas ${event.type === 'alert' ? 'fa-exclamation-triangle' : event.type === 'warning' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                        </div>
+                        <div class="event-text">${event.message}</div>
+                    `;
+                    list.appendChild(eventDiv);
+                });
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
         // Добавить событие
         function addEvent(type, message) {
             const now = new Date();
@@ -2601,7 +2228,9 @@
             document.getElementById('metric-internet').textContent = `${getRandomValue(80, 180)} Мб/с`;
             
             initEquipment();
+            
             updateCharts();
+            
             resetUpdateTimer();
             
             const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
