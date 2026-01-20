@@ -37,7 +37,58 @@
             padding-bottom: env(safe-area-inset-bottom, 60px);
         }
         
-        /* Компактная шапка */
+        /* Бегущая строка обновлений (исправленная, перемещена вверх) */
+        .news-ticker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(19, 47, 76, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e4976;
+            padding: 6px 0;
+            overflow: hidden;
+            z-index: 999;
+            font-size: 11px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ticker-container {
+            display: flex;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker-scroll 45s linear infinite; /* Замедлено с 30s до 45s */
+        }
+        
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #a3c7e6;
+            flex-shrink: 0;
+        }
+        
+        .ticker-badge {
+            background: rgba(0, 122, 204, 0.3);
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-size: 9px;
+            margin-right: 8px;
+            color: #00a8ff;
+        }
+        
+        @keyframes ticker-scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        /* Компактная шапка (под бегущей строкой) */
         .compact-header {
             background: linear-gradient(135deg, #132f4c 0%, #0a1929 100%);
             padding: 12px 15px;
@@ -46,7 +97,8 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding-top: env(safe-area-inset-top, 12px);
+            padding-top: 28px; /* Отступ для бегущей строки */
+            margin-top: 28px; /* Отступ для бегущей строки */
         }
         
         .header-left {
@@ -613,58 +665,6 @@
             transition: width 30s linear;
         }
         
-        /* Бегущая строка обновлений (исправленная) */
-        .news-ticker {
-            position: fixed;
-            bottom: 60px;
-            left: 0;
-            right: 0;
-            background: rgba(19, 47, 76, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid #1e4976;
-            border-bottom: 1px solid #1e4976;
-            padding: 8px 0;
-            overflow: hidden;
-            z-index: 999;
-            font-size: 12px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .ticker-container {
-            display: flex;
-            white-space: nowrap;
-            padding-left: 100%;
-            animation: ticker-scroll 30s linear infinite;
-        }
-        
-        .ticker-item {
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            color: #a3c7e6;
-            flex-shrink: 0;
-        }
-        
-        .ticker-badge {
-            background: rgba(0, 122, 204, 0.3);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 10px;
-            margin-right: 10px;
-            color: #00a8ff;
-        }
-        
-        @keyframes ticker-scroll {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-        
         /* Модальное окно визуализации офиса */
         .office-visualization-modal {
             display: none;
@@ -973,6 +973,13 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Бегущая строка обновлений (исправленная, перемещена вверх) -->
+        <div class="news-ticker" id="news-ticker">
+            <div class="ticker-container" id="ticker-container">
+                <!-- Контент будет добавлен JavaScript -->
+            </div>
+        </div>
+        
         <!-- Компактная шапка -->
         <header class="compact-header">
             <div class="header-left">
@@ -1100,13 +1107,6 @@
                 </div>
             </div>
         </main>
-        
-        <!-- Бегущая строка обновлений (исправленная) -->
-        <div class="news-ticker" id="news-ticker">
-            <div class="ticker-container" id="ticker-container">
-                <!-- Контент будет добавлен JavaScript -->
-            </div>
-        </div>
         
         <!-- Нижнее меню -->
         <nav class="bottom-nav">
@@ -1245,7 +1245,7 @@
         // Сообщения для бегущей строки (расширенный список)
         const tickerMessages = [
             { type: 'update', text: '✅ Данные обновлены' },
-            { type: 'system', text: '🖥️ Система работает стабильно' },
+            { type: 'system', text: '🖥️ Система работает штатно' },
             { type: 'warning', text: '⚠️ Температура в серверной в норме: 18-27°C' },
             { type: 'update', text: '📊 Графики обновлены' },
             { type: 'system', text: '🔒 Системы безопасности активны' },
@@ -1357,7 +1357,7 @@
             initTicker();
             
             // Добавляем начальные события
-            addEvent('info', '✅ Система мониторинга запущена и работает');
+            addEvent('info', '✅ Система мониторинга запущена и работает штатно');
             addEvent('info', '📊 Все метрики загружены и обновляются');
             
             // Инициализируем температуру в серверной с диапазоном 18-27°C
@@ -1749,7 +1749,7 @@
                     status = 'Высокая';
                     statusColor = '#ffc107';
                 } else {
-                    status = 'Нормальная';
+                    status = 'Оптимальная'; // Изменено с "Нормальная" на "Оптимальная"
                     statusColor = '#4caf50';
                 }
                 
@@ -1773,7 +1773,7 @@
                         <i class="fas fa-info-circle"></i> 
                         ${value > 90 ? 'Требуется немедленное вмешательство' : 
                           value > 70 ? 'Рекомендуется проверить систему' : 
-                          'Система работает в норме'}
+                          'Система работает штатно'} <!-- Изменено с "в норме" на "штатно" -->
                     </div>
                 `;
             } else {
@@ -1784,7 +1784,7 @@
                     status = 'Высокая';
                     statusColor = '#ffc107';
                 } else {
-                    status = 'Нормальная';
+                    status = 'Оптимальная'; // Изменено с "Нормальная" на "Оптимальная"
                     statusColor = '#4caf50';
                 }
                 
@@ -1794,12 +1794,12 @@
                     <div class="detail-time">Время: ${timeLabel}</div>
                     <div class="detail-values">
                         <div class="detail-value">
-                            <div class="detail-label">Трафик</div>
+                            <div class="detail-label">Текущая нагрузка</div>
                             <div class="detail-number">${value} Мб</div>
                             <div class="detail-status" style="color: ${statusColor}">${status}</div>
                         </div>
                         <div class="detail-value">
-                            <div class="detail-label">Средний трафик</div>
+                            <div class="detail-label">Средняя нагрузка</div>
                             <div class="detail-number">${Math.round(chartDataCache.traffic.reduce((a,b) => a + b, 0) / chartDataCache.traffic.length)} Мб</div>
                             <div class="detail-label">за 12 часов</div>
                         </div>
@@ -1808,7 +1808,7 @@
                         <i class="fas fa-info-circle"></i> 
                         ${value > 45 ? 'Возможна перегрузка сети' : 
                           value > 35 ? 'Повышенная нагрузка на сеть' : 
-                          'Сетевая нагрузка в норме'}
+                          'Сетевая нагрузка оптимальна'} <!-- Изменено с "в норме" на "оптимальна" -->
                     </div>
                 `;
             }
@@ -1850,7 +1850,7 @@
             
             // Добавляем несколько начальных сообщений
             const initialMessages = [
-                { type: 'system', text: '🖥️ Все системы работают стабильно' },
+                { type: 'system', text: '🖥️ Все системы работают штатно' }, // Изменено
                 { type: 'info', text: '🌡️ Температура серверной: 18-27°C' },
                 { type: 'event', text: '🔔 Система готова к работе' }
             ];
@@ -1895,6 +1895,7 @@
                 { type: 'system', text: `💾 Диски: C:${getRandomValue(25, 65)}% D:${getRandomValue(20, 50)}% E:${getRandomValue(15, 40)}%` },
                 { type: 'system', text: `📡 Сеть: ${document.getElementById('metric-internet').textContent} | Задержка: ${getRandomValue(5, 35)}мс` },
                 { type: 'system', text: `👥 Пользователи: ${document.getElementById('metric-users').textContent} | Активные сессии: ${getRandomValue(120, 350)}` },
+                { type: 'system', text: `⚡ Питание: ${document.getElementById('metric-power').textContent} | Система работает штатно` }, // Изменено
                 
                 // Случайные сообщения из списка
                 ...tickerMessages.filter(() => Math.random() > 0.7).slice(0, 2)
@@ -2110,6 +2111,7 @@
                         details += `\nСерверная этаж 3:\n`;
                         details += `Температура: ${document.getElementById('metric-temp').textContent}\n`;
                         details += `Диапазон: 18-27°C\n`;
+                        details += `Система работает штатно\n`; // Изменено
                     }
                     
                     alert(details);
@@ -2258,7 +2260,7 @@
             const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
             addTickerItem({
                 type: 'update',
-                text: `✅ ${time} | Данные обновлены`
+                text: `✅ ${time} | Данные обновлены | Система работает штатно` // Изменено
             });
         }
         
