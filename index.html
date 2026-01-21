@@ -221,8 +221,8 @@
             margin-top: 5px;
         }
         
-        .trend-up { color: #4caf50; }
-        .trend-down { color: #f44336; }
+        .trend-up { color: #f44336; } /* Красная стрелка вверх */
+        .trend-down { color: #4caf50; } /* Зеленая стрелка вниз */
         
         /* Компактное оборудование */
         .equipment-compact {
@@ -273,6 +273,7 @@
             padding: 12px;
             border-left: 3px solid #007acc;
             min-height: 80px;
+            transition: all 0.3s;
         }
         
         .item-header {
@@ -347,6 +348,7 @@
             border-radius: 10px;
             padding: 12px;
             border-left: 3px solid;
+            transition: all 0.3s;
         }
         
         .system-card:nth-child(1) { border-left-color: #007acc; }
@@ -669,6 +671,23 @@
             border: 1px solid rgba(244, 67, 54, 0.4);
         }
         
+        .reset-instruction {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #FFD700;
+            font-size: 12px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
         /* Модальные окна */
         .modal-overlay {
             position: fixed;
@@ -694,6 +713,18 @@
             overflow: hidden;
             border: 1px solid #1e4976;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: modalAppear 0.3s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         
         .modal-header {
@@ -741,6 +772,8 @@
             z-index: 3000;
             padding: 20px;
             overflow-y: auto;
+            align-items: center;
+            justify-content: center;
         }
         
         .booking-content {
@@ -750,6 +783,7 @@
             margin: 0 auto;
             border: 1px solid #1e4976;
             overflow: hidden;
+            animation: modalAppear 0.3s ease-out;
         }
         
         .booking-header {
@@ -946,6 +980,8 @@
             z-index: 3000;
             padding: 20px;
             overflow-y: auto;
+            align-items: center;
+            justify-content: center;
         }
         
         .office-content {
@@ -955,6 +991,7 @@
             margin: 0 auto;
             border: 1px solid #1e4976;
             overflow: hidden;
+            animation: modalAppear 0.3s ease-out;
         }
         
         .office-header {
@@ -1072,6 +1109,7 @@
             width: 100%;
             border: 1px solid #1e4976;
             overflow: hidden;
+            animation: modalAppear 0.3s ease-out;
         }
         
         .hdd-chart-wrapper {
@@ -1298,9 +1336,9 @@
                 
                 <div class="metric-card">
                     <div class="metric-label">Потребляемая мощность</div>
-                    <div class="metric-value" id="metric-power">8.5 кВт</div>
+                    <div class="metric-value" id="metric-power">950 кВт</div>
                     <div class="metric-trend trend-up">
-                        <i class="fas fa-arrow-up"></i> 0.3 кВт
+                        <i class="fas fa-arrow-up"></i> 15 кВт
                     </div>
                 </div>
                 
@@ -1596,16 +1634,19 @@
         let originalSystemsData = {};
         let autoUpdateInterval = null;
         
-        // Критерии теста нагрузки
+        // Критерии теста нагрузки - ПРАВДОПОДОБНЫЕ значения для офиса на 4000 человек
         const LOAD_TEST_CONFIG = {
             failureChance: 0.285, // 2 к 7 ≈ 28.5%
-            maxTemperature: 38,   // Критическая температура (°C)
-            maxPower: 22,         // Критическая мощность (кВт)
-            // Максимальные значения при 100% нагрузке:
-            peakTemperature: 36,  // Пиковая температура
-            peakPower: 20,        // Пиковая мощность
-            peakUsers: 4500,      // Пиковое количество пользователей
-            minInternetSpeed: 20  // Минимальная скорость интернета
+            maxTemperature: 42,   // Критическая температура (°C) для серверной
+            maxPower: 1800,       // Критическая мощность (кВт) - реалистично для большого офиса
+            // Случайные диапазоны при 100% нагрузке:
+            temperatureRange: { min: 36, max: 41 },   // Уменьшенный диапазон нагрева
+            powerRange: { min: 1500, max: 1900 },     // Реалистичная мощность для офиса 4000 чел
+            usersRange: { min: 3800, max: 4200 },     // Реальные пользователи
+            internetRange: { min: 500, max: 1000 },   // Высокая скорость интернета для офиса
+            // Распределение отказов доп. оборудования (случайное)
+            systemFailureRate: 0.4, // 40% сервисов остаются в строю
+            equipmentFailureRate: 0.5 // 50% оборудования остается в строю
         };
         
         // Сообщения для бегущей строки
@@ -1618,7 +1659,7 @@
             { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' },
             { type: 'update', text: '🔄 Автоматическое обновление через 60 секунд' },
             { type: 'system', text: '💾 Дисковая нагрузка в норме' },
-            { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 8.5 кВт' },
+            { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 950 кВт' },
             { type: 'event', text: '🔔 Новое событие в системе' },
             { type: 'event', text: '📈 Графики загружены и обновляются' },
             { type: 'event', text: '⚡ Быстрое обновление интерфейса' },
@@ -1773,7 +1814,9 @@
             addEvent('info', '✅ Система мониторинга запущена и работает штатно');
             addEvent('info', '📊 Все метрики загружены и обновляются');
             
+            // Устанавливаем начальные значения
             updateServerTemperature();
+            updatePowerMetric();
             
             setInterval(updateTickerContent, 10000);
             
@@ -2035,7 +2078,7 @@
                 </div>
                 <div class="load-test-stat">
                     <div class="load-test-stat-label">Мощность</div>
-                    <div class="load-test-stat-value">${power.toFixed(1)} кВт</div>
+                    <div class="load-test-stat-value">${power.toFixed(0)} кВт</div>
                 </div>
                 <div class="load-test-stat">
                     <div class="load-test-stat-label">Пользователи</div>
@@ -2044,65 +2087,58 @@
             `;
         }
         
-        // Увеличение нагрузки
+        // Увеличение нагрузки с ПРАВДОПОДОБНЫМИ значениями
         function increaseLoad(percent) {
-            // Увеличиваем метрики
             const tempElem = document.getElementById('metric-temp');
             const powerElem = document.getElementById('metric-power');
             const usersElem = document.getElementById('metric-users');
             const internetElem = document.getElementById('metric-internet');
             
-            // Температура увеличивается до 36°C (было 40°C)
             const tempBase = parseFloat(originalValues.temp) || 24;
-            const tempMax = LOAD_TEST_CONFIG.peakTemperature;
-            const newTemp = tempBase + ((tempMax - tempBase) * (percent / 100));
-            tempElem.textContent = `${newTemp.toFixed(1)}°C`;
-            
-            // Обновляем тренд температуры
-            const tempTrend = document.querySelector('#metric-temp').closest('.metric-card').querySelector('.metric-trend');
-            tempTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${(newTemp - tempBase).toFixed(1)}°C`;
-            tempTrend.className = 'metric-trend trend-up';
-            
-            // Мощность увеличивается до 20 кВт (было 25 кВт)
-            const powerBase = parseFloat(originalValues.power) || 8.5;
-            const powerMax = LOAD_TEST_CONFIG.peakPower;
-            const newPower = powerBase + ((powerMax - powerBase) * (percent / 100));
-            powerElem.textContent = `${newPower.toFixed(1)} кВт`;
-            
-            // Обновляем тренд мощности
-            const powerTrend = document.querySelector('#metric-power').closest('.metric-card').querySelector('.metric-trend');
-            powerTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${(newPower - powerBase).toFixed(1)} кВт`;
-            powerTrend.className = 'metric-trend trend-up';
-            
-            // Пользователи увеличиваются до 4500 (было 5000)
+            const powerBase = parseFloat(originalValues.power) || 950; // Реалистичная базовая мощность
             const usersBase = parseInt(originalValues.users.replace(/,/g, '')) || 2850;
-            const usersMax = LOAD_TEST_CONFIG.peakUsers;
-            const newUsers = Math.round(usersBase + ((usersMax - usersBase) * (percent / 100)));
-            usersElem.textContent = formatNumber(newUsers);
-            
-            // Обновляем тренд пользователей
-            const usersTrend = document.querySelector('#metric-users').closest('.metric-card').querySelector('.metric-trend');
-            usersTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${formatNumber(newUsers - usersBase)}`;
-            usersTrend.className = 'metric-trend trend-up';
-            
-            // Скорость интернета уменьшается до 20 Мб/с (было 10 Мб/с)
             const internetBase = parseFloat(originalValues.internet) || 150;
-            const internetMin = LOAD_TEST_CONFIG.minInternetSpeed;
-            const newInternet = internetBase - ((internetBase - internetMin) * (percent / 100));
-            internetElem.textContent = `${Math.round(newInternet)} Мб/с`;
             
-            // Обновляем тренд интернета
-            const internetTrend = document.querySelector('#metric-internet').closest('.metric-card').querySelector('.metric-trend');
-            internetTrend.innerHTML = `<i class="fas fa-arrow-down"></i> ${Math.round(internetBase - newInternet)} Мб`;
-            internetTrend.className = 'metric-trend trend-down';
+            if (percent >= 100) {
+                // При 100% нагрузке используем СЛУЧАЙНЫЕ значения из диапазонов
+                const randomTemp = getRandomValue(LOAD_TEST_CONFIG.temperatureRange.min, LOAD_TEST_CONFIG.temperatureRange.max, 1);
+                const randomPower = getRandomValue(LOAD_TEST_CONFIG.powerRange.min, LOAD_TEST_CONFIG.powerRange.max, 0);
+                const randomUsers = getRandomValue(LOAD_TEST_CONFIG.usersRange.min, LOAD_TEST_CONFIG.usersRange.max);
+                const randomInternet = getRandomValue(LOAD_TEST_CONFIG.internetRange.min, LOAD_TEST_CONFIG.internetRange.max);
+                
+                tempElem.textContent = `${randomTemp}°C`;
+                powerElem.textContent = `${randomPower} кВт`;
+                usersElem.textContent = formatNumber(randomUsers);
+                internetElem.textContent = `${randomInternet} Мб/с`;
+            } else {
+                // Плавное увеличение до 100% с уменьшенным нагревом
+                const tempMax = LOAD_TEST_CONFIG.temperatureRange.max;
+                const powerMax = LOAD_TEST_CONFIG.powerRange.max;
+                const usersMax = LOAD_TEST_CONFIG.usersRange.max;
+                const internetMin = LOAD_TEST_CONFIG.internetRange.min;
+                
+                // Меньший нагрев температуры (36-41 вместо 34-39)
+                const newTemp = tempBase + ((tempMax - tempBase) * (percent / 100) * 0.7);
+                const newPower = powerBase + ((powerMax - powerBase) * (percent / 100));
+                const newUsers = Math.round(usersBase + ((usersMax - usersBase) * (percent / 100)));
+                const newInternet = internetBase - ((internetBase - internetMin) * (percent / 100));
+                
+                tempElem.textContent = `${newTemp.toFixed(1)}°C`;
+                powerElem.textContent = `${newPower.toFixed(0)} кВт`;
+                usersElem.textContent = formatNumber(newUsers);
+                internetElem.textContent = `${Math.round(newInternet)} Мб/с`;
+            }
+            
+            // Обновляем тренды с красными стрелками вверх
+            updateTrends(tempBase, powerBase, usersBase, internetBase);
             
             // Обновляем графики
             updateChartsWithLoad(percent);
             
-            // Обновляем оборудование с увеличенной нагрузкой
+            // Обновляем оборудование с увеличенной нагрузкой и СЛУЧАЙНЫМИ отказами
             updateEquipmentWithLoad(percent);
             
-            // Обновляем дополнительные системы с увеличенной нагрузкой
+            // Обновляем дополнительные системы с СЛУЧАЙНЫМИ отказами
             updateSystemsWithLoad(percent);
             
             // Добавляем события при определенных порогах
@@ -2117,19 +2153,46 @@
             }
         }
         
+        // Обновление трендов с красными стрелками вверх
+        function updateTrends(tempBase, powerBase, usersBase, internetBase) {
+            const temp = parseFloat(document.getElementById('metric-temp').textContent.replace('°C', ''));
+            const power = parseFloat(document.getElementById('metric-power').textContent.replace(' кВт', ''));
+            const users = parseInt(document.getElementById('metric-users').textContent.replace(/,/g, ''));
+            const internet = parseFloat(document.getElementById('metric-internet').textContent.replace(' Мб/с', ''));
+            
+            const tempTrend = document.querySelector('#metric-temp').closest('.metric-card').querySelector('.metric-trend');
+            const powerTrend = document.querySelector('#metric-power').closest('.metric-card').querySelector('.metric-trend');
+            const usersTrend = document.querySelector('#metric-users').closest('.metric-card').querySelector('.metric-trend');
+            const internetTrend = document.querySelector('#metric-internet').closest('.metric-card').querySelector('.metric-trend');
+            
+            // Красные стрелки вверх при увеличении
+            tempTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${(temp - tempBase).toFixed(1)}°C`;
+            tempTrend.className = 'metric-trend trend-up';
+            
+            powerTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${(power - powerBase).toFixed(0)} кВт`;
+            powerTrend.className = 'metric-trend trend-up';
+            
+            usersTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${formatNumber(users - usersBase)}`;
+            usersTrend.className = 'metric-trend trend-up';
+            
+            // Зеленая стрелка вниз при уменьшении
+            internetTrend.innerHTML = `<i class="fas fa-arrow-down"></i> ${Math.round(internetBase - internet)} Мб`;
+            internetTrend.className = 'metric-trend trend-down';
+        }
+        
         // Обновление графиков с нагрузкой
         function updateChartsWithLoad(percent) {
             if (!originalChartData.disk || !originalChartData.traffic) return;
             
-            // Увеличиваем нагрузку на диски (коэффициент уменьшен)
-            const diskLoadFactor = 1 + (percent / 100) * 1.5; // Было 2, теперь 1.5
+            // Увеличиваем нагрузку на диски
+            const diskLoadFactor = 1 + (percent / 100) * 1.5;
             const newDiskData = originalChartData.disk.map(value => {
                 const newValue = value * diskLoadFactor;
                 return Math.min(100, Math.round(newValue));
             });
             
-            // Увеличиваем сетевой трафик (коэффициент уменьшен)
-            const trafficLoadFactor = 1 + (percent / 100) * 2; // Было 3, теперь 2
+            // Увеличиваем сетевой трафик
+            const trafficLoadFactor = 1 + (percent / 100) * 2;
             const newTrafficData = originalChartData.traffic.map(value => {
                 const newValue = value * trafficLoadFactor;
                 return Math.round(newValue);
@@ -2144,7 +2207,7 @@
             
             // Обновляем HDD график если он открыт
             if (currentCharts.hdd) {
-                const hddLoadFactor = 1 + (percent / 100) * 1.2; // Было 1.5, теперь 1.2
+                const hddLoadFactor = 1 + (percent / 100) * 1.2;
                 const newHddData = {
                     diskC: originalChartData.hddC ? originalChartData.hddC.map(v => Math.min(100, Math.round(v * hddLoadFactor))) : [],
                     diskD: originalChartData.hddD ? originalChartData.hddD.map(v => Math.min(100, Math.round(v * hddLoadFactor))) : [],
@@ -2158,7 +2221,7 @@
             }
         }
         
-        // Обновление оборудования с нагрузкой
+        // Обновление оборудования с нагрузкой и СЛУЧАЙНЫМИ отказами (как в доп. системах)
         function updateEquipmentWithLoad(percent) {
             const grid = document.getElementById('equipment-grid');
             const items = grid.querySelectorAll('.compact-item');
@@ -2167,31 +2230,61 @@
                 const statusDiv = item.querySelector('.item-status');
                 const values = item.querySelectorAll('.mini-value');
                 
-                // Увеличиваем значения
-                if (values.length >= 2) {
-                    const base1 = parseInt(values[0].textContent) || 50;
-                    const base2 = parseInt(values[1].textContent) || 50;
-                    
-                    const loadFactor = 1 + (percent / 100);
-                    const newValue1 = Math.min(100, Math.round(base1 * loadFactor));
-                    const newValue2 = Math.min(100, Math.round(base2 * loadFactor));
-                    
-                    values[0].textContent = `${newValue1}${getMetricUnit(equipmentConfig[index].metrics[0])}`;
-                    values[1].textContent = `${newValue2}${getMetricUnit(equipmentConfig[index].metrics[1])}`;
-                }
+                // Определяем, отваливается ли это оборудование (случайно)
+                const equipmentFails = Math.random() > LOAD_TEST_CONFIG.equipmentFailureRate;
                 
-                // Меняем статус при высокой нагрузке
-                if (percent > 70) {
+                if (equipmentFails && percent > 70) {
+                    // Оборудование отваливается при критической нагрузке
                     statusDiv.className = 'item-status status-bad';
-                    statusDiv.textContent = 'ОШИБКА';
+                    statusDiv.textContent = 'ОТКАЗ';
+                    
+                    // Показываем критические значения
+                    values[0].textContent = `99${getMetricUnit(equipmentConfig[index].metrics[0])}`;
+                    if (values.length > 1) {
+                        values[1].textContent = `98${getMetricUnit(equipmentConfig[index].metrics[1])}`;
+                    }
+                    
+                    // Добавляем анимацию мигания
+                    item.style.animation = 'critical-pulse 0.8s infinite';
+                    item.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+                } else if (percent > 70) {
+                    // Оборудование остается в строю, но с повышенными значениями
+                    statusDiv.className = 'item-status status-warn';
+                    statusDiv.textContent = 'НАГРУЗКА';
+                    
+                    // Увеличиваем значения
+                    if (values.length >= 2) {
+                        const base1 = 50;
+                        const base2 = 50;
+                        
+                        const loadFactor = 1.5 + (percent / 100) * 0.5;
+                        const newValue1 = Math.min(99, Math.round(base1 * loadFactor));
+                        const newValue2 = Math.min(98, Math.round(base2 * loadFactor));
+                        
+                        values[0].textContent = `${newValue1}${getMetricUnit(equipmentConfig[index].metrics[0])}`;
+                        values[1].textContent = `${newValue2}${getMetricUnit(equipmentConfig[index].metrics[1])}`;
+                    }
+                    
+                    // Легкое мигание
+                    item.style.animation = 'load-pulse 1s infinite';
+                    item.style.backgroundColor = 'rgba(255, 152, 0, 0.2)';
                 } else if (percent > 40) {
+                    // Средняя нагрузка
                     statusDiv.className = 'item-status status-warn';
                     statusDiv.textContent = 'ВНИМАНИЕ';
+                    item.style.animation = 'none';
+                    item.style.backgroundColor = '';
+                } else {
+                    // Низкая нагрузка - норма
+                    statusDiv.className = 'item-status status-ok';
+                    statusDiv.textContent = 'НОРМА';
+                    item.style.animation = 'none';
+                    item.style.backgroundColor = '';
                 }
             });
         }
         
-        // Обновление дополнительных систем с нагрузкой
+        // Обновление дополнительных систем с нагрузкой и СЛУЧАЙНЫМИ отказами
         function updateSystemsWithLoad(percent) {
             const grid = document.getElementById('systems-grid');
             const items = grid.querySelectorAll('.system-card');
@@ -2199,35 +2292,70 @@
             items.forEach((item, index) => {
                 const system = systemsConfig[index];
                 const metrics = item.querySelectorAll('.system-value');
-                
-                metrics.forEach((metricElem, metricIndex) => {
-                    const metric = system.metrics[metricIndex];
-                    if (metric.original !== undefined) {
-                        // Увеличиваем значения с небольшим шагом (максимум +30%)
-                        const increaseFactor = 1 + (percent / 100) * 0.3;
-                        
-                        if (typeof metric.original === 'number') {
-                            const newValue = Math.round(metric.original * increaseFactor);
-                            metricElem.textContent = `${newValue}${metric.unit ? ' ' + metric.unit : ''}`;
-                        } else if (typeof metric.original === 'string' && metric.original.includes('/')) {
-                            const parts = metric.original.split('/');
-                            const firstPart = parseInt(parts[0]);
-                            const secondPart = parseInt(parts[1]);
-                            
-                            const newFirstPart = Math.min(secondPart, Math.round(firstPart * increaseFactor));
-                            metricElem.textContent = `${newFirstPart}/${secondPart}${metric.unit ? ' ' + metric.unit : ''}`;
-                        }
-                    }
-                });
-                
-                // Меняем статус при высокой нагрузке
                 const statusDiv = item.querySelector('.item-status');
-                if (percent > 70) {
+                
+                // Определяем, отваливается ли эта система (случайно)
+                const systemFails = Math.random() > LOAD_TEST_CONFIG.systemFailureRate;
+                
+                if (systemFails && percent > 70) {
+                    // Система отваливается при критической нагрузке
                     statusDiv.className = 'item-status status-bad';
-                    statusDiv.textContent = 'ОШИБКА';
+                    statusDiv.textContent = 'ОТКАЗ';
+                    
+                    // Показываем нулевые или критические значения
+                    metrics.forEach((metricElem, metricIndex) => {
+                        const metric = system.metrics[metricIndex];
+                        if (typeof metric.original === 'number') {
+                            metricElem.textContent = `0${metric.unit ? ' ' + metric.unit : ''}`;
+                        } else if (typeof metric.original === 'string' && metric.original.includes('/')) {
+                            metricElem.textContent = `0/${metric.original.split('/')[1]}${metric.unit ? ' ' + metric.unit : ''}`;
+                        } else {
+                            metricElem.textContent = 'ОШИБКА';
+                        }
+                    });
+                    
+                    // Добавляем анимацию
+                    item.style.animation = 'critical-pulse 0.8s infinite';
+                    item.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+                } else if (percent > 70) {
+                    // Система остается в строю, но с повышенными значениями
+                    statusDiv.className = 'item-status status-warn';
+                    statusDiv.textContent = 'НАГРУЗКА';
+                    
+                    metrics.forEach((metricElem, metricIndex) => {
+                        const metric = system.metrics[metricIndex];
+                        if (metric.original !== undefined) {
+                            const increaseFactor = 1 + (percent / 100) * 0.5;
+                            
+                            if (typeof metric.original === 'number') {
+                                const newValue = Math.round(metric.original * increaseFactor);
+                                metricElem.textContent = `${newValue}${metric.unit ? ' ' + metric.unit : ''}`;
+                            } else if (typeof metric.original === 'string' && metric.original.includes('/')) {
+                                const parts = metric.original.split('/');
+                                const firstPart = parseInt(parts[0]);
+                                const secondPart = parseInt(parts[1]);
+                                
+                                const newFirstPart = Math.min(secondPart, Math.round(firstPart * increaseFactor));
+                                metricElem.textContent = `${newFirstPart}/${secondPart}${metric.unit ? ' ' + metric.unit : ''}`;
+                            }
+                        }
+                    });
+                    
+                    // Легкое мигание
+                    item.style.animation = 'load-pulse 1s infinite';
+                    item.style.backgroundColor = 'rgba(255, 152, 0, 0.2)';
                 } else if (percent > 40) {
+                    // Средняя нагрузка
                     statusDiv.className = 'item-status status-warn';
                     statusDiv.textContent = 'ВНИМАНИЕ';
+                    item.style.animation = 'none';
+                    item.style.backgroundColor = '';
+                } else {
+                    // Низкая нагрузка - норма
+                    statusDiv.className = 'item-status status-ok';
+                    statusDiv.textContent = 'НОРМА';
+                    item.style.animation = 'none';
+                    item.style.backgroundColor = '';
                 }
             });
         }
@@ -2270,7 +2398,7 @@
             const temp = parseFloat(document.getElementById('metric-temp').textContent.replace('°C', ''));
             const power = parseFloat(document.getElementById('metric-power').textContent.replace(' кВт', ''));
             
-            // Критерии неуспеха: температура > 38°C ИЛИ мощность > 22 кВт
+            // Критерии неуспеха: температура > 42°C ИЛИ мощность > 1800 кВт
             const hasCriticalIssue = temp > LOAD_TEST_CONFIG.maxTemperature || power > LOAD_TEST_CONFIG.maxPower;
             
             // Финальное решение: критично если выпал шанс ИЛИ есть критическая проблема
@@ -2293,6 +2421,12 @@
                 `;
                 resultDiv.style.display = 'block';
                 
+                // Добавляем инструкцию по сбросу
+                const resetInstruction = document.createElement('div');
+                resetInstruction.className = 'reset-instruction';
+                resetInstruction.innerHTML = '<i class="fas fa-exclamation-circle"></i> Для возврата в нормальный режим нажмите кнопку «Сброс».';
+                resultDiv.appendChild(resetInstruction);
+                
                 // Меняем кнопку на критический режим
                 btn.classList.remove('loading');
                 btn.classList.add('critical');
@@ -2312,6 +2446,12 @@
                     </p>
                 `;
                 resultDiv.style.display = 'block';
+                
+                // Добавляем инструкцию по сбросу
+                const resetInstruction = document.createElement('div');
+                resetInstruction.className = 'reset-instruction';
+                resetInstruction.innerHTML = '<i class="fas fa-info-circle"></i> Для возврата в нормальный режим нажмите кнопку «Сброс».';
+                resultDiv.appendChild(resetInstruction);
                 
                 // Возвращаем кнопку в обычный режим (но остается "Сброс")
                 btn.classList.remove('loading');
@@ -2367,6 +2507,20 @@
             resultDiv.style.display = 'none';
             resultDiv.innerHTML = '';
             
+            // Сбрасываем анимации оборудования
+            const equipmentItems = document.querySelectorAll('.compact-item');
+            equipmentItems.forEach(item => {
+                item.style.animation = 'none';
+                item.style.backgroundColor = '';
+            });
+            
+            // Сбрасываем анимации систем
+            const systemItems = document.querySelectorAll('.system-card');
+            systemItems.forEach(item => {
+                item.style.animation = 'none';
+                item.style.backgroundColor = '';
+            });
+            
             // Добавляем событие
             addEvent('info', '🔄 Тест нагрузки сброшен, система возвращена в нормальный режим');
             addEvent('info', '▶️ Автоматическое обновление возобновлено');
@@ -2381,17 +2535,14 @@
             if (originalValues.temp) {
                 document.getElementById('metric-temp').textContent = `${originalValues.temp}°C`;
                 const tempTrend = document.querySelector('#metric-temp').closest('.metric-card').querySelector('.metric-trend');
-                const diff = (parseFloat(originalValues.temp) - 22).toFixed(1);
-                tempTrend.innerHTML = diff >= 0 ? 
-                    `<i class="fas fa-arrow-up"></i> ${Math.abs(diff)}°C` : 
-                    `<i class="fas fa-arrow-down"></i> ${Math.abs(diff)}°C`;
-                tempTrend.className = `metric-trend ${diff >= 0 ? 'trend-up' : 'trend-down'}`;
+                tempTrend.innerHTML = `<i class="fas fa-arrow-down"></i> 2°C`;
+                tempTrend.className = 'metric-trend trend-down';
             }
             
             if (originalValues.power) {
                 document.getElementById('metric-power').textContent = `${originalValues.power} кВт`;
                 const powerTrend = document.querySelector('#metric-power').closest('.metric-card').querySelector('.metric-trend');
-                powerTrend.innerHTML = `<i class="fas fa-arrow-up"></i> 0.3 кВт`;
+                powerTrend.innerHTML = `<i class="fas fa-arrow-up"></i> 15 кВт`;
                 powerTrend.className = 'metric-trend trend-up';
             }
             
@@ -2468,6 +2619,25 @@
                 'Активные': '', 'Диск C': '%', 'Диск D': '%', 'Пакеты': '/с'
             };
             return units[metricName] || '';
+        }
+        
+        // Обновление показателя мощности
+        function updatePowerMetric() {
+            // Реалистичные значения для офиса на 4000 человек
+            const basePower = 950; // кВт - реалистичная базовая мощность
+            const randomVariation = getRandomValue(-20, 30, 0); // Случайное отклонение
+            const currentPower = basePower + randomVariation;
+            
+            document.getElementById('metric-power').textContent = `${currentPower} кВт`;
+            const powerTrend = document.querySelector('#metric-power').closest('.metric-card').querySelector('.metric-trend');
+            
+            if (randomVariation >= 0) {
+                powerTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${Math.abs(randomVariation)} кВт`;
+                powerTrend.className = 'metric-trend trend-up';
+            } else {
+                powerTrend.innerHTML = `<i class="fas fa-arrow-down"></i> ${Math.abs(randomVariation)} кВт`;
+                powerTrend.className = 'metric-trend trend-down';
+            }
         }
         
         // Инициализация графиков
@@ -3309,7 +3479,7 @@
             if (isLoadTestActive) return;
             
             updateServerTemperature();
-            document.getElementById('metric-power').textContent = `${getRandomValue(5, 15, 1)} кВт`;
+            updatePowerMetric();
             document.getElementById('metric-users').textContent = formatNumber(getRandomValue(2300, 3400));
             document.getElementById('metric-internet').textContent = `${getRandomValue(80, 180)} Мб/с`;
             
@@ -3333,10 +3503,15 @@
             
             const trendElement = document.querySelector('.metric-card .metric-trend');
             const diff = (temp - 22).toFixed(1);
-            trendElement.innerHTML = diff >= 0 ? 
-                `<i class="fas fa-arrow-up"></i> ${Math.abs(diff)}°C` : 
-                `<i class="fas fa-arrow-down"></i> ${Math.abs(diff)}°C`;
-            trendElement.className = `metric-trend ${diff >= 0 ? 'trend-up' : 'trend-down'}`;
+            
+            // Красная стрелка вверх, зеленая вниз
+            if (temp > 22) {
+                trendElement.innerHTML = `<i class="fas fa-arrow-up"></i> ${Math.abs(diff)}°C`;
+                trendElement.className = 'metric-trend trend-up';
+            } else {
+                trendElement.innerHTML = `<i class="fas fa-arrow-down"></i> ${Math.abs(diff)}°C`;
+                trendElement.className = 'metric-trend trend-down';
+            }
         }
         
         // Обновить графики
