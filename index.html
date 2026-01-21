@@ -37,7 +37,7 @@
             padding-bottom: env(safe-area-inset-bottom, 60px);
         }
         
-        /* Бегущая строка обновлений - ИСПРАВЛЕНА */
+        /* Бегущая строка обновлений */
         .news-ticker {
             position: fixed;
             top: 0;
@@ -479,7 +479,7 @@
             color: #e6f1ff;
         }
         
-        /* Нижнее меню - ОБНОВЛЕНО с 7 кнопками (добавлена "Нагрузить") */
+        /* Нижнее меню - 6 кнопок (убран "Обновить", добавлена "Нагрузить") */
         .bottom-nav {
             background: linear-gradient(135deg, #132f4c 0%, #0a1929 100%);
             border-top: 1px solid #1e4976;
@@ -511,7 +511,7 @@
             border-radius: 8px;
             transition: all 0.2s;
             touch-action: manipulation;
-            min-width: 45px;
+            min-width: 50px;
             height: 48px;
             justify-content: center;
             flex: 1;
@@ -527,23 +527,147 @@
             color: #00a8ff;
         }
         
-        .nav-btn.loading {
-            color: #ff9800;
+        /* Стиль для кнопки "Нагрузить" - ВЫДЕЛЕНА */
+        .nav-btn.load-test-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(255, 71, 87, 0.3);
         }
         
-        .nav-btn.critical {
-            color: #f44336;
-            animation: critical-pulse 1s infinite;
+        .nav-btn.load-test-btn:active {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+            transform: scale(0.95);
+        }
+        
+        .nav-btn.load-test-btn.loading {
+            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            animation: load-pulse 1s infinite;
+        }
+        
+        .nav-btn.load-test-btn.critical {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            animation: critical-pulse 0.8s infinite;
+        }
+        
+        @keyframes load-pulse {
+            0%, 100% { box-shadow: 0 3px 15px rgba(255, 152, 0, 0.4); }
+            50% { box-shadow: 0 3px 20px rgba(255, 152, 0, 0.6); }
         }
         
         @keyframes critical-pulse {
-            0%, 100% { color: #f44336; }
-            50% { color: #ff7961; }
+            0%, 100% { box-shadow: 0 3px 15px rgba(244, 67, 54, 0.4); }
+            50% { box-shadow: 0 3px 20px rgba(244, 67, 54, 0.7); }
         }
         
         .nav-icon {
             font-size: 16px;
             margin-bottom: 2px;
+        }
+        
+        /* Индикатор нагрузки системы - НОВЫЙ БЛОК */
+        .load-test-indicator {
+            background: rgba(19, 47, 76, 0.9);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(30, 73, 118, 0.3);
+            display: none; /* Скрыт по умолчанию */
+        }
+        
+        .load-test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .load-test-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #e6f1ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .load-test-status {
+            font-size: 11px;
+            color: #a3c7e6;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 8px;
+            border-radius: 10px;
+        }
+        
+        .load-test-progress-container {
+            margin-bottom: 10px;
+        }
+        
+        .load-test-progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 11px;
+            color: #a3c7e6;
+        }
+        
+        .load-test-progress-bar {
+            height: 6px;
+            background: rgba(30, 73, 118, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .load-test-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9800, #ff5722, #f44336);
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+        
+        .load-test-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .load-test-stat {
+            background: rgba(10, 25, 41, 0.9);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .load-test-stat-label {
+            font-size: 9px;
+            color: #a3c7e6;
+            margin-bottom: 3px;
+        }
+        
+        .load-test-stat-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e6f1ff;
+        }
+        
+        .load-test-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .load-test-result.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+        }
+        
+        .load-test-result.critical {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.4);
         }
         
         /* Модальные окна */
@@ -989,7 +1113,7 @@
             }
             
             .nav-btn {
-                min-width: 40px;
+                min-width: 45px;
                 padding: 4px 3px;
                 font-size: 8px;
             }
@@ -1012,6 +1136,10 @@
             .room-name {
                 font-size: 20px;
             }
+            
+            .load-test-stats {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (min-width: 768px) {
@@ -1027,6 +1155,10 @@
             
             .floors-container,
             .rooms-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .load-test-stats {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
@@ -1103,77 +1235,6 @@
             animation: slideIn 0.3s ease-out;
         }
         
-        /* Стиль для модального окна нагрузки */
-        .load-test-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 3000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .load-test-content {
-            background: #0a1929;
-            border-radius: 16px;
-            max-width: 400px;
-            width: 100%;
-            border: 1px solid #1e4976;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .load-test-header {
-            padding: 15px;
-            background: #132f4c;
-            border-bottom: 1px solid #1e4976;
-            text-align: center;
-        }
-        
-        .load-test-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #e6f1ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .load-test-body {
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .load-test-progress {
-            margin: 20px 0;
-        }
-        
-        .load-test-progress-bar {
-            height: 8px;
-            background: rgba(30, 73, 118, 0.3);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .load-test-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff9800, #f44336);
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .load-test-status {
-            font-size: 14px;
-            color: #a3c7e6;
-            margin-top: 10px;
-        }
-        
         @media (hover: hover) {
             .metric-card:hover {
                 transform: translateY(-2px);
@@ -1182,6 +1243,10 @@
             .nav-btn:hover {
                 background: rgba(0, 122, 204, 0.1);
                 color: #00a8ff;
+            }
+            
+            .nav-btn.load-test-btn:hover {
+                background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
             }
             
             .floor-card:hover,
@@ -1253,6 +1318,32 @@
                     <div class="metric-trend trend-down">
                         <i class="fas fa-arrow-down"></i> 10 Мб
                     </div>
+                </div>
+            </div>
+            
+            <!-- НОВЫЙ БЛОК: Индикатор нагрузки системы -->
+            <div class="load-test-indicator" id="load-test-indicator">
+                <div class="load-test-header">
+                    <h2 class="load-test-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Тест нагрузки системы
+                    </h2>
+                    <div class="load-test-status" id="load-test-status-text">0%</div>
+                </div>
+                <div class="load-test-progress-container">
+                    <div class="load-test-progress-info">
+                        <span>Прогресс нагрузки</span>
+                        <span id="load-test-percent">0%</span>
+                    </div>
+                    <div class="load-test-progress-bar">
+                        <div class="load-test-progress-fill" id="load-test-progress-fill"></div>
+                    </div>
+                </div>
+                <div class="load-test-stats" id="load-test-stats">
+                    <!-- Статистика будет добавлена JavaScript -->
+                </div>
+                <div class="load-test-result" id="load-test-result">
+                    <!-- Результат будет показан здесь -->
                 </div>
             </div>
             
@@ -1330,13 +1421,9 @@
             </div>
         </main>
         
-        <!-- Нижнее меню - ОБНОВЛЕНО с 7 кнопками (добавлена "Нагрузить") -->
+        <!-- Нижнее меню - 6 кнопок (убран "Обновить", добавлена "Нагрузить") -->
         <nav class="bottom-nav">
-            <button class="nav-btn active" data-action="refresh">
-                <i class="fas fa-sync-alt nav-icon"></i>
-                <span>Обновить</span>
-            </button>
-            
+            <!-- Кнопка "Событие" теперь первая -->
             <button class="nav-btn" data-action="simulate">
                 <i class="fas fa-bolt nav-icon"></i>
                 <span>Событие</span>
@@ -1347,8 +1434,8 @@
                 <span>Графики</span>
             </button>
             
-            <!-- НОВАЯ КНОПКА: Нагрузить систему -->
-            <button class="nav-btn" data-action="load-test" id="load-test-btn">
+            <!-- Кнопка "Нагрузить" - ВЫДЕЛЕНА -->
+            <button class="nav-btn load-test-btn" data-action="load-test" id="load-test-btn">
                 <i class="fas fa-tachometer-alt nav-icon"></i>
                 <span>Нагрузить</span>
             </button>
@@ -1483,32 +1570,6 @@
         </div>
     </div>
     
-    <!-- НОВОЕ Модальное окно теста нагрузки -->
-    <div class="load-test-modal" id="load-test-modal">
-        <div class="load-test-content">
-            <div class="load-test-header">
-                <h2 class="load-test-title" id="load-test-title">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Тест нагрузки системы
-                </h2>
-            </div>
-            <div class="load-test-body">
-                <div id="load-test-message">
-                    Нагрузка на систему увеличивается...
-                </div>
-                <div class="load-test-progress">
-                    <div class="load-test-progress-bar">
-                        <div class="load-test-progress-fill" id="load-test-progress-fill"></div>
-                    </div>
-                    <div class="load-test-status" id="load-test-status">0%</div>
-                </div>
-                <div id="load-test-result" style="display: none;">
-                    <!-- Результат будет показан здесь -->
-                </div>
-            </div>
-        </div>
-    </div>
-    
     <!-- Toast уведомления -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -1516,7 +1577,7 @@
     </div>
     
     <script>
-        // Конфигурация - ИЗМЕНЕНО: обновление раз в минуту
+        // Конфигурация
         const UPDATE_INTERVAL = 60000; // 60 секунд (1 минута)
         let updateTimer = 60;
         let eventHistory = [];
@@ -1711,9 +1772,15 @@
             
             // Инициализация теста нагрузки
             initLoadTest();
+            
+            // Автоматическое обновление
+            autoUpdateInterval = setInterval(() => {
+                updateAllData();
+                addEvent('info', '🔄 Автоматическое обновление данных');
+            }, UPDATE_INTERVAL);
         });
         
-        // ИСПРАВЛЕНИЕ: Исправление анимации бегущей строки
+        // Исправление анимации бегущей строки
         function fixTickerAnimation() {
             const tickerContainer = document.getElementById('ticker-container');
             
@@ -1844,7 +1911,7 @@
         // Инициализация теста нагрузки
         function initLoadTest() {
             const btn = document.getElementById('load-test-btn');
-            const modal = document.getElementById('load-test-modal');
+            const indicator = document.getElementById('load-test-indicator');
             
             btn.addEventListener('click', function() {
                 if (isLoadTestActive) {
@@ -1855,12 +1922,6 @@
                     startLoadTest();
                 }
             });
-            
-            // Сохраняем ссылку на интервал автоматического обновления
-            autoUpdateInterval = setInterval(() => {
-                updateAllData();
-                addEvent('info', '🔄 Автоматическое обновление данных');
-            }, UPDATE_INTERVAL);
         }
         
         // Запуск теста нагрузки
@@ -1879,24 +1940,17 @@
                 autoUpdateInterval = null;
             }
             
+            // Показываем индикатор нагрузки
+            const indicator = document.getElementById('load-test-indicator');
+            indicator.style.display = 'block';
+            
             // Меняем кнопку
             const btn = document.getElementById('load-test-btn');
-            btn.classList.add('critical');
+            btn.classList.add('loading');
             btn.innerHTML = '<i class="fas fa-stop-circle nav-icon"></i><span>Сброс</span>';
             
-            // Показываем модальное окно
-            const modal = document.getElementById('load-test-modal');
-            const progressFill = document.getElementById('load-test-progress-fill');
-            const status = document.getElementById('load-test-status');
-            const message = document.getElementById('load-test-message');
-            const resultDiv = document.getElementById('load-test-result');
-            
-            modal.style.display = 'flex';
-            progressFill.style.width = '0%';
-            status.textContent = '0%';
-            message.textContent = 'Нагрузка на систему увеличивается...';
-            resultDiv.style.display = 'none';
-            resultDiv.innerHTML = '';
+            // Обновляем статистику
+            updateLoadTestStats();
             
             // Добавляем событие
             addEvent('warning', '⚠️ Запущен тест нагрузки системы');
@@ -1908,17 +1962,65 @@
                 const progressPercent = Math.min(100, loadTestProgress);
                 
                 // Обновляем прогресс
-                progressFill.style.width = `${progressPercent}%`;
-                status.textContent = `${progressPercent}%`;
+                document.getElementById('load-test-progress-fill').style.width = `${progressPercent}%`;
+                document.getElementById('load-test-percent').textContent = `${progressPercent}%`;
+                document.getElementById('load-test-status-text').textContent = `${progressPercent}%`;
                 
                 // Увеличиваем нагрузку
                 increaseLoad(progressPercent);
+                
+                // Обновляем статистику
+                updateLoadTestStats();
                 
                 // Если достигли 100%, завершаем тест
                 if (loadTestProgress >= 100) {
                     completeLoadTest();
                 }
             }, 150); // Увеличиваем каждые 150 мс, итого ~15 секунд до 100%
+        }
+        
+        // Обновление статистики теста нагрузки
+        function updateLoadTestStats() {
+            const statsContainer = document.getElementById('load-test-stats');
+            
+            const temp = parseFloat(document.getElementById('metric-temp').textContent.replace('°C', ''));
+            const power = parseFloat(document.getElementById('metric-power').textContent.replace(' кВт', ''));
+            const users = parseInt(document.getElementById('metric-users').textContent.replace(/,/g, ''));
+            const internet = parseFloat(document.getElementById('metric-internet').textContent.replace(' Мб/с', ''));
+            
+            // Рассчитываем статус нагрузки
+            let loadStatus = 'Низкая';
+            let statusColor = '#4caf50';
+            
+            if (loadTestProgress > 70) {
+                loadStatus = 'Критическая';
+                statusColor = '#f44336';
+            } else if (loadTestProgress > 40) {
+                loadStatus = 'Высокая';
+                statusColor = '#ff9800';
+            } else if (loadTestProgress > 20) {
+                loadStatus = 'Средняя';
+                statusColor = '#ffc107';
+            }
+            
+            statsContainer.innerHTML = `
+                <div class="load-test-stat">
+                    <div class="load-test-stat-label">Статус нагрузки</div>
+                    <div class="load-test-stat-value" style="color: ${statusColor}">${loadStatus}</div>
+                </div>
+                <div class="load-test-stat">
+                    <div class="load-test-stat-label">Температура</div>
+                    <div class="load-test-stat-value">${temp.toFixed(1)}°C</div>
+                </div>
+                <div class="load-test-stat">
+                    <div class="load-test-stat-label">Мощность</div>
+                    <div class="load-test-stat-value">${power.toFixed(1)} кВт</div>
+                </div>
+                <div class="load-test-stat">
+                    <div class="load-test-stat-label">Пользователи</div>
+                    <div class="load-test-stat-value">${formatNumber(users)}</div>
+                </div>
+            `;
         }
         
         // Увеличение нагрузки
@@ -1935,11 +2037,21 @@
             const newTemp = tempBase + ((tempMax - tempBase) * (percent / 100));
             tempElem.textContent = `${newTemp.toFixed(1)}°C`;
             
+            // Обновляем тренд температуры
+            const tempTrend = document.querySelector('#metric-temp').closest('.metric-card').querySelector('.metric-trend');
+            tempTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${(newTemp - tempBase).toFixed(1)}°C`;
+            tempTrend.className = 'metric-trend trend-up';
+            
             // Мощность увеличивается до 25 кВт
             const powerBase = parseFloat(originalValues.power) || 8.5;
             const powerMax = 25;
             const newPower = powerBase + ((powerMax - powerBase) * (percent / 100));
             powerElem.textContent = `${newPower.toFixed(1)} кВт`;
+            
+            // Обновляем тренд мощности
+            const powerTrend = document.querySelector('#metric-power').closest('.metric-card').querySelector('.metric-trend');
+            powerTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${(newPower - powerBase).toFixed(1)} кВт`;
+            powerTrend.className = 'metric-trend trend-up';
             
             // Пользователи увеличиваются до 5000
             const usersBase = parseInt(originalValues.users.replace(/,/g, '')) || 2850;
@@ -1947,11 +2059,21 @@
             const newUsers = Math.round(usersBase + ((usersMax - usersBase) * (percent / 100)));
             usersElem.textContent = formatNumber(newUsers);
             
+            // Обновляем тренд пользователей
+            const usersTrend = document.querySelector('#metric-users').closest('.metric-card').querySelector('.metric-trend');
+            usersTrend.innerHTML = `<i class="fas fa-arrow-up"></i> ${formatNumber(newUsers - usersBase)}`;
+            usersTrend.className = 'metric-trend trend-up';
+            
             // Скорость интернета уменьшается до 10 Мб/с
             const internetBase = parseFloat(originalValues.internet) || 150;
             const internetMin = 10;
             const newInternet = internetBase - ((internetBase - internetMin) * (percent / 100));
             internetElem.textContent = `${Math.round(newInternet)} Мб/с`;
+            
+            // Обновляем тренд интернета
+            const internetTrend = document.querySelector('#metric-internet').closest('.metric-card').querySelector('.metric-trend');
+            internetTrend.innerHTML = `<i class="fas fa-arrow-down"></i> ${Math.round(internetBase - newInternet)} Мб`;
+            internetTrend.className = 'metric-trend trend-down';
             
             // Обновляем графики
             updateChartsWithLoad(percent);
@@ -2073,60 +2195,55 @@
             // Шанс 1 к 5 (20%) что всё плохо
             const isCritical = Math.random() < 0.2;
             
-            const modal = document.getElementById('load-test-modal');
-            const message = document.getElementById('load-test-message');
             const resultDiv = document.getElementById('load-test-result');
+            const btn = document.getElementById('load-test-btn');
             
             if (isCritical) {
                 // Критический результат
-                message.textContent = 'Тест завершен с КРИТИЧЕСКИМИ ошибками!';
+                resultDiv.className = 'load-test-result critical';
                 resultDiv.innerHTML = `
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(244, 67, 54, 0.2); border-radius: 10px; border: 1px solid #f44336;">
-                        <h3 style="color: #f44336; margin-bottom: 10px;">
-                            <i class="fas fa-exclamation-triangle"></i> СИСТЕМА НЕ ВЫДЕРЖАЛА НАГРУЗКИ!
-                        </h3>
-                        <p style="color: #ffcdd2; font-size: 14px;">
-                            Обнаружены критические ошибки в работе системы. Требуется немедленное вмешательство специалистов.
-                        </p>
-                        <ul style="text-align: left; color: #ffcdd2; font-size: 13px; margin-top: 10px;">
-                            <li>Температура серверной достигла 40°C</li>
-                            <li>Потребляемая мощность превысила 25 кВт</li>
-                            <li>Дисковая нагрузка на критическом уровне</li>
-                            <li>Сетевое соединение нестабильно</li>
-                        </ul>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <i class="fas fa-exclamation-triangle" style="color: #f44336; font-size: 18px;"></i>
+                        <h3 style="color: #f44336; margin: 0;">СИСТЕМА НЕ ВЫДЕРЖАЛА НАГРУЗКИ!</h3>
                     </div>
+                    <p style="color: #ffcdd2; font-size: 12px; margin: 0;">
+                        Обнаружены критические ошибки в работе системы. Требуется немедленное вмешательство специалистов.
+                    </p>
                 `;
+                resultDiv.style.display = 'block';
+                
+                // Меняем кнопку на критический режим
+                btn.classList.remove('loading');
+                btn.classList.add('critical');
                 
                 addEvent('alert', '🚨 ТЕСТ НАГРУЗКИ: Система не выдержала нагрузку! Критические ошибки!');
             } else {
                 // Успешный результат
-                message.textContent = 'Тест завершен успешно!';
+                resultDiv.className = 'load-test-result success';
                 resultDiv.innerHTML = `
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(76, 175, 80, 0.2); border-radius: 10px; border: 1px solid #4caf50;">
-                        <h3 style="color: #4caf50; margin-bottom: 10px;">
-                            <i class="fas fa-check-circle"></i> СИСТЕМА УСПЕШНО ВЫДЕРЖАЛА НАГРУЗКУ!
-                        </h3>
-                        <p style="color: #c8e6c9; font-size: 14px;">
-                            Все системы работают в пределах допустимых параметров даже при максимальной нагрузке.
-                        </p>
-                        <ul style="text-align: left; color: #c8e6c9; font-size: 13px; margin-top: 10px;">
-                            <li>Система охлаждения справилась с нагрузкой</li>
-                            <li>Электропитание стабильно</li>
-                            <li>Дисковая подсистема работает нормально</li>
-                            <li>Сетевая инфраструктура выдержала нагрузку</li>
-                        </ul>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <i class="fas fa-check-circle" style="color: #4caf50; font-size: 18px;"></i>
+                        <h3 style="color: #4caf50; margin: 0;">СИСТЕМА УСПЕШНО ВЫДЕРЖАЛА НАГРУЗКУ!</h3>
                     </div>
+                    <p style="color: #c8e6c9; font-size: 12px; margin: 0;">
+                        Все системы работают в пределах допустимых параметров даже при максимальной нагрузке.
+                    </p>
                 `;
+                resultDiv.style.display = 'block';
+                
+                // Возвращаем кнопку в обычный режим (но остается "Сброс")
+                btn.classList.remove('loading');
                 
                 addEvent('info', '✅ ТЕСТ НАГРУЗКИ: Система успешно выдержала максимальную нагрузку');
             }
             
-            resultDiv.style.display = 'block';
+            // Обновляем статус
+            document.getElementById('load-test-status-text').textContent = isCritical ? 'КРИТИЧЕСКИ' : 'УСПЕШНО';
             
-            // Автоматически закрываем модальное окно через 5 секунд
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 5000);
+            // Показываем уведомление
+            showToast(isCritical ? 
+                'Тест завершен с критическими ошибками!' : 
+                'Тест завершен успешно!');
         }
         
         // Сброс теста нагрузки
@@ -2154,14 +2271,19 @@
                 }, UPDATE_INTERVAL);
             }
             
+            // Скрываем индикатор нагрузки
+            const indicator = document.getElementById('load-test-indicator');
+            indicator.style.display = 'none';
+            
             // Сбрасываем кнопку
             const btn = document.getElementById('load-test-btn');
-            btn.classList.remove('critical');
+            btn.classList.remove('loading', 'critical');
             btn.innerHTML = '<i class="fas fa-tachometer-alt nav-icon"></i><span>Нагрузить</span>';
             
-            // Закрываем модальное окно
-            const modal = document.getElementById('load-test-modal');
-            modal.style.display = 'none';
+            // Скрываем результат
+            const resultDiv = document.getElementById('load-test-result');
+            resultDiv.style.display = 'none';
+            resultDiv.innerHTML = '';
             
             // Добавляем событие
             addEvent('info', '🔄 Тест нагрузки сброшен, система возвращена в нормальный режим');
@@ -2176,15 +2298,33 @@
             // Восстанавливаем метрики
             if (originalValues.temp) {
                 document.getElementById('metric-temp').textContent = `${originalValues.temp}°C`;
+                const tempTrend = document.querySelector('#metric-temp').closest('.metric-card').querySelector('.metric-trend');
+                const diff = (parseFloat(originalValues.temp) - 22).toFixed(1);
+                tempTrend.innerHTML = diff >= 0 ? 
+                    `<i class="fas fa-arrow-up"></i> ${Math.abs(diff)}°C` : 
+                    `<i class="fas fa-arrow-down"></i> ${Math.abs(diff)}°C`;
+                tempTrend.className = `metric-trend ${diff >= 0 ? 'trend-up' : 'trend-down'}`;
             }
+            
             if (originalValues.power) {
                 document.getElementById('metric-power').textContent = `${originalValues.power} кВт`;
+                const powerTrend = document.querySelector('#metric-power').closest('.metric-card').querySelector('.metric-trend');
+                powerTrend.innerHTML = `<i class="fas fa-arrow-up"></i> 0.3 кВт`;
+                powerTrend.className = 'metric-trend trend-up';
             }
+            
             if (originalValues.users) {
                 document.getElementById('metric-users').textContent = originalValues.users;
+                const usersTrend = document.querySelector('#metric-users').closest('.metric-card').querySelector('.metric-trend');
+                usersTrend.innerHTML = `<i class="fas fa-arrow-up"></i> 150`;
+                usersTrend.className = 'metric-trend trend-up';
             }
+            
             if (originalValues.internet) {
                 document.getElementById('metric-internet').textContent = `${originalValues.internet} Мб/с`;
+                const internetTrend = document.querySelector('#metric-internet').closest('.metric-card').querySelector('.metric-trend');
+                internetTrend.innerHTML = `<i class="fas fa-arrow-down"></i> 10 Мб`;
+                internetTrend.className = 'metric-trend trend-down';
             }
             
             // Восстанавливаем графики
@@ -2214,81 +2354,6 @@
             // Очищаем сохраненные значения
             originalValues = {};
             originalChartData = {};
-        }
-        
-        // Показать бронирование переговорных
-        function showBooking() {
-            const modal = document.getElementById('booking-modal');
-            const roomsContainer = document.getElementById('rooms-container');
-            
-            roomsContainer.innerHTML = '';
-            
-            roomsConfig.forEach(room => {
-                const roomCard = document.createElement('div');
-                roomCard.className = `room-card ${room.booked ? 'booked' : 'available'}`;
-                roomCard.dataset.id = room.id;
-                
-                const scheduleHtml = room.schedule.map(slot => `
-                    <div class="time-slot">
-                        <span>${slot.time}</span>
-                        <span style="color: ${slot.available ? '#4caf50' : '#f44336'};">
-                            ${slot.available ? 'Свободно' : 'Занято'}
-                        </span>
-                    </div>
-                `).join('');
-                
-                roomCard.innerHTML = `
-                    <div class="room-name">${room.name}</div>
-                    <div class="room-capacity">Вместимость: ${room.capacity}</div>
-                    <div class="room-status ${room.booked ? 'status-booked' : 'status-available'}">
-                        ${room.booked ? 'ЗАНЯТО' : 'СВОБОДНО'}
-                    </div>
-                    <div class="room-schedule">
-                        ${scheduleHtml}
-                    </div>
-                    <div style="margin-top: 10px; font-size: 10px; color: #a3c7e6;">
-                        <i class="fas fa-door-open"></i> Этаж: ${room.floor}
-                    </div>
-                `;
-                
-                roomCard.addEventListener('click', function() {
-                    const roomId = this.dataset.id;
-                    const roomData = roomsConfig.find(r => r.id == roomId);
-                    
-                    if (roomData.booked) {
-                        const unbook = confirm(`Комната "${roomData.name}" уже забронирована.\nХотите снять бронь?`);
-                        if (unbook) {
-                            roomData.booked = false;
-                            showBooking();
-                            showToast(`Бронь комнаты "${roomData.name}" снята`);
-                            addEvent('info', `🗓️ Бронь комнаты "${roomData.name}" снята`);
-                        }
-                    } else {
-                        const book = confirm(`Забронировать комнату "${roomData.name}"?\nВместимость: ${roomData.capacity}\nЭтаж: ${roomData.floor}`);
-                        if (book) {
-                            roomData.booked = true;
-                            showBooking();
-                            showToast(`Комната "${roomData.name}" забронирована`);
-                            addEvent('info', `🗓️ Комната "${roomData.name}" забронирована`);
-                        }
-                    }
-                });
-                
-                roomsContainer.appendChild(roomCard);
-            });
-            
-            // Обновляем счетчик свободных комнат
-            const availableRooms = roomsConfig.filter(room => !room.booked).length;
-            const totalRooms = roomsConfig.length;
-            
-            const counterElement = modal.querySelector('.mt-10');
-            if (counterElement) {
-                counterElement.innerHTML = `<i class="fas fa-info-circle"></i> Всего переговорных: ${totalRooms} | Свободно сейчас: ${availableRooms}`;
-            }
-            
-            modal.style.display = 'block';
-            
-            addEvent('info', '🗓️ Открыто бронирование переговорных комнат');
         }
         
         // Получить единицу измерения для метрики
@@ -2861,9 +2926,6 @@
                     }
                     
                     switch(action) {
-                        case 'refresh':
-                            manualUpdate();
-                            break;
                         case 'simulate':
                             simulateEvent();
                             break;
@@ -2949,25 +3011,6 @@
             modal.style.display = 'block';
             
             addEvent('info', '🏢 Открыта визуализация офиса РН-Ванкор');
-        }
-        
-        // Ручное обновление
-        function manualUpdate() {
-            // Если тест нагрузки активен, не обновляем
-            if (isLoadTestActive) {
-                showToast('Обновление недоступно во время теста нагрузки');
-                return;
-            }
-            
-            updateAllData();
-            showToast('Данные обновлены вручную');
-            addEvent('info', '🔄 Ручное обновление данных выполнено');
-            
-            const refreshBtn = document.querySelector('[data-action="refresh"]');
-            refreshBtn.innerHTML = '<i class="fas fa-check nav-icon"></i><span>Готово</span>';
-            setTimeout(() => {
-                refreshBtn.innerHTML = '<i class="fas fa-sync-alt nav-icon"></i><span>Обновить</span>';
-            }, 1000);
         }
         
         // Симуляция события
