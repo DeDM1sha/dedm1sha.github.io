@@ -37,7 +37,7 @@
             padding-bottom: env(safe-area-inset-bottom, 60px);
         }
         
-        /* Бегущая строка обновлений */
+        /* Бегущая строка обновлений - ИСПРАВЛЕНА */
         .news-ticker {
             position: fixed;
             top: 0;
@@ -58,8 +58,8 @@
         .ticker-container {
             display: flex;
             white-space: nowrap;
+            animation: ticker-scroll 120s linear infinite;
             padding-left: 100%;
-            animation: ticker-scroll 60s linear infinite;
         }
         
         .ticker-item {
@@ -479,7 +479,7 @@
             color: #e6f1ff;
         }
         
-        /* Нижнее меню - ОБНОВЛЕНО для 6 кнопок */
+        /* Нижнее меню - ОБНОВЛЕНО с 7 кнопками (добавлена "Нагрузить") */
         .bottom-nav {
             background: linear-gradient(135deg, #132f4c 0%, #0a1929 100%);
             border-top: 1px solid #1e4976;
@@ -511,7 +511,7 @@
             border-radius: 8px;
             transition: all 0.2s;
             touch-action: manipulation;
-            min-width: 55px;
+            min-width: 45px;
             height: 48px;
             justify-content: center;
             flex: 1;
@@ -525,6 +525,20 @@
         
         .nav-btn.active {
             color: #00a8ff;
+        }
+        
+        .nav-btn.loading {
+            color: #ff9800;
+        }
+        
+        .nav-btn.critical {
+            color: #f44336;
+            animation: critical-pulse 1s infinite;
+        }
+        
+        @keyframes critical-pulse {
+            0%, 100% { color: #f44336; }
+            50% { color: #ff7961; }
         }
         
         .nav-icon {
@@ -794,7 +808,7 @@
             height: 100%;
             background: linear-gradient(90deg, #007acc, #00a8ff);
             width: 0%;
-            transition: width 30s linear;
+            transition: width 60s linear;
         }
         
         /* Модальное окно визуализации офиса */
@@ -975,7 +989,7 @@
             }
             
             .nav-btn {
-                min-width: 45px;
+                min-width: 40px;
                 padding: 4px 3px;
                 font-size: 8px;
             }
@@ -1089,6 +1103,77 @@
             animation: slideIn 0.3s ease-out;
         }
         
+        /* Стиль для модального окна нагрузки */
+        .load-test-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .load-test-content {
+            background: #0a1929;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #1e4976;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .load-test-header {
+            padding: 15px;
+            background: #132f4c;
+            border-bottom: 1px solid #1e4976;
+            text-align: center;
+        }
+        
+        .load-test-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e6f1ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .load-test-body {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .load-test-progress {
+            margin: 20px 0;
+        }
+        
+        .load-test-progress-bar {
+            height: 8px;
+            background: rgba(30, 73, 118, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .load-test-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9800, #f44336);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .load-test-status {
+            font-size: 14px;
+            color: #a3c7e6;
+            margin-top: 10px;
+        }
+        
         @media (hover: hover) {
             .metric-card:hover {
                 transform: translateY(-2px);
@@ -1130,7 +1215,7 @@
             </div>
             <div class="status-badge">
                 <div class="status-dot"></div>
-                <span id="update-timer">30</span>сек
+                <span id="update-timer">60</span>сек
             </div>
         </header>
         
@@ -1237,7 +1322,7 @@
             <div class="update-progress">
                 <div class="progress-info">
                     <span>Следующее обновление</span>
-                    <span id="countdown">30 сек</span>
+                    <span id="countdown">60 сек</span>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
@@ -1245,7 +1330,7 @@
             </div>
         </main>
         
-        <!-- Нижнее меню - ОБНОВЛЕНО с 6 кнопками -->
+        <!-- Нижнее меню - ОБНОВЛЕНО с 7 кнопками (добавлена "Нагрузить") -->
         <nav class="bottom-nav">
             <button class="nav-btn active" data-action="refresh">
                 <i class="fas fa-sync-alt nav-icon"></i>
@@ -1262,7 +1347,12 @@
                 <span>Графики</span>
             </button>
             
-            <!-- НОВАЯ КНОПКА: Бронирование переговорных -->
+            <!-- НОВАЯ КНОПКА: Нагрузить систему -->
+            <button class="nav-btn" data-action="load-test" id="load-test-btn">
+                <i class="fas fa-tachometer-alt nav-icon"></i>
+                <span>Нагрузить</span>
+            </button>
+            
             <button class="nav-btn" data-action="booking">
                 <i class="fas fa-calendar-alt nav-icon"></i>
                 <span>Бронь</span>
@@ -1326,7 +1416,7 @@
         </div>
     </div>
     
-    <!-- НОВОЕ Модальное окно бронирования переговорных -->
+    <!-- Модальное окно бронирования переговорных -->
     <div class="booking-modal" id="booking-modal">
         <div class="booking-content">
             <div class="booking-header">
@@ -1393,6 +1483,32 @@
         </div>
     </div>
     
+    <!-- НОВОЕ Модальное окно теста нагрузки -->
+    <div class="load-test-modal" id="load-test-modal">
+        <div class="load-test-content">
+            <div class="load-test-header">
+                <h2 class="load-test-title" id="load-test-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Тест нагрузки системы
+                </h2>
+            </div>
+            <div class="load-test-body">
+                <div id="load-test-message">
+                    Нагрузка на систему увеличивается...
+                </div>
+                <div class="load-test-progress">
+                    <div class="load-test-progress-bar">
+                        <div class="load-test-progress-fill" id="load-test-progress-fill"></div>
+                    </div>
+                    <div class="load-test-status" id="load-test-status">0%</div>
+                </div>
+                <div id="load-test-result" style="display: none;">
+                    <!-- Результат будет показан здесь -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Toast уведомления -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -1400,15 +1516,23 @@
     </div>
     
     <script>
-        // Конфигурация
-        const UPDATE_INTERVAL = 30000; // 30 секунд
-        let updateTimer = 30;
+        // Конфигурация - ИЗМЕНЕНО: обновление раз в минуту
+        const UPDATE_INTERVAL = 60000; // 60 секунд (1 минута)
+        let updateTimer = 60;
         let eventHistory = [];
         let currentCharts = {};
         let chartDataCache = {
             disk: [],
             traffic: []
         };
+        
+        // Переменные для теста нагрузки
+        let isLoadTestActive = false;
+        let loadTestInterval = null;
+        let loadTestProgress = 0;
+        let originalValues = {};
+        let originalChartData = {};
+        let autoUpdateInterval = null;
         
         // Сообщения для бегущей строки
         const tickerMessages = [
@@ -1418,7 +1542,7 @@
             { type: 'update', text: '📊 Графики обновлены' },
             { type: 'system', text: '🔒 Системы безопасности активны' },
             { type: 'info', text: '🏢 Офис РН-Ванкор: 10 этажей, 26 ПК, 4 принтера' },
-            { type: 'update', text: '🔄 Автоматическое обновление через 30 секунд' },
+            { type: 'update', text: '🔄 Автоматическое обновление через 60 секунд' },
             { type: 'system', text: '💾 Дисковая нагрузка в норме' },
             { type: 'info', text: '🌡️ Серверная: 24°C | Питание: 8.5 кВт' },
             { type: 'event', text: '🔔 Новое событие в системе' },
@@ -1579,27 +1703,60 @@
             
             setInterval(updateTickerContent, 10000);
             
+            // Исправление бегущей строки
             fixTickerAnimation();
             
             // Инициализация бронирования
             initBooking();
+            
+            // Инициализация теста нагрузки
+            initLoadTest();
         });
         
-        // Исправление анимации бегущей строки
+        // ИСПРАВЛЕНИЕ: Исправление анимации бегущей строки
         function fixTickerAnimation() {
             const tickerContainer = document.getElementById('ticker-container');
             
-            setInterval(() => {
+            // Создаем достаточно элементов для плавной анимации
+            const populateTicker = () => {
                 const items = tickerContainer.children;
-                if (items.length > 0) {
-                    const animation = tickerContainer.style.animation;
-                    tickerContainer.style.animation = 'none';
-                    
-                    tickerContainer.offsetHeight;
-                    
-                    tickerContainer.style.animation = animation;
+                const itemWidth = items.length > 0 ? items[0].offsetWidth + 40 : 300;
+                const containerWidth = window.innerWidth;
+                const neededItems = Math.ceil(containerWidth / itemWidth) * 2 + 4;
+                
+                // Удаляем лишние элементы
+                while (items.length > neededItems && items.length > 15) {
+                    tickerContainer.removeChild(items[0]);
                 }
-            }, 15000);
+                
+                // Добавляем недостающие элементы
+                while (items.length < neededItems) {
+                    const message = tickerMessages[Math.floor(Math.random() * tickerMessages.length)];
+                    addTickerItem(message);
+                }
+            };
+            
+            // Первоначальное заполнение
+            populateTicker();
+            
+            // Регулярное обновление
+            setInterval(populateTicker, 30000);
+            
+            // Перезапуск анимации при её завершении
+            tickerContainer.addEventListener('animationiteration', function() {
+                // Удаляем первые несколько элементов и добавляем новые
+                for (let i = 0; i < 3; i++) {
+                    if (tickerContainer.children.length > 10) {
+                        tickerContainer.removeChild(tickerContainer.firstElementChild);
+                    }
+                }
+                
+                // Добавляем новые элементы
+                for (let i = 0; i < 3; i++) {
+                    const message = tickerMessages[Math.floor(Math.random() * tickerMessages.length)];
+                    addTickerItem(message);
+                }
+            });
         }
         
         // Инициализация оборудования
@@ -1682,6 +1839,381 @@
                     this.style.display = 'none';
                 }
             });
+        }
+        
+        // Инициализация теста нагрузки
+        function initLoadTest() {
+            const btn = document.getElementById('load-test-btn');
+            const modal = document.getElementById('load-test-modal');
+            
+            btn.addEventListener('click', function() {
+                if (isLoadTestActive) {
+                    // Если тест активен, сбрасываем его
+                    resetLoadTest();
+                } else {
+                    // Если тест не активен, запускаем его
+                    startLoadTest();
+                }
+            });
+            
+            // Сохраняем ссылку на интервал автоматического обновления
+            autoUpdateInterval = setInterval(() => {
+                updateAllData();
+                addEvent('info', '🔄 Автоматическое обновление данных');
+            }, UPDATE_INTERVAL);
+        }
+        
+        // Запуск теста нагрузки
+        function startLoadTest() {
+            if (isLoadTestActive) return;
+            
+            isLoadTestActive = true;
+            loadTestProgress = 0;
+            
+            // Сохраняем оригинальные значения
+            saveOriginalValues();
+            
+            // Останавливаем автоматическое обновление
+            if (autoUpdateInterval) {
+                clearInterval(autoUpdateInterval);
+                autoUpdateInterval = null;
+            }
+            
+            // Меняем кнопку
+            const btn = document.getElementById('load-test-btn');
+            btn.classList.add('critical');
+            btn.innerHTML = '<i class="fas fa-stop-circle nav-icon"></i><span>Сброс</span>';
+            
+            // Показываем модальное окно
+            const modal = document.getElementById('load-test-modal');
+            const progressFill = document.getElementById('load-test-progress-fill');
+            const status = document.getElementById('load-test-status');
+            const message = document.getElementById('load-test-message');
+            const resultDiv = document.getElementById('load-test-result');
+            
+            modal.style.display = 'flex';
+            progressFill.style.width = '0%';
+            status.textContent = '0%';
+            message.textContent = 'Нагрузка на систему увеличивается...';
+            resultDiv.style.display = 'none';
+            resultDiv.innerHTML = '';
+            
+            // Добавляем событие
+            addEvent('warning', '⚠️ Запущен тест нагрузки системы');
+            addEvent('info', '⏸️ Автоматическое обновление приостановлено');
+            
+            // Запускаем постепенное увеличение нагрузки
+            loadTestInterval = setInterval(() => {
+                loadTestProgress += 1;
+                const progressPercent = Math.min(100, loadTestProgress);
+                
+                // Обновляем прогресс
+                progressFill.style.width = `${progressPercent}%`;
+                status.textContent = `${progressPercent}%`;
+                
+                // Увеличиваем нагрузку
+                increaseLoad(progressPercent);
+                
+                // Если достигли 100%, завершаем тест
+                if (loadTestProgress >= 100) {
+                    completeLoadTest();
+                }
+            }, 150); // Увеличиваем каждые 150 мс, итого ~15 секунд до 100%
+        }
+        
+        // Увеличение нагрузки
+        function increaseLoad(percent) {
+            // Увеличиваем метрики
+            const tempElem = document.getElementById('metric-temp');
+            const powerElem = document.getElementById('metric-power');
+            const usersElem = document.getElementById('metric-users');
+            const internetElem = document.getElementById('metric-internet');
+            
+            // Температура увеличивается до 40°C
+            const tempBase = parseFloat(originalValues.temp) || 24;
+            const tempMax = 40;
+            const newTemp = tempBase + ((tempMax - tempBase) * (percent / 100));
+            tempElem.textContent = `${newTemp.toFixed(1)}°C`;
+            
+            // Мощность увеличивается до 25 кВт
+            const powerBase = parseFloat(originalValues.power) || 8.5;
+            const powerMax = 25;
+            const newPower = powerBase + ((powerMax - powerBase) * (percent / 100));
+            powerElem.textContent = `${newPower.toFixed(1)} кВт`;
+            
+            // Пользователи увеличиваются до 5000
+            const usersBase = parseInt(originalValues.users.replace(/,/g, '')) || 2850;
+            const usersMax = 5000;
+            const newUsers = Math.round(usersBase + ((usersMax - usersBase) * (percent / 100)));
+            usersElem.textContent = formatNumber(newUsers);
+            
+            // Скорость интернета уменьшается до 10 Мб/с
+            const internetBase = parseFloat(originalValues.internet) || 150;
+            const internetMin = 10;
+            const newInternet = internetBase - ((internetBase - internetMin) * (percent / 100));
+            internetElem.textContent = `${Math.round(newInternet)} Мб/с`;
+            
+            // Обновляем графики
+            updateChartsWithLoad(percent);
+            
+            // Обновляем оборудование с увеличенной нагрузкой
+            updateEquipmentWithLoad(percent);
+            
+            // Добавляем события при определенных порогах
+            if (percent >= 30 && percent < 35) {
+                addEvent('warning', '⚠️ Нагрузка на систему: 30% - параметры растут');
+            }
+            if (percent >= 60 && percent < 65) {
+                addEvent('warning', '⚠️ Нагрузка на систему: 60% - критические показатели');
+            }
+            if (percent >= 90 && percent < 95) {
+                addEvent('alert', '🚨 Нагрузка на систему: 90% - предельные значения!');
+            }
+        }
+        
+        // Обновление графиков с нагрузкой
+        function updateChartsWithLoad(percent) {
+            if (!originalChartData.disk || !originalChartData.traffic) return;
+            
+            // Увеличиваем нагрузку на диски
+            const diskLoadFactor = 1 + (percent / 100) * 2; // До 3x
+            const newDiskData = originalChartData.disk.map(value => {
+                const newValue = value * diskLoadFactor;
+                return Math.min(100, Math.round(newValue));
+            });
+            
+            // Увеличиваем сетевой трафик
+            const trafficLoadFactor = 1 + (percent / 100) * 3; // До 4x
+            const newTrafficData = originalChartData.traffic.map(value => {
+                const newValue = value * trafficLoadFactor;
+                return Math.round(newValue);
+            });
+            
+            // Обновляем графики
+            currentCharts.disk.data.datasets[0].data = newDiskData;
+            currentCharts.traffic.data.datasets[0].data = newTrafficData;
+            
+            currentCharts.disk.update('none');
+            currentCharts.traffic.update('none');
+            
+            // Обновляем HDD график если он открыт
+            if (currentCharts.hdd) {
+                const hddLoadFactor = 1 + (percent / 100) * 1.5; // До 2.5x
+                const newHddData = {
+                    diskC: originalChartData.hddC ? originalChartData.hddC.map(v => Math.min(100, Math.round(v * hddLoadFactor))) : [],
+                    diskD: originalChartData.hddD ? originalChartData.hddD.map(v => Math.min(100, Math.round(v * hddLoadFactor))) : [],
+                    diskE: originalChartData.hddE ? originalChartData.hddE.map(v => Math.min(100, Math.round(v * hddLoadFactor))) : []
+                };
+                
+                currentCharts.hdd.data.datasets[0].data = newHddData.diskC;
+                currentCharts.hdd.data.datasets[1].data = newHddData.diskD;
+                currentCharts.hdd.data.datasets[2].data = newHddData.diskE;
+                currentCharts.hdd.update('none');
+            }
+        }
+        
+        // Обновление оборудования с нагрузкой
+        function updateEquipmentWithLoad(percent) {
+            const grid = document.getElementById('equipment-grid');
+            const items = grid.querySelectorAll('.compact-item');
+            
+            items.forEach((item, index) => {
+                const statusDiv = item.querySelector('.item-status');
+                const values = item.querySelectorAll('.mini-value');
+                
+                // Увеличиваем значения
+                if (values.length >= 2) {
+                    const base1 = parseInt(values[0].textContent) || 50;
+                    const base2 = parseInt(values[1].textContent) || 50;
+                    
+                    const loadFactor = 1 + (percent / 100);
+                    const newValue1 = Math.min(100, Math.round(base1 * loadFactor));
+                    const newValue2 = Math.min(100, Math.round(base2 * loadFactor));
+                    
+                    values[0].textContent = `${newValue1}${getMetricUnit(equipmentConfig[index].metrics[0])}`;
+                    values[1].textContent = `${newValue2}${getMetricUnit(equipmentConfig[index].metrics[1])}`;
+                }
+                
+                // Меняем статус при высокой нагрузке
+                if (percent > 70) {
+                    statusDiv.className = 'item-status status-bad';
+                    statusDiv.textContent = 'ОШИБКА';
+                } else if (percent > 40) {
+                    statusDiv.className = 'item-status status-warn';
+                    statusDiv.textContent = 'ВНИМАНИЕ';
+                }
+            });
+        }
+        
+        // Сохранение оригинальных значений
+        function saveOriginalValues() {
+            originalValues = {
+                temp: document.getElementById('metric-temp').textContent.replace('°C', ''),
+                power: document.getElementById('metric-power').textContent.replace(' кВт', ''),
+                users: document.getElementById('metric-users').textContent,
+                internet: document.getElementById('metric-internet').textContent.replace(' Мб/с', '')
+            };
+            
+            originalChartData = {
+                disk: [...chartDataCache.disk],
+                traffic: [...chartDataCache.traffic],
+                hddC: currentCharts.hdd ? [...currentCharts.hdd.data.datasets[0].data] : [],
+                hddD: currentCharts.hdd ? [...currentCharts.hdd.data.datasets[1].data] : [],
+                hddE: currentCharts.hdd ? [...currentCharts.hdd.data.datasets[2].data] : []
+            };
+        }
+        
+        // Завершение теста нагрузки
+        function completeLoadTest() {
+            if (loadTestInterval) {
+                clearInterval(loadTestInterval);
+                loadTestInterval = null;
+            }
+            
+            // Шанс 1 к 5 (20%) что всё плохо
+            const isCritical = Math.random() < 0.2;
+            
+            const modal = document.getElementById('load-test-modal');
+            const message = document.getElementById('load-test-message');
+            const resultDiv = document.getElementById('load-test-result');
+            
+            if (isCritical) {
+                // Критический результат
+                message.textContent = 'Тест завершен с КРИТИЧЕСКИМИ ошибками!';
+                resultDiv.innerHTML = `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(244, 67, 54, 0.2); border-radius: 10px; border: 1px solid #f44336;">
+                        <h3 style="color: #f44336; margin-bottom: 10px;">
+                            <i class="fas fa-exclamation-triangle"></i> СИСТЕМА НЕ ВЫДЕРЖАЛА НАГРУЗКИ!
+                        </h3>
+                        <p style="color: #ffcdd2; font-size: 14px;">
+                            Обнаружены критические ошибки в работе системы. Требуется немедленное вмешательство специалистов.
+                        </p>
+                        <ul style="text-align: left; color: #ffcdd2; font-size: 13px; margin-top: 10px;">
+                            <li>Температура серверной достигла 40°C</li>
+                            <li>Потребляемая мощность превысила 25 кВт</li>
+                            <li>Дисковая нагрузка на критическом уровне</li>
+                            <li>Сетевое соединение нестабильно</li>
+                        </ul>
+                    </div>
+                `;
+                
+                addEvent('alert', '🚨 ТЕСТ НАГРУЗКИ: Система не выдержала нагрузку! Критические ошибки!');
+            } else {
+                // Успешный результат
+                message.textContent = 'Тест завершен успешно!';
+                resultDiv.innerHTML = `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(76, 175, 80, 0.2); border-radius: 10px; border: 1px solid #4caf50;">
+                        <h3 style="color: #4caf50; margin-bottom: 10px;">
+                            <i class="fas fa-check-circle"></i> СИСТЕМА УСПЕШНО ВЫДЕРЖАЛА НАГРУЗКУ!
+                        </h3>
+                        <p style="color: #c8e6c9; font-size: 14px;">
+                            Все системы работают в пределах допустимых параметров даже при максимальной нагрузке.
+                        </p>
+                        <ul style="text-align: left; color: #c8e6c9; font-size: 13px; margin-top: 10px;">
+                            <li>Система охлаждения справилась с нагрузкой</li>
+                            <li>Электропитание стабильно</li>
+                            <li>Дисковая подсистема работает нормально</li>
+                            <li>Сетевая инфраструктура выдержала нагрузку</li>
+                        </ul>
+                    </div>
+                `;
+                
+                addEvent('info', '✅ ТЕСТ НАГРУЗКИ: Система успешно выдержала максимальную нагрузку');
+            }
+            
+            resultDiv.style.display = 'block';
+            
+            // Автоматически закрываем модальное окно через 5 секунд
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Сброс теста нагрузки
+        function resetLoadTest() {
+            if (!isLoadTestActive) return;
+            
+            // Останавливаем интервал
+            if (loadTestInterval) {
+                clearInterval(loadTestInterval);
+                loadTestInterval = null;
+            }
+            
+            // Сбрасываем состояние
+            isLoadTestActive = false;
+            loadTestProgress = 0;
+            
+            // Восстанавливаем оригинальные значения
+            restoreOriginalValues();
+            
+            // Запускаем автоматическое обновление заново
+            if (!autoUpdateInterval) {
+                autoUpdateInterval = setInterval(() => {
+                    updateAllData();
+                    addEvent('info', '🔄 Автоматическое обновление данных');
+                }, UPDATE_INTERVAL);
+            }
+            
+            // Сбрасываем кнопку
+            const btn = document.getElementById('load-test-btn');
+            btn.classList.remove('critical');
+            btn.innerHTML = '<i class="fas fa-tachometer-alt nav-icon"></i><span>Нагрузить</span>';
+            
+            // Закрываем модальное окно
+            const modal = document.getElementById('load-test-modal');
+            modal.style.display = 'none';
+            
+            // Добавляем событие
+            addEvent('info', '🔄 Тест нагрузки сброшен, система возвращена в нормальный режим');
+            addEvent('info', '▶️ Автоматическое обновление возобновлено');
+            
+            // Показываем toast
+            showToast('Система возвращена в нормальный режим работы');
+        }
+        
+        // Восстановление оригинальных значений
+        function restoreOriginalValues() {
+            // Восстанавливаем метрики
+            if (originalValues.temp) {
+                document.getElementById('metric-temp').textContent = `${originalValues.temp}°C`;
+            }
+            if (originalValues.power) {
+                document.getElementById('metric-power').textContent = `${originalValues.power} кВт`;
+            }
+            if (originalValues.users) {
+                document.getElementById('metric-users').textContent = originalValues.users;
+            }
+            if (originalValues.internet) {
+                document.getElementById('metric-internet').textContent = `${originalValues.internet} Мб/с`;
+            }
+            
+            // Восстанавливаем графики
+            if (originalChartData.disk) {
+                chartDataCache.disk = [...originalChartData.disk];
+                currentCharts.disk.data.datasets[0].data = [...originalChartData.disk];
+                currentCharts.disk.update('none');
+            }
+            
+            if (originalChartData.traffic) {
+                chartDataCache.traffic = [...originalChartData.traffic];
+                currentCharts.traffic.data.datasets[0].data = [...originalChartData.traffic];
+                currentCharts.traffic.update('none');
+            }
+            
+            // Восстанавливаем HDD график
+            if (originalChartData.hddC && currentCharts.hdd) {
+                currentCharts.hdd.data.datasets[0].data = [...originalChartData.hddC];
+                currentCharts.hdd.data.datasets[1].data = [...originalChartData.hddD];
+                currentCharts.hdd.data.datasets[2].data = [...originalChartData.hddE];
+                currentCharts.hdd.update('none');
+            }
+            
+            // Восстанавливаем оборудование
+            initEquipment();
+            
+            // Очищаем сохраненные значения
+            originalValues = {};
+            originalChartData = {};
         }
         
         // Показать бронирование переговорных
@@ -2179,10 +2711,6 @@
             `;
             
             tickerContainer.appendChild(tickerItem);
-            
-            while (tickerContainer.children.length > 15) {
-                tickerContainer.removeChild(tickerContainer.firstChild);
-            }
         }
         
         // Обновление содержимого бегущей строки
@@ -2209,13 +2737,6 @@
             const randomMessage = messages[Math.floor(Math.random() * messages.length)];
             
             addTickerItem(randomMessage);
-            
-            const tickerContainer = document.getElementById('ticker-container');
-            const animation = tickerContainer.style.animation;
-            tickerContainer.style.animation = 'none';
-            setTimeout(() => {
-                tickerContainer.style.animation = animation;
-            }, 10);
         }
         
         // Получить иконку для события
@@ -2324,11 +2845,20 @@
                 btn.addEventListener('click', function() {
                     const action = this.dataset.action;
                     
-                    document.querySelectorAll('.nav-btn').forEach(b => {
-                        b.classList.remove('active');
-                    });
+                    // Не снимаем активность с кнопки "Нагрузить" если тест активен
+                    if (!isLoadTestActive || action !== 'load-test') {
+                        document.querySelectorAll('.nav-btn').forEach(b => {
+                            if (isLoadTestActive && b.dataset.action === 'load-test') {
+                                // Оставляем кнопку "Сброс" активной
+                                return;
+                            }
+                            b.classList.remove('active');
+                        });
+                    }
                     
-                    this.classList.add('active');
+                    if (action !== 'load-test' || !isLoadTestActive) {
+                        this.classList.add('active');
+                    }
                     
                     switch(action) {
                         case 'refresh':
@@ -2339,6 +2869,9 @@
                             break;
                         case 'charts':
                             showHddChartModal();
+                            break;
+                        case 'load-test':
+                            // Обрабатывается в initLoadTest
                             break;
                         case 'booking':
                             showBooking();
@@ -2420,6 +2953,12 @@
         
         // Ручное обновление
         function manualUpdate() {
+            // Если тест нагрузки активен, не обновляем
+            if (isLoadTestActive) {
+                showToast('Обновление недоступно во время теста нагрузки');
+                return;
+            }
+            
             updateAllData();
             showToast('Данные обновлены вручную');
             addEvent('info', '🔄 Ручное обновление данных выполнено');
@@ -2433,6 +2972,12 @@
         
         // Симуляция события
         function simulateEvent() {
+            // Если тест нагрузки активен, не добавляем события
+            if (isLoadTestActive) {
+                showToast('События недоступны во время теста нагрузки');
+                return;
+            }
+            
             const events = [
                 { type: 'warning', message: '⚠️ Повышение температуры в серверной на 3°C' },
                 { type: 'alert', message: '🚨 Отказ системы кондиционирования' },
@@ -2484,6 +3029,11 @@
         
         // Добавить событие
         function addEvent(type, message) {
+            // Если тест нагрузки активен, только критические события
+            if (isLoadTestActive && type !== 'alert' && type !== 'warning') {
+                return;
+            }
+            
             const now = new Date();
             const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
             
@@ -2529,6 +3079,9 @@
         
         // Обновить все данные
         function updateAllData() {
+            // Если тест нагрузки активен, не обновляем
+            if (isLoadTestActive) return;
+            
             updateServerTemperature();
             document.getElementById('metric-power').textContent = `${getRandomValue(5, 15, 1)} кВт`;
             document.getElementById('metric-users').textContent = formatNumber(getRandomValue(2300, 3400));
@@ -2575,27 +3128,22 @@
         // Запустить цикл обновлений
         function startUpdateCycle() {
             setInterval(() => {
-                updateAllData();
-                addEvent('info', '🔄 Автоматическое обновление данных');
-            }, UPDATE_INTERVAL);
-            
-            setInterval(() => {
                 updateTimer--;
                 if (updateTimer < 0) {
-                    updateTimer = 30;
+                    updateTimer = 60;
                 }
                 
                 document.getElementById('update-timer').textContent = updateTimer;
                 document.getElementById('countdown').textContent = `${updateTimer} сек`;
                 
-                const progress = ((30 - updateTimer) / 30) * 100;
+                const progress = ((60 - updateTimer) / 60) * 100;
                 document.getElementById('progress-fill').style.width = `${progress}%`;
             }, 1000);
         }
         
         // Сбросить таймер обновления
         function resetUpdateTimer() {
-            updateTimer = 30;
+            updateTimer = 60;
             document.getElementById('update-timer').textContent = updateTimer;
             document.getElementById('countdown').textContent = `${updateTimer} сек`;
             document.getElementById('progress-fill').style.width = '0%';
@@ -2605,7 +3153,7 @@
             progressFill.style.width = '0%';
             
             setTimeout(() => {
-                progressFill.style.transition = 'width 30s linear';
+                progressFill.style.transition = 'width 60s linear';
             }, 10);
         }
         
