@@ -564,14 +564,14 @@
             margin-bottom: 2px;
         }
         
-        /* Индикатор нагрузки системы - НОВЫЙ БЛОК */
+        /* Индикатор нагрузки системы */
         .load-test-indicator {
             background: rgba(19, 47, 76, 0.9);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
             border: 1px solid rgba(30, 73, 118, 0.3);
-            display: none; /* Скрыт по умолчанию */
+            display: none;
         }
         
         .load-test-header {
@@ -1041,7 +1041,8 @@
         }
         
         .stat-value {
-            font-weight: 600;
+            font-size: 16px; /* Увеличено */
+            font-weight: 700; /* Жирнее */
             color: #e6f1ff;
         }
         
@@ -1321,7 +1322,7 @@
                 </div>
             </div>
             
-            <!-- НОВЫЙ БЛОК: Индикатор нагрузки системы -->
+            <!-- Индикатор нагрузки системы -->
             <div class="load-test-indicator" id="load-test-indicator">
                 <div class="load-test-header">
                     <h2 class="load-test-title">
@@ -1421,9 +1422,8 @@
             </div>
         </main>
         
-        <!-- Нижнее меню - 6 кнопок (убран "Обновить", добавлена "Нагрузить") -->
+        <!-- Нижнее меню - 6 кнопок -->
         <nav class="bottom-nav">
-            <!-- Кнопка "Событие" теперь первая -->
             <button class="nav-btn" data-action="simulate">
                 <i class="fas fa-bolt nav-icon"></i>
                 <span>Событие</span>
@@ -1434,13 +1434,14 @@
                 <span>Графики</span>
             </button>
             
-            <!-- Кнопка "Нагрузить" - ВЫДЕЛЕНА -->
+            <!-- Кнопка "Нагрузить" -->
             <button class="nav-btn load-test-btn" data-action="load-test" id="load-test-btn">
                 <i class="fas fa-tachometer-alt nav-icon"></i>
                 <span>Нагрузить</span>
             </button>
             
-            <button class="nav-btn" data-action="booking">
+            <!-- Кнопка "Бронь" - ИСПРАВЛЕНО -->
+            <button class="nav-btn" data-action="booking" id="booking-btn">
                 <i class="fas fa-calendar-alt nav-icon"></i>
                 <span>Бронь</span>
             </button>
@@ -1593,6 +1594,7 @@
         let loadTestProgress = 0;
         let originalValues = {};
         let originalChartData = {};
+        let originalSystemsData = {};
         let autoUpdateInterval = null;
         
         // Сообщения для бегущей строки
@@ -1629,49 +1631,49 @@
             { id: 'db', name: 'База данных', metrics: ['Диск C', 'Диск D'], icon: 'fa-database' }
         ];
         
-        // Конфигурация дополнительных систем
+        // Конфигурация дополнительных систем - ИСПРАВЛЕНО
         const systemsConfig = [
             {
                 id: 'access',
                 name: 'Система контроля доступа',
                 metrics: [
-                    { label: 'Двери под контролем', value: '7', unit: '' },
-                    { label: 'Сотрудников в офисе', value: '23', unit: '' },
-                    { label: 'Последний вход', value: '16:23', unit: '' }
+                    { label: 'Двери под контролем', value: '12', unit: '', original: 12 },
+                    { label: 'Сотрудников в офисе', value: '42', unit: '', original: 42 },
+                    { label: 'Последний вход', value: '16:23', unit: '', original: '16:23' }
                 ]
             },
             {
                 id: 'fire',
                 name: 'Пожарная сигнализация',
                 metrics: [
-                    { label: 'Датчики дыма', value: '11/12', unit: '' },
-                    { label: 'Температурные датчики', value: '8/8', unit: '' },
-                    { label: 'Последняя проверка', value: '11', unit: 'дней' }
+                    { label: 'Датчики дыма', value: '24/25', unit: '', original: '24/25' },
+                    { label: 'Температурные датчики', value: '15/15', unit: '', original: '15/15' },
+                    { label: 'Последняя проверка', value: '3', unit: 'дней', original: 3 }
                 ]
             },
             {
                 id: 'conference',
                 name: 'Система видеоконференций',
                 metrics: [
-                    { label: 'Активные конференции', value: '0', unit: '' },
-                    { label: 'Участников всего', value: '10', unit: '' },
-                    { label: 'Качество связи', value: '87', unit: '%' }
+                    { label: 'Активные конференции', value: '2', unit: '', original: 2 },
+                    { label: 'Участников всего', value: '35', unit: '', original: 35 },
+                    { label: 'Качество связи', value: '92', unit: '%', original: 92 }
                 ]
             }
         ];
         
-        // Конфигурация этажей офиса
+        // Конфигурация этажей офиса - ОБНОВЛЕНО с большими значениями
         const floorsConfig = [
-            { floor: 1, department: 'Лобби, охрана, ресепшен', pcs: 2, printers: 0, active: true },
-            { floor: 2, department: 'Технические помещения, склад', pcs: 0, printers: 1, active: false },
-            { floor: 3, department: 'ИТ-отдел, серверная', pcs: 4, printers: 1, active: true },
-            { floor: 4, department: 'Финансовый отдел, бухгалтерия', pcs: 4, printers: 1, active: true },
-            { floor: 5, department: 'Отдел кадров, HR', pcs: 3, printers: 0, active: true },
-            { floor: 6, department: 'Юридический отдел', pcs: 3, printers: 0, active: true },
-            { floor: 7, department: 'Отдел маркетинга', pcs: 4, printers: 1, active: true },
-            { floor: 8, department: 'Отдел продаж', pcs: 6, printers: 1, active: true },
-            { floor: 9, department: 'Руководство, переговорные', pcs: 2, printers: 0, active: false },
-            { floor: 10, department: 'Конференц-залы, архив', pcs: 0, printers: 0, active: false }
+            { floor: 1, department: 'Лобби, охрана, ресепшен', pcs: 12, printers: 2, active: true },
+            { floor: 2, department: 'Технические помещения, склад', pcs: 8, printers: 1, active: false },
+            { floor: 3, department: 'ИТ-отдел, серверная', pcs: 25, printers: 5, active: true },
+            { floor: 4, department: 'Финансовый отдел, бухгалтерия', pcs: 18, printers: 3, active: true },
+            { floor: 5, department: 'Отдел кадров, HR', pcs: 15, printers: 2, active: true },
+            { floor: 6, department: 'Юридический отдел', pcs: 14, printers: 2, active: true },
+            { floor: 7, department: 'Отдел маркетинга', pcs: 22, printers: 4, active: true },
+            { floor: 8, department: 'Отдел продаж', pcs: 28, printers: 5, active: true },
+            { floor: 9, department: 'Руководство, переговорные', pcs: 10, printers: 2, active: false },
+            { floor: 10, department: 'Конференц-залы, архив', pcs: 6, printers: 1, active: false }
         ];
         
         // Конфигурация переговорных комнат
@@ -1767,7 +1769,7 @@
             // Исправление бегущей строки
             fixTickerAnimation();
             
-            // Инициализация бронирования
+            // Инициализация бронирования - ИСПРАВЛЕНО
             initBooking();
             
             // Инициализация теста нагрузки
@@ -1892,15 +1894,23 @@
             });
         }
         
-        // Инициализация бронирования
+        // Инициализация бронирования - ИСПРАВЛЕНО
         function initBooking() {
             const closeBtn = document.getElementById('close-booking-modal');
             const modal = document.getElementById('booking-modal');
+            const bookingBtn = document.getElementById('booking-btn');
             
+            // Обработчик для кнопки "Бронь"
+            bookingBtn.addEventListener('click', function() {
+                showBooking();
+            });
+            
+            // Обработчик для закрытия модального окна
             closeBtn.addEventListener('click', function() {
                 modal.style.display = 'none';
             });
             
+            // Закрытие при клике вне окна
             modal.addEventListener('click', function(e) {
                 if (e.target === this) {
                     this.style.display = 'none';
@@ -2081,6 +2091,9 @@
             // Обновляем оборудование с увеличенной нагрузкой
             updateEquipmentWithLoad(percent);
             
+            // Обновляем дополнительные системы с увеличенной нагрузкой - НОВОЕ
+            updateSystemsWithLoad(percent);
+            
             // Добавляем события при определенных порогах
             if (percent >= 30 && percent < 35) {
                 addEvent('warning', '⚠️ Нагрузка на систему: 30% - параметры растут');
@@ -2167,6 +2180,50 @@
             });
         }
         
+        // Обновление дополнительных систем с нагрузкой - НОВАЯ ФУНКЦИЯ
+        function updateSystemsWithLoad(percent) {
+            const grid = document.getElementById('systems-grid');
+            const items = grid.querySelectorAll('.system-card');
+            
+            items.forEach((item, index) => {
+                const system = systemsConfig[index];
+                const metrics = item.querySelectorAll('.system-value');
+                
+                metrics.forEach((metricElem, metricIndex) => {
+                    const metric = system.metrics[metricIndex];
+                    if (metric.original !== undefined) {
+                        // Увеличиваем значения с небольшим шагом (максимум +30%)
+                        const increaseFactor = 1 + (percent / 100) * 0.3; // До 1.3x
+                        
+                        if (typeof metric.original === 'number') {
+                            // Для числовых значений
+                            const newValue = Math.round(metric.original * increaseFactor);
+                            metricElem.textContent = `${newValue}${metric.unit ? ' ' + metric.unit : ''}`;
+                        } else if (typeof metric.original === 'string' && metric.original.includes('/')) {
+                            // Для значений типа "24/25"
+                            const parts = metric.original.split('/');
+                            const firstPart = parseInt(parts[0]);
+                            const secondPart = parseInt(parts[1]);
+                            
+                            // Увеличиваем только первую часть
+                            const newFirstPart = Math.min(secondPart, Math.round(firstPart * increaseFactor));
+                            metricElem.textContent = `${newFirstPart}/${secondPart}${metric.unit ? ' ' + metric.unit : ''}`;
+                        }
+                    }
+                });
+                
+                // Меняем статус при высокой нагрузке
+                const statusDiv = item.querySelector('.item-status');
+                if (percent > 70) {
+                    statusDiv.className = 'item-status status-bad';
+                    statusDiv.textContent = 'ОШИБКА';
+                } else if (percent > 40) {
+                    statusDiv.className = 'item-status status-warn';
+                    statusDiv.textContent = 'ВНИМАНИЕ';
+                }
+            });
+        }
+        
         // Сохранение оригинальных значений
         function saveOriginalValues() {
             originalValues = {
@@ -2183,6 +2240,9 @@
                 hddD: currentCharts.hdd ? [...currentCharts.hdd.data.datasets[1].data] : [],
                 hddE: currentCharts.hdd ? [...currentCharts.hdd.data.datasets[2].data] : []
             };
+            
+            // Сохраняем оригинальные данные дополнительных систем
+            originalSystemsData = JSON.parse(JSON.stringify(systemsConfig));
         }
         
         // Завершение теста нагрузки
@@ -2351,9 +2411,33 @@
             // Восстанавливаем оборудование
             initEquipment();
             
+            // Восстанавливаем дополнительные системы
+            restoreSystems();
+            
             // Очищаем сохраненные значения
             originalValues = {};
             originalChartData = {};
+            originalSystemsData = {};
+        }
+        
+        // Восстановление дополнительных систем
+        function restoreSystems() {
+            // Восстанавливаем данные систем из оригинальных значений
+            if (originalSystemsData.length > 0) {
+                systemsConfig.forEach((system, systemIndex) => {
+                    const originalSystem = originalSystemsData[systemIndex];
+                    if (originalSystem) {
+                        system.metrics.forEach((metric, metricIndex) => {
+                            if (originalSystem.metrics[metricIndex]) {
+                                metric.value = originalSystem.metrics[metricIndex].value;
+                            }
+                        });
+                    }
+                });
+                
+                // Перерисовываем системы
+                initSystems();
+            }
         }
         
         // Получить единицу измерения для метрики
@@ -2936,7 +3020,7 @@
                             // Обрабатывается в initLoadTest
                             break;
                         case 'booking':
-                            showBooking();
+                            // Обрабатывается в initBooking
                             break;
                         case 'office-visualization':
                             showOfficeVisualization();
@@ -2949,7 +3033,7 @@
             });
         }
         
-        // Показать визуализацию офиса
+        // Показать визуализацию офиса - ОБНОВЛЕНО с большими значениями
         function showOfficeVisualization() {
             const modal = document.getElementById('office-modal');
             const floorsContainer = document.getElementById('floors-container');
@@ -2958,7 +3042,14 @@
             
             const sortedFloors = [...floorsConfig].sort((a, b) => b.floor - a.floor);
             
+            // Общая статистика
+            let totalPCs = 0;
+            let totalPrinters = 0;
+            
             sortedFloors.forEach(floor => {
+                totalPCs += floor.pcs;
+                totalPrinters += floor.printers;
+                
                 const floorCard = document.createElement('div');
                 floorCard.className = 'floor-card';
                 floorCard.dataset.floor = floor.floor;
@@ -3008,9 +3099,90 @@
                 floorsContainer.appendChild(floorCard);
             });
             
+            // Обновляем общую статистику в футере
+            const footer = modal.querySelector('.mt-10');
+            if (footer) {
+                footer.innerHTML = `<i class="fas fa-info-circle"></i> Всего этажей: 10 | Активных этажей: 6 | Всего ПК: ${totalPCs} | Принтеров: ${totalPrinters}`;
+            }
+            
             modal.style.display = 'block';
             
             addEvent('info', '🏢 Открыта визуализация офиса РН-Ванкор');
+        }
+        
+        // Показать бронирование переговорных - ОБНОВЛЕНО
+        function showBooking() {
+            const modal = document.getElementById('booking-modal');
+            const roomsContainer = document.getElementById('rooms-container');
+            
+            roomsContainer.innerHTML = '';
+            
+            roomsConfig.forEach(room => {
+                const roomCard = document.createElement('div');
+                roomCard.className = `room-card ${room.booked ? 'booked' : 'available'}`;
+                roomCard.dataset.id = room.id;
+                
+                const scheduleHtml = room.schedule.map(slot => `
+                    <div class="time-slot">
+                        <span>${slot.time}</span>
+                        <span style="color: ${slot.available ? '#4caf50' : '#f44336'};">
+                            ${slot.available ? 'Свободно' : 'Занято'}
+                        </span>
+                    </div>
+                `).join('');
+                
+                roomCard.innerHTML = `
+                    <div class="room-name">${room.name}</div>
+                    <div class="room-capacity">Вместимость: ${room.capacity}</div>
+                    <div class="room-status ${room.booked ? 'status-booked' : 'status-available'}">
+                        ${room.booked ? 'ЗАНЯТО' : 'СВОБОДНО'}
+                    </div>
+                    <div class="room-schedule">
+                        ${scheduleHtml}
+                    </div>
+                    <div style="margin-top: 10px; font-size: 10px; color: #a3c7e6;">
+                        <i class="fas fa-door-open"></i> Этаж: ${room.floor}
+                    </div>
+                `;
+                
+                roomCard.addEventListener('click', function() {
+                    const roomId = this.dataset.id;
+                    const roomData = roomsConfig.find(r => r.id == roomId);
+                    
+                    if (roomData.booked) {
+                        const unbook = confirm(`Комната "${roomData.name}" уже забронирована.\nХотите снять бронь?`);
+                        if (unbook) {
+                            roomData.booked = false;
+                            showBooking();
+                            showToast(`Бронь комнаты "${roomData.name}" снята`);
+                            addEvent('info', `🗓️ Бронь комнаты "${roomData.name}" снята`);
+                        }
+                    } else {
+                        const book = confirm(`Забронировать комнату "${roomData.name}"?\nВместимость: ${roomData.capacity}\nЭтаж: ${roomData.floor}`);
+                        if (book) {
+                            roomData.booked = true;
+                            showBooking();
+                            showToast(`Комната "${roomData.name}" забронирована`);
+                            addEvent('info', `🗓️ Комната "${roomData.name}" забронирована`);
+                        }
+                    }
+                });
+                
+                roomsContainer.appendChild(roomCard);
+            });
+            
+            // Обновляем счетчик свободных комнат
+            const availableRooms = roomsConfig.filter(room => !room.booked).length;
+            const totalRooms = roomsConfig.length;
+            
+            const counterElement = modal.querySelector('.mt-10');
+            if (counterElement) {
+                counterElement.innerHTML = `<i class="fas fa-info-circle"></i> Всего переговорных: ${totalRooms} | Свободно сейчас: ${availableRooms}`;
+            }
+            
+            modal.style.display = 'block';
+            
+            addEvent('info', '🗓️ Открыто бронирование переговорных комнат');
         }
         
         // Симуляция события
