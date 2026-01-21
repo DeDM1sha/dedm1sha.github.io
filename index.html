@@ -1353,7 +1353,7 @@
                 <div class="metric-card">
                     <div class="metric-label">Скорость интернета</div>
                     <div class="metric-value" id="metric-internet">150 Мб/с</div>
-                    <div class="metric-trend trend-down">
+                    <div class="metric-trend trend-up">
                         <i class="fas fa-arrow-down"></i> 10 Мб
                     </div>
                 </div>
@@ -2177,7 +2177,7 @@
             
             // Зеленая стрелка вниз при уменьшении
             internetTrend.innerHTML = `<i class="fas fa-arrow-down"></i> ${Math.round(internetBase - internet)} Мб`;
-            internetTrend.className = 'metric-trend trend-down';
+            internetTrend.className = 'metric-trend trend-up';
         }
         
         // Обновление графиков с нагрузкой
@@ -2557,7 +2557,7 @@
                 document.getElementById('metric-internet').textContent = `${originalValues.internet} Мб/с`;
                 const internetTrend = document.querySelector('#metric-internet').closest('.metric-card').querySelector('.metric-trend');
                 internetTrend.innerHTML = `<i class="fas fa-arrow-down"></i> 10 Мб`;
-                internetTrend.className = 'metric-trend trend-down';
+                internetTrend.className = 'metric-trend trend-up';
             }
             
             // Восстанавливаем графики
